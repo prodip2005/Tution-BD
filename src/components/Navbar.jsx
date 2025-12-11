@@ -1,96 +1,205 @@
-import React from "react";
-import { NavLink } from "react-router"; // তুমি আগে react-router ব্যবহার করোলে ঠিক আছে
+import React, { useState } from "react";
+import { NavLink } from "react-router";
+import { motion, AnimatePresence } from "framer-motion";
+
+/* --- Framer Motion variants --- */
+const navVariants = {
+    hidden: { opacity: 0, y: -12 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: "spring", stiffness: 120, damping: 14, when: "beforeChildren" },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: -6 },
+    visible: (i = 1) => ({ opacity: 1, y: 0, transition: { delay: i * 0.06 } }),
+};
 
 const Navbar = () => {
-    const menuItems = (
-        <>
-            <li>
-                <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                        `px-4 py-2 rounded-lg transition-colors duration-200 ${isActive ? "bg-primary text-white shadow-md" : "text-base-content/90"
-                        }`
-                    }
-                >
-                    Home
-                </NavLink>
-            </li>
+    const [open, setOpen] = useState(false);
 
-            <li>
-                <NavLink
-                    to="/about"
-                    className={({ isActive }) =>
-                        `px-4 py-2 rounded-lg transition-colors duration-200 ${isActive ? "bg-primary text-white shadow-md" : "text-base-content/90"
-                        }`
-                    }
-                >
-                    About
-                </NavLink>
-            </li>
+    const navLinkClasses = ({ isActive }) =>
+        `px-4 py-2 rounded-lg relative transition-all duration-300 overflow-hidden
+      ${isActive ? "bg-primary text-white shadow-lg shadow-primary/50" : "text-base-content/80"}
+      group`;
 
-            <li>
-                <NavLink
-                    to="/contact"
-                    className={({ isActive }) =>
-                        `px-4 py-2 rounded-lg transition-colors duration-200 ${isActive ? "bg-primary text-white shadow-md" : "text-base-content/90"
-                        }`
-                    }
-                >
-                    Contact
-                </NavLink>
-            </li>
-        </>
-    );
+    const menuItems = [
+        { to: "/", label: "Home" },
+        { to: "/tutions", label: "Tutions" },
+        { to: "/tutors", label: "Tutors" },
+        { to: "/about", label: "About" },
+        { to: "/contact", label: "Contact" },
+    ];
 
     return (
         <header className="w-full">
-            <nav
-                className="
-          mx-auto md:max-w-7xl
-          rounded-2xl md:rounded-4xl
-          mt-2 md:mt-4
-          px-4 py-3
-          flex items-center justify-between gap-4
-          backdrop-blur-lg bg-white/40 dark:bg-gray-400
-          border border-white/10 dark:border-gray-700/40
-          shadow
-          transition-all duration-300
-        "
+            {/* motion.nav with glass classes; we also add a custom class nav-glass for extra CSS animation */}
+            <motion.nav
+                initial="hidden"
+                animate="visible"
+                variants={navVariants}
+                className={
+                    "nav-glass mx-auto md:max-w-7xl rounded-2xl md:rounded-3xl mt-3 md:mt-5 px-4 py-3 flex items-center justify-between gap-4 backdrop-blur-xl bg-white/16 dark:bg-gray-800/28 border border-white/12 dark:border-gray-700/40 shadow-xl shadow-black/6 transition-all duration-500"
+                }
             >
-                <div className="flex items-center gap-3">
-                    <div className="lg:hidden">
-                        <label htmlFor="nav-toggle" className="btn btn-ghost btn-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </label>
-                    </div>
+                {/* subtle moving gradient overlay (shimmer) is implemented via a child span */}
+                <span aria-hidden className="glass-shimmer pointer-events-none" />
 
-                    <a className="text-lg font-bold btn btn-ghost normal-case">MyGlassSite</a>
+                {/* left: brand + mobile toggle */}
+                <div className="flex items-center gap-3 relative z-10">
+                    <button
+                        onClick={() => setOpen((s) => !s)}
+                        aria-label="menu"
+                        className="lg:hidden btn btn-ghost btn-circle"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+
+                    <img
+                        className="w-10 rounded-full shadow-lg"
+                        src="https://images-platform.99static.com/DVETQ4KXxNUWF1Q-k4ASnnzl9LY=/112x112:2365x2365/fit-in/99designs-work-samples/work-sample-designs/1039810/842795fa-0320-4287-baac-22e221a46d34"
+                        alt="Tutor OWL Logo"
+                    />
+
+                    <a className="text font-extrabold text-xl normal-case tracking-wider text-base-content/90">
+                        Tutor <span className="text-primary">OWL</span>
+                    </a>
                 </div>
 
-                <div className="hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1 gap-2 bg-transparent">{menuItems}</ul>
+                {/* center: desktop menu */}
+                <div className="hidden lg:flex relative z-10">
+                    <ul className="menu menu-horizontal px-1 gap-2 bg-transparent flex items-center">
+                        {menuItems.map((item, idx) => (
+                            <motion.li
+                                key={item.to}
+                                custom={idx}
+                                initial="hidden"
+                                animate="visible"
+                                variants={itemVariants}
+                                className="relative"
+                            >
+                                <NavLink to={item.to} className={navLinkClasses}>
+                                    <motion.span className="relative z-10" whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
+                                        {item.label}
+                                    </motion.span>
+
+                                    {/* animated subtle underline (scaleX on hover) */}
+                                    <motion.span
+                                        className="absolute left-0 bottom-0 h-[2px] w-full bg-white/20 rounded-sm"
+                                        initial={{ scaleX: 0 }}
+                                        whileHover={{ scaleX: 1 }}
+                                        transition={{ duration: 0.35 }}
+                                        style={{ transformOrigin: "left" }}
+                                    />
+                                </NavLink>
+                            </motion.li>
+                        ))}
+                    </ul>
                 </div>
 
-                <div className="flex items-center gap-3">
-                    <button className="btn btn-sm btn-primary rounded-lg">Login</button>
+                {/* right: actions */}
+                <div className="flex items-center gap-3 relative z-10">
+                    <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="btn btn-sm btn-primary rounded-xl shadow-lg shadow-primary/30 transition-all duration-300">
+                        Login
+                    </motion.button>
                 </div>
-            </nav>
+            </motion.nav>
 
-            <input type="checkbox" id="nav-toggle" className="hidden" />
-            <div className="lg:hidden">
-                <div
-                    className="
-            p-3 mt-2 mx-4 rounded-xl
-            backdrop-blur-lg bg-white/35 dark:bg-gray-900/25
-            border border-white/10 dark:border-gray-700/40
-            shadow-inner
-          "
-                >
-                    <ul className="menu menu-compact">{menuItems}</ul>
-                </div>
-            </div>
+            {/* mobile menu: animated drawer */}
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ type: "spring", stiffness: 260, damping: 28 }}
+                        className="lg:hidden"
+                    >
+                        <div className="p-3 mt-2 mx-4 rounded-xl backdrop-blur-xl bg-white/40 dark:bg-gray-700/50 border border-white/50 dark:border-gray-500/60 shadow-lg">
+                            <ul className="menu menu-compact flex flex-col gap-2">
+                                {menuItems.map((item, idx) => (
+                                    <motion.li key={item.to} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.04 }}>
+                                        <NavLink
+                                            to={item.to}
+                                            className={({ isActive }) => `block px-4 py-2 rounded-lg transition-colors duration-200 ${isActive ? "bg-primary text-white" : "text-base-content/90"}`}
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            {item.label}
+                                        </NavLink>
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Inline CSS for shimmer + subtle pulse. Move to global CSS if you prefer */}
+            <style>{`
+        /* glass container extra styling */
+        .nav-glass {
+          position: relative;
+          overflow: visible;
+        }
+
+        /* moving gradient shimmer */
+        .glass-shimmer {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: linear-gradient(120deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.02) 60%, rgba(255,255,255,0.00) 100%);
+          transform: translateX(-40%);
+          filter: blur(8px);
+          opacity: 0.9;
+          mix-blend-mode: overlay;
+          animation: shimmer 6s linear infinite;
+          border-radius: inherit;
+        }
+
+        @keyframes shimmer {
+          0% { transform: translateX(-40%) scale(1.02); opacity: 0.6; }
+          50% { transform: translateX(40%) scale(1.03); opacity: 0.85; }
+          100% { transform: translateX(-40%) scale(1.02); opacity: 0.6; }
+        }
+
+        /* subtle pulse of border & shadow to give life */
+        .nav-glass {
+          animation: glassPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes glassPulse {
+          0% { box-shadow: 0 10px 30px rgba(2,6,23,0.06); border-color: rgba(255,255,255,0.10); }
+          50% { box-shadow: 0 18px 50px rgba(2,6,23,0.08); border-color: rgba(255,255,255,0.08); }
+          100% { box-shadow: 0 10px 30px rgba(2,6,23,0.06); border-color: rgba(255,255,255,0.10); }
+        }
+
+        /* make sure buttons and links sit above shimmer */
+        .nav-glass > .relative,
+        .nav-glass .btn,
+        .nav-glass a,
+        .nav-glass .menu {
+          position: relative;
+          z-index: 10;
+        }
+
+        /* tiny floating effect for desktop only (soft transform) */
+        @media (min-width: 1024px) {
+          .nav-glass {
+            transform-origin: center;
+            animation: glassPulse 10s ease-in-out infinite, floatY 8s ease-in-out infinite;
+          }
+
+          @keyframes floatY {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0); }
+          }
+        }
+      `}</style>
         </header>
     );
 };
