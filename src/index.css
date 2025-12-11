@@ -1,0 +1,15 @@
+@import "tailwindcss";
+ @plugin "daisyui" {
+   themes: light --default;
+ }
+ @plugin "daisyui/theme" {
+  
+  --color-primary: blue;
+  --color-secondary: teal;
+}
+
+
+
+ a.active{
+  background-color: green;
+ }
