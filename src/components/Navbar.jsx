@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router";
+// src/components/Navbar.jsx
+import React, { useContext, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import { AuthContext } from "../Providers/AuthContext"; // path ঠিক করে নিবে
 
 /* --- Framer Motion variants --- */
 const navVariants = {
@@ -18,6 +20,8 @@ const itemVariants = {
 };
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    const { user, LogOut } = useContext(AuthContext); // <-- useContext here
     const [open, setOpen] = useState(false);
 
     const navLinkClasses = ({ isActive }) =>
@@ -32,6 +36,16 @@ const Navbar = () => {
         { to: "/about", label: "About" },
         { to: "/contact", label: "Contact" },
     ];
+
+    const handleLogOut = async () => {
+        try {
+            await LogOut(); // ensure AuthProvider exposes LogOut()
+            navigate("/"); // go to home after logout
+        } catch (err) {
+            console.error("Logout error:", err);
+            // you can show toast/alert here
+        }
+    };
 
     return (
         <header className="w-full">
@@ -65,9 +79,9 @@ const Navbar = () => {
                         alt="Tutor OWL Logo"
                     />
 
-                    <a className="text font-extrabold text-xl normal-case tracking-wider text-base-content/90">
+                    <NavLink to="/" className="text font-extrabold text-xl normal-case tracking-wider text-base-content/90">
                         Tutor <span className="text-primary">OWL</span>
-                    </a>
+                    </NavLink>
                 </div>
 
                 {/* center: desktop menu */}
@@ -89,7 +103,7 @@ const Navbar = () => {
 
                                     {/* animated subtle underline (scaleX on hover) */}
                                     <motion.span
-                                        className="absolute left-0 bottom-0 h-[2px] w-full bg-white/20 rounded-sm"
+                                        className="absolute left-0 bottom-0 h-0.5 w-full bg-white/20 rounded-sm"
                                         initial={{ scaleX: 0 }}
                                         whileHover={{ scaleX: 1 }}
                                         transition={{ duration: 0.35 }}
@@ -102,10 +116,38 @@ const Navbar = () => {
                 </div>
 
                 {/* right: actions */}
-                <div className="flex items-center gap-3 relative z-10">
-                    <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="btn btn-sm btn-primary rounded-xl shadow-lg shadow-primary/30 transition-all duration-300">
-                        Login
-                    </motion.button>
+                <div className="relative z-10">
+                    {user ? (
+                        /* User area: avatar + name + logout */
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3">
+                                <img
+                                    src={user.photoURL || "https://placehold.co/40x40?text=U"}
+                                    alt={user.displayName || "User"}
+                                    onError={(e) => (e.currentTarget.src = "https://placehold.co/40x40?text=U")}
+                                    className="w-14 h-14 rounded-full object-cover border"
+                                />
+                                <div className="hidden sm:flex flex-col">
+                                    <span className="text-sm font-medium">{user.displayName || (user.email ? user.email.split("@")[0] : "User")}</span>
+                               
+                                </div>
+                            </div>
+
+                            <button onClick={handleLogOut}>
+                                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="btn btn-sm bg-red-600 text-white rounded-xl shadow-lg shadow-primary/30 transition-all duration-300">
+                                Logout
+                            </motion.button>
+                            </button>
+                        </div>
+                    ) : (
+                        <Link to={"/login"}>
+                            <div className="flex items-center gap-3">
+                                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="btn btn-sm btn-primary rounded-xl shadow-lg shadow-primary/30 transition-all duration-300">
+                                    Login / Register
+                                </motion.button>
+                            </div>
+                        </Link>
+                    )}
                 </div>
             </motion.nav>
 
@@ -132,6 +174,18 @@ const Navbar = () => {
                                         </NavLink>
                                     </motion.li>
                                 ))}
+                                {/* add auth actions in mobile menu */}
+                                <li className="mt-2">
+                                    {user ? (
+                                        <button onClick={handleLogOut} className="w-full btn btn-ghost">
+                                            Logout
+                                        </button>
+                                    ) : (
+                                        <NavLink to="/login" className="w-full btn btn-primary">
+                                            Login / Register
+                                        </NavLink>
+                                    )}
+                                </li>
                             </ul>
                         </div>
                     </motion.div>
