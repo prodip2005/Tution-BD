@@ -7,6 +7,11 @@ import About from "../Pages/About";
 import Contact from "../Pages/Contact";
 import Login from "../Pages/Login";
 import RegistrationForm from "../Pages/Registration";
+import PrivateRoute from "../Private/PrivateRoute";
+import Dashboard from "../Pages/Dashboard/Dashboard";
+import UpdateUserProfile from "../Pages/UpdateUserProfile";
+import PostTutions from "../Pages/Dashboard/PostTutions";
+import TutorDetails from "../components/TutorDetails";
 
 const router = createBrowserRouter([
     {
@@ -15,31 +20,54 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                Component:Home
+                Component: Home
             },
             {
                 path: '/tutions',
-                Component:Tutions,
+                Component: Tutions,
             },
             {
                 path: '/tutors',
-                Component:Tutors,
+                Component: Tutors,
             },
             {
                 path: '/about',
-                Component:About
+                Component: About
             },
             {
                 path: '/contact',
-                Component:Contact
+                element: <Contact></Contact>
+
             },
             {
                 path: '/login',
-                Component:Login
+                Component: Login
             },
             {
                 path: '/register',
-                Component:RegistrationForm,
+                Component: RegistrationForm,
+            },
+            {
+                path: '/updateUserProfile',
+                Component: UpdateUserProfile
+            },
+            {
+                path: "/tutors/:email",
+                element: <TutorDetails />
+            }
+
+        ]
+    },
+    {
+        path: 'dashboard',
+        element:
+            <PrivateRoute>
+                <Dashboard></Dashboard>
+            </PrivateRoute>,
+        children: [
+            {
+                path: 'post-tutions',
+                Component: PostTutions
             }
         ]
     }

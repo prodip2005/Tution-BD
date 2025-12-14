@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { updateProfile } from "firebase/auth";
 import { AuthContext } from "../Providers/AuthContext"; // adjust path if needed
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 // ---------- Animated SweetAlert-like component ----------
 const AnimatedAlert = ({ title = "Success!", message, onClose, type = "success" }) => {
     return (
-        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/40 backdrop-blur-sm">
             <div className="w-full max-w-sm px-6 py-6 rounded-2xl bg-white dark:bg-gray-900 shadow-2xl text-center">
                 <div className="flex flex-col items-center gap-3">
                     {type === "success" ? (
@@ -26,8 +27,7 @@ const AnimatedAlert = ({ title = "Success!", message, onClose, type = "success" 
 
                     <button
                         onClick={onClose}
-                        className={`mt-4 px-5 py-2 rounded-lg text-white transition ${type === "success" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
-                            }`}
+                        className={`mt-4 px-5 py-2 rounded-lg text-white transition ${type === "success" ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
                     >
                         OK
                     </button>
@@ -41,7 +41,6 @@ const AnimatedAlert = ({ title = "Success!", message, onClose, type = "success" 
           100% { transform: scale(1); opacity: 1 }
         }
         .animate-sweet { animation: sweetPop 420ms cubic-bezier(.2,1.1,.3,1); }
-        /* give card the animation class */
         .fixed > .w-full > div { animation: sweetPop 420ms cubic-bezier(.2,1.1,.3,1); }
       `}</style>
         </div>
@@ -52,6 +51,7 @@ const AnimatedAlert = ({ title = "Success!", message, onClose, type = "success" 
 const RegistrationForm = () => {
     const { Register } = useContext(AuthContext); // <-- make sure AuthProvider provides Register()
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
 
     const {
         register,
@@ -66,6 +66,7 @@ const RegistrationForm = () => {
             email: "",
             photoUrl: "",
             password: "",
+            role: "student", // default role
         },
     });
 
@@ -74,36 +75,58 @@ const RegistrationForm = () => {
     const [successPopup, setSuccessPopup] = useState(null); // {message} or null
 
     const photoPreview = watch("photoUrl");
+    const chosenRole = watch("role");
 
     const showInlineError = (msg) => {
         setFeedback({ type: "error", message: msg });
-        setTimeout(() => setFeedback(null), 3000);
+        setTimeout(() => setFeedback(null), 4000);
     };
 
     const onSubmit = async (data) => {
         setFeedback(null);
         try {
-            // 1) create user
+            // 1) create user with email & password
             const res = await Register(data.email, data.password);
-            // 2) update profile
+
+            // 2) update firebase profile
             await updateProfile(res.user, {
                 displayName: data.name || undefined,
                 photoURL: data.photoUrl || undefined,
             });
 
-            // 3) show animated sweetalert-like popup, then redirect
-            setSuccessPopup({ message: "Registration complete — welcome!" });
+            // 3) post user to server via axiosSecure
+            // prepare payload
+            const userPayload = {
+                name: data.name,
+                email: data.email,
+                photoURL: data.photoUrl || null,
+                role: data.role || "student",
+            };
 
+            // POST to /users
+            try {
+                const postRes = await axiosSecure.post("/users", userPayload);
+                // optionally check postRes.data for success
+                // console.log("POST /users response:", postRes.data);
+            } catch (postErr) {
+                console.error("Failed to save user to server:", postErr);
+                // still consider registration succeeded on Firebase, but inform user
+                showInlineError("Registration succeeded but saving profile failed. Try again later.");
+                // we don't return here — you might still want to proceed to dashboard
+            }
+
+            // 4) show animated popup
+            setSuccessPopup({ message: "Registration complete — welcome!" });
             reset();
 
-            // auto-close & redirect after 1.8s if user doesn't click OK
+            // auto-close & redirect after a short delay
             setTimeout(() => {
                 setSuccessPopup(null);
-                navigate("/"); // change path if needed
-            }, 1800);
+                navigate("/");
+            }, 1600);
         } catch (err) {
             console.error("Registration error:", err);
-            // Better friendly message extraction
+            // friendly error extraction
             const msg = err?.message || "Registration failed";
             showInlineError(msg);
         }
@@ -191,6 +214,23 @@ const RegistrationForm = () => {
                             <p className="text-sm text-gray-600">Preview</p>
                         </div>
                     )}
+                </div>
+
+                {/* Role (student / tutor) */}
+                <div className="input-group">
+                    <label className="block text-sm font-medium mb-1">Role</label>
+                    <div className="flex items-center gap-4">
+                        <label className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border ${chosenRole === "student" ? "bg-blue-50 border-blue-200" : "border-gray-200"}`}>
+                            <input {...register("role", { required: true })} type="radio" value="student" defaultChecked />
+                            <span className="text-sm">Student</span>
+                        </label>
+
+                        <label className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border ${chosenRole === "tutor" ? "bg-blue-50 border-blue-200" : "border-gray-200"}`}>
+                            <input {...register("role", { required: true })} type="radio" value="tutor" />
+                            <span className="text-sm">Tutor</span>
+                        </label>
+                    </div>
+                    {errors.role && <p className="text-red-500 text-sm mt-1">Please select a role</p>}
                 </div>
 
                 {/* Password */}

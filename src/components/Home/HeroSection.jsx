@@ -28,7 +28,7 @@ const slideData = [
         image: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1600&auto=format&fit=crop",
         title: "Interactive Lessons That Click",
         subtitle: "Engaging lessons with practical projects and feedback.",
-        cta: { label: "Explore Courses", href: "/courses" },
+        cta: { label: "Find Tutions", href: "/tutions" },
     },
 ];
 
@@ -45,7 +45,7 @@ const HeroSection = () => {
                     mousewheel
                     keyboard
                     autoplay={{
-                        delay: 4500,
+                        delay: 1500,
                         disableOnInteraction: false,
                         pauseOnMouseEnter: true,
                     }}

@@ -33,8 +33,9 @@ const Navbar = () => {
         { to: "/", label: "Home" },
         { to: "/tutions", label: "Tutions" },
         { to: "/tutors", label: "Tutors" },
-        { to: "/about", label: "About" },
-        { to: "/contact", label: "Contact" },
+        // { to: "/about", label: "About" },
+        // { to: "/contact", label: "Contact" },
+ 
     ];
 
     const handleLogOut = async () => {
@@ -73,15 +74,16 @@ const Navbar = () => {
                         </svg>
                     </button>
 
-                    <img
-                        className="w-10 rounded-full shadow-lg"
-                        src="https://images-platform.99static.com/DVETQ4KXxNUWF1Q-k4ASnnzl9LY=/112x112:2365x2365/fit-in/99designs-work-samples/work-sample-designs/1039810/842795fa-0320-4287-baac-22e221a46d34"
-                        alt="Tutor OWL Logo"
-                    />
+                    <Link to={'/'}>
+                        <img
+                            className="w-10 rounded-full shadow-lg"
+                            src="https://images-platform.99static.com/DVETQ4KXxNUWF1Q-k4ASnnzl9LY=/112x112:2365x2365/fit-in/99designs-work-samples/work-sample-designs/1039810/842795fa-0320-4287-baac-22e221a46d34"
+                            alt="Tutor OWL Logo"
+                        /></Link>
 
-                    <NavLink to="/" className="text font-extrabold text-xl normal-case tracking-wider text-base-content/90">
+                    <Link to="/" className="text font-black text-xl normal-case tracking-wider text-base-content/90">
                         Tutor <span className="text-primary">OWL</span>
-                    </NavLink>
+                    </Link>
                 </div>
 
                 {/* center: desktop menu */}
@@ -112,6 +114,14 @@ const Navbar = () => {
                                 </NavLink>
                             </motion.li>
                         ))}
+
+                        {user && (
+                            <motion.li initial="hidden" animate="visible" variants={itemVariants} className="relative">
+                                <NavLink to="/dashboard/" className={navLinkClasses}>
+                                    <span className="relative z-10">Dashboard</span>
+                                </NavLink>
+                            </motion.li>
+                        )}
                     </ul>
                 </div>
 
@@ -121,12 +131,14 @@ const Navbar = () => {
                         /* User area: avatar + name + logout */
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-3">
-                                <img
-                                    src={user.photoURL || "https://placehold.co/40x40?text=U"}
-                                    alt={user.displayName || "User"}
-                                    onError={(e) => (e.currentTarget.src = "https://placehold.co/40x40?text=U")}
-                                    className="w-14 h-14 rounded-full object-cover border"
-                                />
+                                <Link to={'/updateUserProfile'}>
+                                    <img
+                                        src={user.photoURL || "https://placehold.co/40x40?text=U"}
+                                        alt={user.displayName || "User"}
+                                        onError={(e) => (e.currentTarget.src = "https://placehold.co/40x40?text=U")}
+                                        className="w-14 h-14 rounded-full object-cover border"
+                                    />
+                                </Link>
                                 <div className="hidden sm:flex flex-col">
                                     <span className="text-sm font-medium">{user.displayName || (user.email ? user.email.split("@")[0] : "User")}</span>
                                
@@ -173,7 +185,18 @@ const Navbar = () => {
                                             {item.label}
                                         </NavLink>
                                     </motion.li>
+
                                 ))}
+
+                                {user && (
+                                    <motion.li initial="hidden" animate="visible" variants={itemVariants} className="relative">
+                                        <NavLink to="/dashboard" className={navLinkClasses}>
+                                            <span className="relative z-10">Dashboard</span>
+                                        </NavLink>
+                                    </motion.li>
+                                )}
+
+                                
                                 {/* add auth actions in mobile menu */}
                                 <li className="mt-2">
                                     {user ? (

@@ -289,3 +289,30 @@
 }
 
 
+
+
+
+/* Scaling Bar Animation Keyframes */
+@keyframes scaleBar {
+  0% {
+    transform: scaleX(0.1); /* Starts very small */
+  }
+  50% {
+    transform: scaleX(1); /* Expands fully */
+  }
+  100% {
+    transform: scaleX(0.1); /* Shrinks again */
+  }
+}
+
+/* Applying the animation */
+#scaling-bar {
+  animation: scaleBar 2s infinite ease-in-out;
+}
+
+
+
+a.active{
+  @apply bg-primary text-white
+  
+}
