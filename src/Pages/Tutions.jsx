@@ -71,6 +71,31 @@ const Tutions = () => {
         }
     };
 
+
+    const handleDelete = async (tuitionId) => {
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this tuition?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            const res = await axiosSecure.delete(
+                `/tuitions/${tuitionId}?email=${user.email}`
+            );
+
+            if (res.data.success) {
+                alert("Tuition deleted successfully");
+                refetchAll();
+                refetchMy();
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Failed to delete tuition");
+        }
+    };
+
+
     return (
         <div className="max-w-6xl mx-auto px-4 py-10">
             {/* Title */}
@@ -154,17 +179,24 @@ const Tutions = () => {
                                         <td className="text-sm">{t.email}</td>
                                         <td className="space-x-2">
                                             {/* STUDENT EDIT */}
-                                            {role === "student" &&
-                                                t.email === user?.email && (
+                                            {role === "student" && t.email === user?.email && (
+                                                <>
                                                     <button
-                                                        onClick={() =>
-                                                            setEditTuition(t)
-                                                        }
+                                                        onClick={() => setEditTuition(t)}
                                                         className="px-3 py-1 bg-yellow-500 text-white rounded-full text-sm"
                                                     >
                                                         Edit
                                                     </button>
-                                                )}
+
+                                                    <button
+                                                        onClick={() => handleDelete(t._id)}
+                                                        className="px-3 py-1 bg-red-600 text-white rounded-full text-sm"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </>
+                                            )}
+
 
                                             {/* TUTOR / ADMIN APPLY */}
                                             {(role === "tutor" ||
