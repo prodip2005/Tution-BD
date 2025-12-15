@@ -15,6 +15,8 @@ import TutorDetails from "../components/TutorDetails";
 import My_Applications from "../Pages/Dashboard/My_Applications";
 import Applied_Tutions from "../Pages/Dashboard/Applied_Tutions";
 import Payment from "../Pages/Dashboard/Payment/Payment";
+import Payment_Success from "../Pages/Dashboard/Payment/Payment_Success";
+import Payment_Cancelled from "../Pages/Dashboard/Payment/Payment_Cancelled";
 
 const router = createBrowserRouter([
     {
@@ -83,7 +85,15 @@ const router = createBrowserRouter([
             {
                 path: 'payment/:applicationId',
                 Component:Payment
-            }
+            },
+            {
+                path: 'payment-success',
+                Component:Payment_Success
+            },
+            {
+                path: 'payment-cancelled',
+                Component:Payment_Cancelled
+            },
         ]
     }
 ])

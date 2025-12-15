@@ -51,6 +51,22 @@ const Payment = () => {
     const formatCurrency = (amount) => `৳ ${new Intl.NumberFormat('en-IN').format(amount)}`;
 
 
+
+    const handlePayment = async() => {
+        const paymentInfo = {
+            expectedSalary: application.expectedSalary,
+            applicationId: application._id,
+            studentEmail: application.studentEmail,
+            tuitionSubject: application.tuitionSubject
+        }
+
+        const res = await axiosSecure.post('/create-checkout-session', paymentInfo);
+        console.log(res.data);
+        window.location.href = res.data.url
+        
+    }
+
+
     return (
         // Full Page Container with Soft Light Background (Replacing bg-gray-900)
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 sm:p-8">
@@ -154,7 +170,7 @@ const Payment = () => {
                         whileTap={{ scale: 0.95 }}
                         variants={itemVariants}
                         // The actual click functionality remains unchanged
-                        onClick={() => { /* Placeholder for payment initiation logic */ }}
+                        onClick={handlePayment}
                     >
                         <FaMoneyBillWave className="text-3xl" />
                         CONFIRM AND PAY NOW
