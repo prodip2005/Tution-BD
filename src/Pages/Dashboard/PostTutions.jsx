@@ -30,6 +30,8 @@ const PostTutions = () => {
             ...data,
             email: user.email,
             status: "pending",
+            studentName: user.displayName,     
+            studentId: user._id,              
             createdAt: new Date(),
         };
 

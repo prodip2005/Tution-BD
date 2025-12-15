@@ -12,6 +12,9 @@ import Dashboard from "../Pages/Dashboard/Dashboard";
 import UpdateUserProfile from "../Pages/UpdateUserProfile";
 import PostTutions from "../Pages/Dashboard/PostTutions";
 import TutorDetails from "../components/TutorDetails";
+import My_Applications from "../Pages/Dashboard/My_Applications";
+import Applied_Tutions from "../Pages/Dashboard/Applied_Tutions";
+import Payment from "../Pages/Dashboard/Payment/Payment";
 
 const router = createBrowserRouter([
     {
@@ -68,6 +71,18 @@ const router = createBrowserRouter([
             {
                 path: 'post-tutions',
                 Component: PostTutions
+            },
+            {
+                path: 'applications',
+                Component:My_Applications
+            },
+            {
+                path: 'applied-tutions',
+                Component:Applied_Tutions
+            },
+            {
+                path: 'payment/:applicationId',
+                Component:Payment
             }
         ]
     }

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { AuthContext } from "../Providers/AuthContext";
 import useRole from "../Hooks/useRole";
@@ -8,9 +9,10 @@ import useRole from "../Hooks/useRole";
 const Tutions = () => {
     const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
-    const { role } = useRole();
+    const { role, isLoading } = useRole();
 
     const [tab, setTab] = useState("all");
+    const [applyTuition, setApplyTuition] = useState(null);
     const [editTuition, setEditTuition] = useState(null);
 
     // ================= ALL TUITIONS =================
@@ -26,16 +28,31 @@ const Tutions = () => {
         },
     });
 
-    // ================= MY TUITIONS =================
+    // ================= MY TUITIONS (STUDENT) =================
     const {
         data: myTuitions = [],
         isLoading: loadingMy,
         refetch: refetchMy,
     } = useQuery({
         queryKey: ["my-tuitions", user?.email],
-        enabled: !!user?.email,
+        enabled: role === "student",
         queryFn: async () => {
             const res = await axiosSecure.get(`/tuitions?email=${user.email}`);
+            return res.data || [];
+        },
+    });
+
+    // ================= MY APPLICATIONS (TUTOR) =================
+    const {
+        data: myApplications = [],
+        refetch: refetchApplications,
+    } = useQuery({
+        queryKey: ["my-applications", user?.email],
+        enabled: role === "tutor",
+        queryFn: async () => {
+            const res = await axiosSecure.get(
+                `/applications?email=${user.email}`
+            );
             return res.data || [];
         },
     });
@@ -43,8 +60,68 @@ const Tutions = () => {
     const tuitions = tab === "all" ? allTuitions : myTuitions;
     const loading = tab === "all" ? loadingAll : loadingMy;
 
-    // ================= UPDATE HANDLER =================
-    const handleUpdate = async (e) => {
+    // ================= CHECK IF ALREADY APPLIED =================
+    const isApplied = (tuitionId) => {
+        return myApplications.some((app) => app.tuitionId === tuitionId);
+    };
+
+    // ================= APPLY SUBMIT =================
+    const handleApplySubmit = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+
+        const applicationData = {
+            tuitionId: applyTuition._id,
+            tuitionSubject: applyTuition.subject,
+
+            studentName: applyTuition.studentName,
+            studentEmail: applyTuition.email,
+            studentId: applyTuition.studentId,
+
+            tutorName: user.displayName,
+            tutorEmail: user.email,
+
+            qualifications: form.qualifications.value,
+            experience: form.experience.value,
+            expectedSalary: form.expectedSalary.value,
+        };
+
+        const res = await axiosSecure.post("/applications", applicationData);
+
+        if (res.data.success) {
+            Swal.fire("Success", "Applied successfully", "success");
+            refetchApplications();
+            setApplyTuition(null);
+        }
+    };
+
+    // ================= DELETE TUITION =================
+    const handleDeleteTuition = async (id) => {
+        const confirm = await Swal.fire({
+            title: "Are you sure?",
+            text: "This tuition will be deleted permanently",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        const res = await axiosSecure.delete(
+            `/tuitions/${id}?email=${user.email}`
+        );
+
+        if (res.data.success) {
+            Swal.fire("Deleted!", "Tuition removed", "success");
+            refetchAll();
+            refetchMy();
+        } else {
+            Swal.fire("Error", "Delete failed", "error");
+        }
+    };
+
+    // ================= EDIT SUBMIT =================
+    const handleEditSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
 
@@ -53,9 +130,7 @@ const Tutions = () => {
             class: form.class.value,
             location: form.location.value,
             budget: form.budget.value,
-            time: form.time.value,
-            details: form.details.value,
-            email: user.email, // 🔐 security
+            email: user.email, // 🔐 ownership check
         };
 
         const res = await axiosSecure.put(
@@ -64,41 +139,19 @@ const Tutions = () => {
         );
 
         if (res.data.success) {
-            alert("Tuition updated successfully");
+            Swal.fire("Updated!", "Tuition updated", "success");
             setEditTuition(null);
             refetchAll();
             refetchMy();
+        } else {
+            Swal.fire("Error", "Update failed", "error");
         }
     };
 
-
-    const handleDelete = async (tuitionId) => {
-        const confirmDelete = window.confirm(
-            "Are you sure you want to delete this tuition?"
-        );
-
-        if (!confirmDelete) return;
-
-        try {
-            const res = await axiosSecure.delete(
-                `/tuitions/${tuitionId}?email=${user.email}`
-            );
-
-            if (res.data.success) {
-                alert("Tuition deleted successfully");
-                refetchAll();
-                refetchMy();
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Failed to delete tuition");
-        }
-    };
-
+    if (isLoading) return <p className="text-center">Loading...</p>;
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-10">
-            {/* Title */}
             <motion.h2
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -107,7 +160,7 @@ const Tutions = () => {
                 📚 Tuition Posts
             </motion.h2>
 
-            {/* Tabs */}
+            {/* TABS */}
             <div className="flex justify-center gap-4 mb-6">
                 <button
                     onClick={() => setTab("all")}
@@ -132,8 +185,8 @@ const Tutions = () => {
                 )}
             </div>
 
-            {/* Table */}
-            <motion.div className="overflow-x-auto bg-white shadow-xl rounded-xl">
+            {/* TABLE */}
+            <div className="overflow-x-auto bg-white shadow-xl rounded-xl">
                 {loading ? (
                     <p className="text-center py-10">Loading...</p>
                 ) : (
@@ -146,125 +199,148 @@ const Tutions = () => {
                                 <th>Location</th>
                                 <th>Budget</th>
                                 <th>Status</th>
-                                <th>Posted By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            {tuitions.length === 0 ? (
-                                <tr>
-                                    <td colSpan="8" className="text-center py-6">
-                                        No tuitions found
+                            {tuitions.map((t, i) => (
+                                <tr key={t._id}>
+                                    <td>{i + 1}</td>
+                                    <td>{t.subject}</td>
+                                    <td>{t.class}</td>
+                                    <td>{t.location}</td>
+                                    <td>৳ {t.budget}</td>
+                                    <td>{t.status}</td>
+                                    <td>
+                                        {/* STUDENT */}
+                                        {role === "student" && t.email === user?.email && (
+                                            <>
+                                                <button
+                                                    className="btn btn-xs btn-warning mr-2"
+                                                    onClick={() => setEditTuition(t)}
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    className="btn btn-xs btn-error"
+                                                    onClick={() => handleDeleteTuition(t._id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </>
+                                        )}
+
+                                        {/* TUTOR */}
+                                        {role === "tutor" &&
+                                            (isApplied(t._id) ? (
+                                                <button
+                                                    disabled
+                                                    className="btn btn-xs btn-disabled"
+                                                >
+                                                    Applied
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="btn btn-xs btn-primary"
+                                                    onClick={() =>
+                                                        setApplyTuition(t)
+                                                    }
+                                                >
+                                                    Apply
+                                                </button>
+                                            ))}
                                     </td>
                                 </tr>
-                            ) : (
-                                tuitions.map((t, i) => (
-                                    <motion.tr
-                                        key={t._id}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: i * 0.05 }}
-                                    >
-                                        <td>{i + 1}</td>
-                                        <td>{t.subject}</td>
-                                        <td>{t.class}</td>
-                                        <td>{t.location}</td>
-                                        <td>৳ {t.budget}</td>
-                                        <td>
-                                            <span className="px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-700">
-                                                {t.status}
-                                            </span>
-                                        </td>
-                                        <td className="text-sm">{t.email}</td>
-                                        <td className="space-x-2">
-                                            {/* STUDENT EDIT */}
-                                            {role === "student" && t.email === user?.email && (
-                                                <>
-                                                    <button
-                                                        onClick={() => setEditTuition(t)}
-                                                        className="px-3 py-1 bg-yellow-500 text-white rounded-full text-sm"
-                                                    >
-                                                        Edit
-                                                    </button>
-
-                                                    <button
-                                                        onClick={() => handleDelete(t._id)}
-                                                        className="px-3 py-1 bg-red-600 text-white rounded-full text-sm"
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </>
-                                            )}
-
-
-                                            {/* TUTOR / ADMIN APPLY */}
-                                            {(role === "tutor" ||
-                                                role === "admin") && (
-                                                    <button className="px-3 py-1 bg-indigo-600 text-white rounded-full text-sm">
-                                                        Apply
-                                                    </button>
-                                                )}
-                                        </td>
-                                    </motion.tr>
-                                ))
-                            )}
+                            ))}
                         </tbody>
                     </table>
                 )}
-            </motion.div>
+            </div>
 
-            {/* ================= EDIT MODAL ================= */}
+            {/* APPLY MODAL */}
+            {applyTuition && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded w-96">
+                        <form
+                            onSubmit={handleApplySubmit}
+                            className="space-y-3"
+                        >
+                            <input
+                                name="qualifications"
+                                placeholder="Qualifications"
+                                required
+                                className="input input-bordered w-full"
+                            />
+                            <input
+                                name="experience"
+                                placeholder="Experience"
+                                required
+                                className="input input-bordered w-full"
+                            />
+                            <input
+                                name="expectedSalary"
+                                placeholder="Expected Salary"
+                                required
+                                className="input input-bordered w-full"
+                            />
+
+                            <button className="btn btn-primary w-full">
+                                Submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* EDIT MODAL */}
             {editTuition && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-xl p-6 w-full max-w-md">
-                        <h3 className="text-xl font-bold mb-4">
+                    <div className="bg-white p-6 rounded w-96">
+                        <h3 className="text-lg font-bold mb-3">
                             ✏️ Edit Tuition
                         </h3>
 
-                        <form onSubmit={handleUpdate} className="space-y-3">
+                        <form
+                            onSubmit={handleEditSubmit}
+                            className="space-y-3"
+                        >
                             <input
                                 name="subject"
                                 defaultValue={editTuition.subject}
                                 className="input input-bordered w-full"
+                                required
                             />
                             <input
                                 name="class"
                                 defaultValue={editTuition.class}
                                 className="input input-bordered w-full"
+                                required
                             />
                             <input
                                 name="location"
                                 defaultValue={editTuition.location}
                                 className="input input-bordered w-full"
+                                required
                             />
                             <input
                                 name="budget"
                                 defaultValue={editTuition.budget}
                                 className="input input-bordered w-full"
-                            />
-                            <input
-                                name="time"
-                                defaultValue={editTuition.time}
-                                className="input input-bordered w-full"
-                            />
-                            <textarea
-                                name="details"
-                                defaultValue={editTuition.details}
-                                className="textarea textarea-bordered w-full"
+                                required
                             />
 
-                            <div className="flex justify-end gap-3">
+                            <div className="flex gap-2 justify-end">
                                 <button
                                     type="button"
+                                    className="btn btn-sm"
                                     onClick={() => setEditTuition(null)}
-                                    className="px-4 py-2 bg-gray-300 rounded"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-indigo-600 text-white rounded"
+                                    className="btn btn-sm btn-primary"
                                 >
                                     Update
                                 </button>

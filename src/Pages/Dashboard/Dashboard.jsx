@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link, NavLink, Outlet } from 'react-router';
-import { MdOutlinePostAdd } from "react-icons/md";
+import { MdMoveToInbox, MdOutlinePostAdd } from "react-icons/md";
 import useRole from '../../Hooks/useRole';
+import { VscGitStashApply } from "react-icons/vsc";
+
 
 
 const Dashboard = () => {
@@ -55,6 +57,35 @@ const Dashboard = () => {
                                     <MdOutlinePostAdd className='my-1.5 inline-block size-4' />
 
                                     <span className="is-drawer-close:hidden">Post Tutions</span>
+
+                                </NavLink>
+                            </li>
+                        }
+                        
+                        {
+                            role === 'tutor' &&
+                            <li>
+                                    <NavLink to={'applications'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Applications">
+
+                                    {/* Home icon */}
+                                        <MdMoveToInbox className='my-1.5 inline-block size-4' />
+
+                                    <span className="is-drawer-close:hidden">My Applications</span>
+
+                                </NavLink>
+                            </li>
+                        }
+
+
+                        {
+                            role === 'student' &&
+                            <li>
+                                    <NavLink to={'applied-tutions'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Applied Tutions">
+
+                                    {/* Home icon */}
+                                        <VscGitStashApply className='my-1.5 inline-block size-4' />
+
+                                        <span className="is-drawer-close:hidden">Applied Tutions</span>
 
                                 </NavLink>
                             </li>
