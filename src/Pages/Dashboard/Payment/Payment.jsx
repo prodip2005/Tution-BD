@@ -56,6 +56,7 @@ const Payment = () => {
         const paymentInfo = {
             expectedSalary: application.expectedSalary,
             applicationId: application._id,
+            applicationName:application.studentName,
             studentEmail: application.studentEmail,
             tuitionSubject: application.tuitionSubject
         }

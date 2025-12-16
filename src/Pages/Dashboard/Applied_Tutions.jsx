@@ -79,6 +79,68 @@ const Applied_Tutions = () => {
         return <p className="text-center mt-10">Loading...</p>;
     }
 
+    const handleDelete = async (id) => {
+        const confirm = await Swal.fire({
+            title: "Are you sure?",
+            text: "This application will be permanently deleted",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete",
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        const res = await axiosSecure.delete(
+            `/applications/student/${id}?email=${user.email}`
+        );
+
+
+        if (res.data.success) {
+            Swal.fire("Deleted!", "Application removed", "success");
+            refetch();
+        }
+    };
+
+    const handleDeleteAll = async () => {
+        if (data.length === 0) {
+            return Swal.fire("Nothing to delete", "", "info");
+        }
+
+        const confirm = await Swal.fire({
+            title: "Delete ALL applications?",
+            text: "This will permanently delete all your tutor applications!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete all",
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        const ids = data.map(app => app._id);
+
+        const res = await axiosSecure.delete(
+            "/applications/student/bulk",
+            {
+                data: {
+                    ids,
+                    email: user.email,
+                },
+            }
+        );
+
+        if (res.data.success) {
+            Swal.fire(
+                "Deleted!",
+                `${res.data.deletedCount} applications removed`,
+                "success"
+            );
+            refetch();
+        }
+    };
+
+
+
+
     return (
         <div className="max-w-7xl mx-auto px-4 py-12">
             <motion.h2
@@ -86,8 +148,18 @@ const Applied_Tutions = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-4xl font-extrabold text-center mb-12"
             >
+                
                 🎓 Tutor Applications
             </motion.h2>
+            <div className="flex justify-end mb-6">
+                <button
+                    onClick={handleDeleteAll}
+                    className="px-5 py-2 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700"
+                >
+                    🗑 Delete All Applications
+                </button>
+            </div>
+
 
             {data.length === 0 ? (
                 <p className="text-center text-gray-500">
@@ -183,6 +255,14 @@ const Applied_Tutions = () => {
                                     Rejected
                                 </div>
                             )}
+
+                            <button
+                                onClick={() => handleDelete(app._id)}
+                                className="mt-3 w-full py-2 rounded-xl bg-red-600 text-white hover:bg-red-700"
+                            >
+                                🗑 Delete Application
+                            </button>
+
                         </motion.div>
                     ))}
                 </div>

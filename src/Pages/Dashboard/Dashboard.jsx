@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet } from 'react-router';
 import { MdMoveToInbox, MdOutlinePostAdd } from "react-icons/md";
 import useRole from '../../Hooks/useRole';
 import { VscGitStashApply } from "react-icons/vsc";
+import { FaRegCreditCard } from 'react-icons/fa';
 
 
 
@@ -86,6 +87,36 @@ const Dashboard = () => {
                                         <VscGitStashApply className='my-1.5 inline-block size-4' />
 
                                         <span className="is-drawer-close:hidden">Applied Tutions</span>
+
+                                </NavLink>
+                            </li>
+                        }
+                        
+                        
+                        {
+                            role === 'student' &&
+                            <li>
+                                    <NavLink to={'payment-history'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Payment History">
+
+                                    {/* Home icon */}
+                                        <FaRegCreditCard className='my-1.5 inline-block size-4' />
+
+                                        <span className="is-drawer-close:hidden">Payment History</span>
+
+                                </NavLink>
+                            </li>
+                        }
+                        
+                        
+                        {
+                            role === 'tutor' &&
+                            <li>
+                                    <NavLink to={'tutor-payment'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Payment History">
+
+                                    {/* Home icon */}
+                                        <FaRegCreditCard className='my-1.5 inline-block size-4' />
+
+                                        <span className="is-drawer-close:hidden">Payment History</span>
 
                                 </NavLink>
                             </li>

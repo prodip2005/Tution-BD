@@ -96,14 +96,15 @@ const My_Applications = () => {
                                         >
                                             Edit
                                         </button>
-                                        <button
-                                            onClick={() => handleDelete(app._id)}
-                                            className="btn btn-sm btn-error"
-                                        >
-                                            Delete
-                                        </button>
+                                        
                                     </>
                                 )}
+                                <button
+                                    onClick={() => handleDelete(app._id)}
+                                    className="btn btn-sm btn-error"
+                                >
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     ))}
