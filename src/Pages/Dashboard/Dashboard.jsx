@@ -3,7 +3,10 @@ import { Link, NavLink, Outlet } from 'react-router';
 import { MdMoveToInbox, MdOutlinePostAdd } from "react-icons/md";
 import useRole from '../../Hooks/useRole';
 import { VscGitStashApply } from "react-icons/vsc";
-import { FaRegCreditCard } from 'react-icons/fa';
+import { FaChalkboardTeacher, FaClipboardList, FaRegCreditCard } from 'react-icons/fa';
+import { HiOutlineDocumentText } from "react-icons/hi";
+import { FaUsersBetweenLines } from "react-icons/fa6";
+
 
 
 
@@ -76,6 +79,19 @@ const Dashboard = () => {
                                 </NavLink>
                             </li>
                         }
+                        {
+                            role === 'student' &&
+                            <li>
+                                <NavLink to={'my-tutions'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="My Tutioins">
+
+                                    {/* Home icon */}
+                                        <HiOutlineDocumentText className='my-1.5 inline-block size-4' />
+
+                                    <span className="is-drawer-close:hidden">My Tutioins</span>
+
+                                </NavLink>
+                            </li>
+                        }
 
 
                         {
@@ -108,6 +124,9 @@ const Dashboard = () => {
                         }
                         
                         
+                        
+                        
+                        
                         {
                             role === 'tutor' &&
                             <li>
@@ -121,6 +140,52 @@ const Dashboard = () => {
                                 </NavLink>
                             </li>
                         }
+                        
+                        {
+                            role === 'admin' &&
+                            <li>
+                                    <NavLink to={'all-users'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All Users">
+
+                                    {/* Home icon */}
+                                        <FaUsersBetweenLines className='my-1.5 inline-block size-4' />
+
+                                        <span className="is-drawer-close:hidden">All Users</span>
+
+                                </NavLink>
+                            </li>
+                        }
+
+                        {
+                            role === 'admin' &&
+                            <li>
+                                <NavLink to={'apply-tution'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Applied Tutions">
+
+                                    {/* Home icon */}
+                                        <FaClipboardList className='my-1.5 inline-block size-4' />
+
+                                    <span className="is-drawer-close:hidden">Applied Tutions</span>
+
+                                </NavLink>
+                            </li>
+                        }
+                        
+                        
+                        {
+                            role === 'admin' &&
+                            <li>
+                                    <NavLink to={'applied-tutor'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Tutor Application">
+
+                                    {/* Home icon */}
+                                        <FaChalkboardTeacher className='my-1.5 inline-block size-4' />
+
+                                        <span className="is-drawer-close:hidden">Tutor Application</span>
+
+                                </NavLink>
+                            </li>
+                        }
+                        
+                        
+                        
 
 
                     </ul>

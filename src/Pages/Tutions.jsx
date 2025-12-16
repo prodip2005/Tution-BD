@@ -11,33 +11,17 @@ const Tutions = () => {
     const axiosSecure = useAxiosSecure();
     const { role, isLoading } = useRole();
 
-    const [tab, setTab] = useState("all");
     const [applyTuition, setApplyTuition] = useState(null);
-    const [editTuition, setEditTuition] = useState(null);
 
     // ================= ALL TUITIONS =================
     const {
         data: allTuitions = [],
         isLoading: loadingAll,
-        refetch: refetchAll,
+        refetch,
     } = useQuery({
         queryKey: ["tuitions"],
         queryFn: async () => {
             const res = await axiosSecure.get("/tuitions");
-            return res.data || [];
-        },
-    });
-
-    // ================= MY TUITIONS (STUDENT) =================
-    const {
-        data: myTuitions = [],
-        isLoading: loadingMy,
-        refetch: refetchMy,
-    } = useQuery({
-        queryKey: ["my-tuitions", user?.email],
-        enabled: role === "student",
-        queryFn: async () => {
-            const res = await axiosSecure.get(`/tuitions?email=${user.email}`);
             return res.data || [];
         },
     });
@@ -48,7 +32,7 @@ const Tutions = () => {
         refetch: refetchApplications,
     } = useQuery({
         queryKey: ["my-applications", user?.email],
-        enabled: role === "tutor",
+        enabled: role === "tutor" && !!user?.email,
         queryFn: async () => {
             const res = await axiosSecure.get(
                 `/applications?email=${user.email}`
@@ -57,16 +41,12 @@ const Tutions = () => {
         },
     });
 
-    // 🔥 BOOKED tuition hide
-    const filteredAll = allTuitions.filter(t => t.status !== "booked");
-    const filteredMy = myTuitions.filter(t => t.status !== "booked");
-
-    const tuitions = tab === "all" ? filteredAll : filteredMy;
-    const loading = tab === "all" ? loadingAll : loadingMy;
+    // ================= FILTER BOOKED =================
+    const tuitions = allTuitions.filter(t => t.status !== "booked");
 
     // ================= CHECK IF ALREADY APPLIED =================
     const isApplied = (tuitionId) => {
-        return myApplications.some((app) => app.tuitionId === tuitionId);
+        return myApplications.some(app => app.tuitionId === tuitionId);
     };
 
     // ================= APPLY SUBMIT =================
@@ -92,57 +72,14 @@ const Tutions = () => {
             Swal.fire("Success", "Applied successfully", "success");
             refetchApplications();
             setApplyTuition(null);
+        } else {
+            Swal.fire("Error", res.data.message || "Failed", "error");
         }
     };
 
-    // ================= DELETE TUITION =================
-    const handleDeleteTuition = async (id) => {
-        const confirm = await Swal.fire({
-            title: "Are you sure?",
-            icon: "warning",
-            showCancelButton: true,
-        });
-
-        if (!confirm.isConfirmed) return;
-
-        const res = await axiosSecure.delete(
-            `/tuitions/${id}?email=${user.email}`
-        );
-
-        if (res.data.success) {
-            Swal.fire("Deleted", "", "success");
-            refetchAll();
-            refetchMy();
-        }
-    };
-
-    // ================= EDIT SUBMIT =================
-    const handleEditSubmit = async (e) => {
-        e.preventDefault();
-        const form = e.target;
-
-        const updatedData = {
-            subject: form.subject.value,
-            class: form.class.value,
-            location: form.location.value,
-            budget: form.budget.value,
-            email: user.email,
-        };
-
-        const res = await axiosSecure.put(
-            `/tuitions/${editTuition._id}`,
-            updatedData
-        );
-
-        if (res.data.success) {
-            Swal.fire("Updated!", "", "success");
-            setEditTuition(null);
-            refetchAll();
-            refetchMy();
-        }
-    };
-
-    if (isLoading) return <p className="text-center">Loading...</p>;
+    if (isLoading || loadingAll) {
+        return <p className="text-center mt-10">Loading...</p>;
+    }
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-10">
@@ -151,31 +88,8 @@ const Tutions = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-3xl font-bold mb-6 text-center"
             >
-                📚 Tuition Posts
+                📚 Available Tuitions
             </motion.h2>
-
-            {/* TABS */}
-            <div className="flex justify-center gap-4 mb-6">
-                <button
-                    onClick={() => setTab("all")}
-                    className={`px-5 py-2 rounded-full ${tab === "all"
-                        ? "bg-indigo-600 text-white"
-                        : "bg-gray-200"}`}
-                >
-                    All Tuitions
-                </button>
-
-                {role === "student" && (
-                    <button
-                        onClick={() => setTab("my")}
-                        className={`px-5 py-2 rounded-full ${tab === "my"
-                            ? "bg-indigo-600 text-white"
-                            : "bg-gray-200"}`}
-                    >
-                        My Tuitions
-                    </button>
-                )}
-            </div>
 
             {/* TABLE */}
             <div className="overflow-x-auto bg-white shadow-xl rounded-xl">
@@ -187,7 +101,10 @@ const Tutions = () => {
                             <th>Class</th>
                             <th>Location</th>
                             <th>Budget</th>
-                            <th>Action</th>
+                            {
+                                role === 'tutor' &&
+                                <th>Action</th>
+                            }
                         </tr>
                     </thead>
 
@@ -200,26 +117,12 @@ const Tutions = () => {
                                 <td>{t.location}</td>
                                 <td>৳ {t.budget}</td>
                                 <td>
-                                    {role === "student" && t.email === user?.email && (
-                                        <>
+                                    {role === "tutor" && (
+                                        isApplied(t._id) ? (
                                             <button
-                                                className="btn btn-xs btn-warning mr-2"
-                                                onClick={() => setEditTuition(t)}
+                                                disabled
+                                                className="btn btn-xs"
                                             >
-                                                Edit
-                                            </button>
-                                            <button
-                                                className="btn btn-xs btn-error"
-                                                onClick={() => handleDeleteTuition(t._id)}
-                                            >
-                                                Delete
-                                            </button>
-                                        </>
-                                    )}
-
-                                    {role === "tutor" &&
-                                        (isApplied(t._id) ? (
-                                            <button disabled className="btn btn-xs">
                                                 Applied
                                             </button>
                                         ) : (
@@ -229,7 +132,8 @@ const Tutions = () => {
                                             >
                                                 Apply
                                             </button>
-                                        ))}
+                                        )
+                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -239,33 +143,42 @@ const Tutions = () => {
 
             {/* APPLY MODAL */}
             {applyTuition && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded w-96">
-                        <form onSubmit={handleApplySubmit} className="space-y-3">
-                            <input name="qualifications" required className="input w-full" placeholder="Qualifications" />
-                            <input name="experience" required className="input w-full" placeholder="Experience" />
-                            <input name="expectedSalary" required className="input w-full" placeholder="Expected Salary" />
-                            <button className="btn btn-primary w-full">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            )}
+                        <h3 className="text-lg font-semibold mb-3">
+                            Apply for {applyTuition.subject}
+                        </h3>
 
-            {/* EDIT MODAL */}
-            {editTuition && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded w-96">
-                        <form onSubmit={handleEditSubmit} className="space-y-3">
-                            <input name="subject" defaultValue={editTuition.subject} className="input w-full" />
-                            <input name="class" defaultValue={editTuition.class} className="input w-full" />
-                            <input name="location" defaultValue={editTuition.location} className="input w-full" />
-                            <input name="budget" defaultValue={editTuition.budget} className="input w-full" />
+                        <form onSubmit={handleApplySubmit} className="space-y-3">
+                            <input
+                                name="qualifications"
+                                required
+                                className="input input-bordered w-full"
+                                placeholder="Qualifications"
+                            />
+                            <input
+                                name="experience"
+                                required
+                                className="input input-bordered w-full"
+                                placeholder="Experience"
+                            />
+                            <input
+                                name="expectedSalary"
+                                required
+                                className="input input-bordered w-full"
+                                placeholder="Expected Salary"
+                            />
+
                             <div className="flex justify-end gap-2">
-                                <button type="button" onClick={() => setEditTuition(null)} className="btn btn-sm">
+                                <button
+                                    type="button"
+                                    onClick={() => setApplyTuition(null)}
+                                    className="btn btn-sm"
+                                >
                                     Cancel
                                 </button>
                                 <button className="btn btn-sm btn-primary">
-                                    Update
+                                    Submit
                                 </button>
                             </div>
                         </form>

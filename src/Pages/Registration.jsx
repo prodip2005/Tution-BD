@@ -75,7 +75,6 @@ const RegistrationForm = () => {
     const [successPopup, setSuccessPopup] = useState(null); // {message} or null
 
     const photoPreview = watch("photoUrl");
-    const chosenRole = watch("role");
 
     const showInlineError = (msg) => {
         setFeedback({ type: "error", message: msg });
@@ -100,7 +99,7 @@ const RegistrationForm = () => {
                 name: data.name,
                 email: data.email,
                 photoURL: data.photoUrl || null,
-                role: data.role || "student",
+                role: "student",
             };
 
             // POST to /users
@@ -216,22 +215,6 @@ const RegistrationForm = () => {
                     )}
                 </div>
 
-                {/* Role (student / tutor) */}
-                <div className="input-group">
-                    <label className="block text-sm font-medium mb-1">Role</label>
-                    <div className="flex items-center gap-4">
-                        <label className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border ${chosenRole === "student" ? "bg-blue-50 border-blue-200" : "border-gray-200"}`}>
-                            <input {...register("role", { required: true })} type="radio" value="student" defaultChecked />
-                            <span className="text-sm">Student</span>
-                        </label>
-
-                        <label className={`inline-flex items-center gap-2 px-3 py-2 rounded-md border ${chosenRole === "tutor" ? "bg-blue-50 border-blue-200" : "border-gray-200"}`}>
-                            <input {...register("role", { required: true })} type="radio" value="tutor" />
-                            <span className="text-sm">Tutor</span>
-                        </label>
-                    </div>
-                    {errors.role && <p className="text-red-500 text-sm mt-1">Please select a role</p>}
-                </div>
 
                 {/* Password */}
                 <div className="input-group relative">

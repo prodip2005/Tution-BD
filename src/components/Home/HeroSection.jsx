@@ -7,10 +7,7 @@ import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-/**
- * Replace slideData image URLs with your own images.
- * Swiper autoplay will pause on mouse enter and resume on leave.
- */
+
 const slideData = [
     {
         image: "https://images.unsplash.com/photo-1506765515384-028b60a970df?q=80&w=1600&auto=format&fit=crop",
@@ -68,7 +65,7 @@ const HeroSection = () => {
                                 />
 
                                 {/* soft overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/45" />
+                                <div className="absolute inset-0 bg-linear-to-b from-black/20 via-black/10 to-black/45" />
 
                                 {/* Content */}
                                 <div className="relative z-10 h-full flex items-center">

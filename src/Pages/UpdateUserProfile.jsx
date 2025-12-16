@@ -6,10 +6,7 @@ import { AuthContext } from "../Providers/AuthContext";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { auth } from "../Firebase/firebase.init";
 
-const roles = [
-    { value: "student", label: "Student" },
-    { value: "tutor", label: "Tutor" },
-];
+
 
 const UpdateUserProfile = () => {
     const { user } = useContext(AuthContext);
@@ -28,9 +25,7 @@ const UpdateUserProfile = () => {
     } = useForm({
         defaultValues: {
             name: "",
-            role: "",
             imageUrl: "",
-            subjects: "",
             institution: "",
             level: "",
             location: "",
@@ -82,9 +77,7 @@ const UpdateUserProfile = () => {
             const payload = {
                 email: user.email,
                 name: data.name,
-                role: data.role,
                 image: data.imageUrl,
-                subjects: data.subjects,
                 institution: data.institution,
                 level: data.level,
                 location: data.location,
@@ -154,24 +147,12 @@ const UpdateUserProfile = () => {
                         className="input input-bordered w-full"
                     />
 
-                    <select {...register("role")} className="input input-bordered w-full">
-                        {roles.map((r) => (
-                            <option key={r.value} value={r.value}>
-                                {r.label}
-                            </option>
-                        ))}
-                    </select>
+                    
 
                     <input
                         {...register("imageUrl")}
                         onChange={(e) => setPreview(e.target.value)}
                         placeholder="Profile Image URL"
-                        className="input input-bordered w-full"
-                    />
-
-                    <input
-                        {...register("subjects")}
-                        placeholder="Subjects (Math, Physics)"
                         className="input input-bordered w-full"
                     />
 

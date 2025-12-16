@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../Providers/AuthContext"; // path ঠিক করে নিবে
+import useRole from "../Hooks/useRole";
 
 /* --- Framer Motion variants --- */
 const navVariants = {
@@ -14,6 +15,7 @@ const navVariants = {
     },
 };
 
+
 const itemVariants = {
     hidden: { opacity: 0, y: -6 },
     visible: (i = 1) => ({ opacity: 1, y: 0, transition: { delay: i * 0.06 } }),
@@ -23,6 +25,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const { user, LogOut } = useContext(AuthContext); // <-- useContext here
     const [open, setOpen] = useState(false);
+    const {role}=useRole()
 
     const navLinkClasses = ({ isActive }) =>
         `px-4 py-2 rounded-lg relative transition-all duration-300 overflow-hidden
@@ -33,10 +36,8 @@ const Navbar = () => {
         { to: "/", label: "Home" },
         { to: "/tutions", label: "Tutions" },
         { to: "/tutors", label: "Tutors" },
-        // { to: "/about", label: "About" },
-        // { to: "/contact", label: "Contact" },
- 
     ];
+
 
     const handleLogOut = async () => {
         try {
@@ -122,6 +123,25 @@ const Navbar = () => {
                                 </NavLink>
                             </motion.li>
                         )}
+
+
+
+                        {user && role === "student" && (
+                            <motion.li
+                                initial={{ opacity: 0, x: -6 }}
+                                animate={{ opacity: 1, x: 0 }}
+                            >
+                                <NavLink
+                                    to="/apply-tutor"
+                                    className="block px-4 py-2 rounded-lg text-base-content/90"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Be a Tutor
+                                </NavLink>
+                            </motion.li>
+                        )}
+
+                        
                     </ul>
                 </div>
 
@@ -145,11 +165,15 @@ const Navbar = () => {
                                 </div>
                             </div>
 
-                            <button onClick={handleLogOut}>
-                                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="btn btn-sm bg-red-600 text-white rounded-xl shadow-lg shadow-primary/30 transition-all duration-300">
+                            <motion.button
+                                onClick={handleLogOut}
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="btn btn-sm bg-red-600 text-white rounded-xl shadow-lg shadow-primary/30 transition-all duration-300"
+                            >
                                 Logout
                             </motion.button>
-                            </button>
+
                         </div>
                     ) : (
                         <Link to={"/login"}>

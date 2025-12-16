@@ -19,6 +19,11 @@ import Payment_Success from "../Pages/Dashboard/Payment/Payment_Success";
 import Payment_Cancelled from "../Pages/Dashboard/Payment/Payment_Cancelled";
 import PaymentHistory from "../Pages/Dashboard/Payment/PaymentHistory";
 import TutorPaymentHistory from "../Pages/Dashboard/Payment/TutorPaymentHistory";
+import MyTutioins from "../Pages/Dashboard/MyTutioins";
+import AllUsers from "../Pages/Dashboard/AllUsers";
+import ApplyTutor from "../components/ApplyTutor";
+import AppliedTutor from "../Pages/Dashboard/AppliedTutor";
+import ApplyTution from "../Pages/Dashboard/ApplyTution";
 
 const router = createBrowserRouter([
     {
@@ -61,6 +66,10 @@ const router = createBrowserRouter([
             {
                 path: "/tutors/:email",
                 element: <TutorDetails />
+            },
+            {
+                path: '/apply-tutor',
+                Component:ApplyTutor
             }
 
         ]
@@ -103,6 +112,22 @@ const router = createBrowserRouter([
             {
                 path: 'tutor-payment',
                 Component:TutorPaymentHistory
+            },
+            {
+                path: 'my-tutions',
+                Component:MyTutioins
+            },
+            {
+                path: 'all-users',
+                Component:AllUsers
+            },
+            {
+                path: 'applied-tutor',
+                Component:AppliedTutor
+            },
+            {
+                path: 'apply-tution',
+                Component:ApplyTution
             }
         ]
     }
