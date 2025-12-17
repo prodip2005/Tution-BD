@@ -144,12 +144,12 @@ const Dashboard = () => {
                         {
                             role === 'admin' &&
                             <li>
-                                    <NavLink to={'all-users'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="All Users">
+                                    <NavLink to={'all-users'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Users Management">
 
                                     {/* Home icon */}
                                         <FaUsersBetweenLines className='my-1.5 inline-block size-4' />
 
-                                        <span className="is-drawer-close:hidden">All Users</span>
+                                        <span className="is-drawer-close:hidden">Users Management</span>
 
                                 </NavLink>
                             </li>
