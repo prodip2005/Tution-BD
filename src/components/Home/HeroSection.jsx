@@ -53,7 +53,7 @@ const HeroSection = () => {
                     {slideData.map((s, i) => (
                         <SwiperSlide key={i}>
                             <div className="relative w-full h-[520px] md:h-[620px]">
-                                {/* Background image */}
+                               
                                 <div
                                     className="absolute inset-0 bg-center bg-cover transition-transform duration-1000"
                                     style={{
@@ -64,10 +64,10 @@ const HeroSection = () => {
                                     aria-hidden
                                 />
 
-                                {/* soft overlay */}
+                               
                                 <div className="absolute inset-0 bg-linear-to-b from-black/20 via-black/10 to-black/45" />
 
-                                {/* Content */}
+                              
                                 <div className="relative z-10 h-full flex items-center">
                                     <div className="container mx-auto px-6 md:px-12">
                                         <div className="max-w-2xl text-white">
@@ -90,7 +90,6 @@ const HeroSection = () => {
                                     </div>
                                 </div>
 
-                                {/* subtle animated vignette to add life */}
                                 <div
                                     className="absolute inset-0 pointer-events-none"
                                     style={{
@@ -103,7 +102,6 @@ const HeroSection = () => {
                     ))}
                 </Swiper>
 
-                {/* small style hack for nav dots/buttons layering */}
                 <style>{`
           /* bring navigation buttons and pagination above overlay */
           .swiper-button-next, .swiper-button-prev {

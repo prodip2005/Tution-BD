@@ -2,7 +2,7 @@
 import React, { useContext, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { AuthContext } from "../Providers/AuthContext"; // path ঠিক করে নিবে
+import { AuthContext } from "../Providers/AuthContext";
 import useRole from "../Hooks/useRole";
 
 /* --- Framer Motion variants --- */
@@ -23,7 +23,7 @@ const itemVariants = {
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const { user, LogOut } = useContext(AuthContext); // <-- useContext here
+    const { user, LogOut } = useContext(AuthContext); 
     const [open, setOpen] = useState(false);
     const {role}=useRole()
 
@@ -41,11 +41,10 @@ const Navbar = () => {
 
     const handleLogOut = async () => {
         try {
-            await LogOut(); // ensure AuthProvider exposes LogOut()
-            navigate("/"); // go to home after logout
+            await LogOut(); 
+            navigate("/"); 
         } catch (err) {
             console.error("Logout error:", err);
-            // you can show toast/alert here
         }
     };
 

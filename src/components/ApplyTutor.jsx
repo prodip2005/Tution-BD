@@ -19,7 +19,6 @@ const ApplyTutor = () => {
         formState: { errors }
     } = useForm();
 
-    // 🔎 Check existing tutor application
     useEffect(() => {
         if (!user?.email) return;
 
@@ -29,7 +28,6 @@ const ApplyTutor = () => {
                     setAlreadyApplied(true);
                     setTutorData(res.data.tutor);
 
-                    // ✅ pending হলে form prefill
                     if (res.data.tutor.status === 'pending') {
                         Object.keys(res.data.tutor).forEach(key => {
                             setValue(key, res.data.tutor[key]);
@@ -43,7 +41,6 @@ const ApplyTutor = () => {
     const onSubmit = (data) => {
         data.email = user.email;
 
-        // ✏️ UPDATE
         if (alreadyApplied && tutorData?.status === 'pending') {
             axiosSecure.patch(`/tutors/${tutorData._id}`, data)
                 .then(res => {
@@ -73,7 +70,6 @@ const ApplyTutor = () => {
                 });
         }
 
-        // 🆕 FIRST APPLY
         else {
             axiosSecure.post('/tutors', data)
                 .then(res => {
@@ -111,7 +107,6 @@ const ApplyTutor = () => {
         return <p className="text-center mt-20">Loading...</p>;
     }
 
-    // 🚫 Already applied & not pending
     if (alreadyApplied && tutorData?.status !== 'pending') {
         return (
             <div className="max-w-xl mx-auto mt-20 text-center">

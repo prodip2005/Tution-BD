@@ -15,7 +15,6 @@ const AllUsers = () => {
     const [activeRole, setActiveRole] = useState("student");
     const [selectedUser, setSelectedUser] = useState(null);
 
-    // 🔄 FETCH USERS
     const { data: users = [], refetch, isLoading } = useQuery({
         queryKey: ["all-users"],
         queryFn: async () => {
@@ -28,12 +27,11 @@ const AllUsers = () => {
         return <p className="text-center mt-10">Loading users...</p>;
     }
 
-    // 🎯 FILTER USERS BY ROLE
     const filteredUsers = users.filter(
         (user) => user.role === activeRole
     );
 
-    // 🔁 ROLE CHANGE HANDLER
+ 
     const handleRoleChange = async (email, role) => {
         const confirm = await Swal.fire({
             title: "Are you sure?",
@@ -67,7 +65,7 @@ const AllUsers = () => {
         }
     };
 
-    // 🗑️ DELETE USER
+
     const handleDelete = async (email) => {
         const confirm = await Swal.fire({
             title: "Delete user?",
@@ -137,7 +135,6 @@ const AllUsers = () => {
                 </button>
             </div>
 
-            {/* USERS TABLE */}
             <div className="overflow-x-auto bg-white shadow-xl rounded-xl">
                 <table className="table w-full">
                     <thead className="bg-indigo-600 text-white">
