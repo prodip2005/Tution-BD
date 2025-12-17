@@ -218,7 +218,26 @@ const Navbar = () => {
                                             <span className="relative z-10">Dashboard</span>
                                         </NavLink>
                                     </motion.li>
+
                                 )}
+                                {user && role === "student" && (
+                                    <motion.li
+                                        initial={{ opacity: 0, x: -6 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                    >
+                                        <NavLink
+                                            to="/apply-tutor"
+                                            className={({ isActive }) =>
+                                                `block px-4 py-2 rounded-lg transition-colors duration-200 ${isActive ? "bg-primary text-white" : "text-base-content/90"
+                                                }`
+                                            }
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            Be a Tutor
+                                        </NavLink>
+                                    </motion.li>
+                                )}
+
 
                                 
                                 {/* add auth actions in mobile menu */}

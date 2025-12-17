@@ -28,7 +28,7 @@ const Applied_Tutions = () => {
 
 
     // console.log(data);
-    
+
 
     // ================= VIEW TUTOR =================
     const handleViewTutor = async (email) => {
@@ -148,7 +148,7 @@ const Applied_Tutions = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-4xl font-extrabold text-center mb-12"
             >
-                
+
                 🎓 Tutor Applications
             </motion.h2>
             <div className="flex justify-end mb-6">
@@ -223,8 +223,8 @@ const Applied_Tutions = () => {
 
                             {/* PENDING + NOT PAID → LINK TO PAYMENT */}
                             {app.status === "pending" && app.paymentStatus !== "paid" && (
-                                
-                                
+
+
                                 <div className="flex gap-3">
                                     <Link
                                         to={`/dashboard/payment/${app._id}`}

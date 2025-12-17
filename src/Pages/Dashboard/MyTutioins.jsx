@@ -98,8 +98,8 @@ const My_Tuitions = () => {
                                 <td>
                                     <span
                                         className={`badge ${t.status === "booked"
-                                                ? "badge-success"
-                                                : "badge-warning"
+                                            ? "badge-success"
+                                            : "badge-warning"
                                             }`}
                                     >
                                         {t.status}
