@@ -262,7 +262,7 @@ const Navbar = () => {
         /* glass container extra styling */
         .nav-glass {
           position: relative;
-          overflow: visible;
+          overflow: hidden;
         }
 
         /* moving gradient shimmer */

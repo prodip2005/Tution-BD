@@ -7,7 +7,7 @@ import ScrollProgress from '../Animation/ScrollProgress';
 const RootLayout = () => {
    
     return (
-        <div className='min-h-screen flex flex-col'>
+        <div className='min-h-screen flex flex-col overflow-x-hidden'>
             <div className='sticky top-0 z-50'>
                 <ScrollProgress />
                 <Navbar />
