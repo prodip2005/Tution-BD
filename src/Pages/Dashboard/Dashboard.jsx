@@ -158,12 +158,12 @@ const Dashboard = () => {
                         {
                             role === 'admin' &&
                             <li>
-                                <NavLink to={'apply-tution'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Applied Tutions">
+                                    <NavLink to={'apply-tution'} className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Tution Management">
 
                                     {/* Home icon */}
                                         <FaClipboardList className='my-1.5 inline-block size-4' />
 
-                                    <span className="is-drawer-close:hidden">Applied Tutions</span>
+                                    <span className="is-drawer-close:hidden">Tution Management</span>
 
                                 </NavLink>
                             </li>

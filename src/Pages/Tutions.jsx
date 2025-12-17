@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import { AuthContext } from "../Providers/AuthContext";
 import useRole from "../Hooks/useRole";
+import useDebounce from "../Hooks/useDebounce";
 
 const Tutions = () => {
     const { user } = useContext(AuthContext);
@@ -12,21 +13,27 @@ const Tutions = () => {
     const { role, isLoading } = useRole();
 
     const [applyTuition, setApplyTuition] = useState(null);
+    const [sortBy, setSortBy] = useState("latest");
+    const [search, setSearch] = useState("");
+
+    // 🔥 debounce search (important)
+    const debouncedSearch = useDebounce(search, 500);
 
     // ================= ALL TUITIONS =================
     const {
         data: allTuitions = [],
         isLoading: loadingAll,
-        refetch,
     } = useQuery({
-        queryKey: ["tuitions"],
+        queryKey: ["tuitions", sortBy, debouncedSearch],
         queryFn: async () => {
-            const res = await axiosSecure.get("/tuitions");
+            const res = await axiosSecure.get(
+                `/tuitions?sortBy=${sortBy}&search=${debouncedSearch}`
+            );
             return res.data || [];
         },
     });
 
-    // ================= MY APPLICATIONS (TUTOR) =================
+    // ================= MY APPLICATIONS =================
     const {
         data: myApplications = [],
         refetch: refetchApplications,
@@ -41,15 +48,16 @@ const Tutions = () => {
         },
     });
 
-    // ================= FILTER BOOKED =================
-    const tuitions = allTuitions.filter(t => t.status !== "booked" && t.tuition_status === "approved");
+    // ================= FILTER =================
+    const tuitions = allTuitions.filter(
+        t => t.status !== "booked" && t.tuition_status === "approved"
+    );
 
-    // ================= CHECK IF ALREADY APPLIED =================
-    const isApplied = (tuitionId) => {
-        return myApplications.some(app => app.tuitionId === tuitionId);
-    };
+    // ================= CHECK APPLIED =================
+    const isApplied = (tuitionId) =>
+        myApplications.some(app => app.tuitionId === tuitionId);
 
-    // ================= APPLY SUBMIT =================
+    // ================= APPLY =================
     const handleApplySubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -91,6 +99,28 @@ const Tutions = () => {
                 📚 Available Tuitions
             </motion.h2>
 
+            {/* SEARCH + SORT */}
+            <div className="flex flex-col md:flex-row justify-between gap-3 mb-4">
+                <input
+                    type="text"
+                    placeholder="Search by subject, class, location"
+                    className="input input-bordered input-sm w-full md:w-72"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+
+                <select
+                    className="select select-bordered select-sm"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                >
+                    <option value="latest">Latest</option>
+                    <option value="location">Location (A–Z)</option>
+                    <option value="class">Class</option>
+                    <option value="subject">Subject (A–Z)</option>
+                </select>
+            </div>
+
             {/* TABLE */}
             <div className="overflow-x-auto bg-white shadow-xl rounded-xl">
                 <table className="table w-full">
@@ -101,14 +131,19 @@ const Tutions = () => {
                             <th>Class</th>
                             <th>Location</th>
                             <th>Budget</th>
-                            {
-                                role === 'tutor' &&
-                                <th>Action</th>
-                            }
+                            {role === "tutor" && <th>Action</th>}
                         </tr>
                     </thead>
 
                     <tbody>
+                        {tuitions.length === 0 && (
+                            <tr>
+                                <td colSpan="6" className="text-center py-6">
+                                    No tuitions found
+                                </td>
+                            </tr>
+                        )}
+
                         {tuitions.map((t, i) => (
                             <tr key={t._id}>
                                 <td>{i + 1}</td>
@@ -116,13 +151,11 @@ const Tutions = () => {
                                 <td>{t.class}</td>
                                 <td>{t.location}</td>
                                 <td>৳ {t.budget}</td>
-                                <td>
-                                    {role === "tutor" && (
-                                        isApplied(t._id) ? (
-                                            <button
-                                                disabled
-                                                className="btn btn-xs"
-                                            >
+
+                                {role === "tutor" && (
+                                    <td>
+                                        {isApplied(t._id) ? (
+                                            <button disabled className="btn btn-xs">
                                                 Applied
                                             </button>
                                         ) : (
@@ -132,9 +165,9 @@ const Tutions = () => {
                                             >
                                                 Apply
                                             </button>
-                                        )
-                                    )}
-                                </td>
+                                        )}
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>

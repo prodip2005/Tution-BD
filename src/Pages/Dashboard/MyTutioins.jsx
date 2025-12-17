@@ -117,7 +117,7 @@ const My_Tuitions = () => {
                                     </button>
 
                                     <button
-                                        disabled={t.status === "booked"}
+                                        
                                         className="btn btn-xs btn-error"
                                         onClick={() => handleDelete(t._id)}
                                     >
