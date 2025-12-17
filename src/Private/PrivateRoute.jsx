@@ -9,12 +9,12 @@ const PrivateRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
     const location = useLocation();
 
-    // Loading হলে spinner/showing skeleton দেখানো যাবে
+ 
     if (loading) {
         return <ScalingBarLoader/>
     }
 
-    // user না থাকলে → login পেইজে redirect
+    
     return user ? (
         children
     ) : (

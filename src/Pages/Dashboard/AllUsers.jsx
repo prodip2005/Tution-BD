@@ -172,70 +172,59 @@ const AllUsers = () => {
                                     {user.role}
                                 </td>
 
-                                <td className="flex gap-2 flex-wrap">
-                                    {/* VIEW */}
-                                    <button
-                                        className="btn btn-xs btn-info"
-                                        onClick={() => setSelectedUser(user)}
-                                    >
-                                        <FaEye />
-                                    </button>
+                                <td className="text-center">
+                                    <div className="flex gap-2 flex-wrap justify-center items-center">
 
-                                    {/* MAKE ADMIN */}
-                                    {user.role !== "admin" && (
                                         <button
-                                            onClick={() =>
-                                                handleRoleChange(
-                                                    user.email,
-                                                    "admin"
-                                                )
-                                            }
-                                            className="btn btn-xs btn-warning"
+                                            className="btn btn-xs btn-info"
+                                            onClick={() => setSelectedUser(user)}
                                         >
-                                            Make Admin
+                                            <FaEye />
                                         </button>
-                                    )}
 
-                                    {/* MAKE TUTOR */}
-                                    {user.role !== "tutor" && (
+                                        {user.role !== "admin" && (
+                                            <button
+                                                onClick={() =>
+                                                    handleRoleChange(user.email, "admin")
+                                                }
+                                                className="btn btn-xs btn-warning"
+                                            >
+                                                Make Admin
+                                            </button>
+                                        )}
+
+                                        {user.role !== "tutor" && (
+                                            <button
+                                                onClick={() =>
+                                                    handleRoleChange(user.email, "tutor")
+                                                }
+                                                className="btn btn-xs btn-success"
+                                            >
+                                                Make Tutor
+                                            </button>
+                                        )}
+
+                                        {user.role !== "student" && (
+                                            <button
+                                                onClick={() =>
+                                                    handleRoleChange(user.email, "student")
+                                                }
+                                                className="btn btn-xs btn-secondary"
+                                            >
+                                                Make Student
+                                            </button>
+                                        )}
+
                                         <button
-                                            onClick={() =>
-                                                handleRoleChange(
-                                                    user.email,
-                                                    "tutor"
-                                                )
-                                            }
-                                            className="btn btn-xs btn-success"
+                                            onClick={() => handleDelete(user.email)}
+                                            className="btn btn-xs btn-error"
                                         >
-                                            Make Tutor
+                                            <FaTrash />
                                         </button>
-                                    )}
 
-                                    {/* MAKE STUDENT */}
-                                    {user.role !== "student" && (
-                                        <button
-                                            onClick={() =>
-                                                handleRoleChange(
-                                                    user.email,
-                                                    "student"
-                                                )
-                                            }
-                                            className="btn btn-xs btn-secondary"
-                                        >
-                                            Make Student
-                                        </button>
-                                    )}
-
-                                    {/* DELETE */}
-                                    <button
-                                        onClick={() =>
-                                            handleDelete(user.email)
-                                        }
-                                        className="btn btn-xs btn-error"
-                                    >
-                                        <FaTrash />
-                                    </button>
+                                    </div>
                                 </td>
+
                             </tr>
                         ))}
 

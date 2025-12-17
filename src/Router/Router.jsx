@@ -24,6 +24,9 @@ import AllUsers from "../Pages/Dashboard/AllUsers";
 import ApplyTutor from "../components/ApplyTutor";
 import AppliedTutor from "../Pages/Dashboard/AppliedTutor";
 import ApplyTution from "../Pages/Dashboard/ApplyTution";
+import TutorRoute from "../Private/TutorRoute";
+import StudentRoute from "../Private/StudentRoute";
+import AdminRoute from "../Private/AdminRoute";
 
 const router = createBrowserRouter([
     {
@@ -61,7 +64,10 @@ const router = createBrowserRouter([
             },
             {
                 path: '/updateUserProfile',
-                Component: UpdateUserProfile
+                element:
+                    <PrivateRoute>
+                        <UpdateUserProfile></UpdateUserProfile>
+                </PrivateRoute>
             },
             {
                 path: "/tutors/:email",
@@ -69,7 +75,10 @@ const router = createBrowserRouter([
             },
             {
                 path: '/apply-tutor',
-                Component:ApplyTutor
+                element:
+                    <StudentRoute>
+                        <ApplyTutor></ApplyTutor>
+                </StudentRoute>
             }
 
         ]
@@ -83,51 +92,78 @@ const router = createBrowserRouter([
         children: [
             {
                 path: 'post-tutions',
-                Component: PostTutions
+                element:
+                    <StudentRoute>
+                        <PostTutions></PostTutions>
+                    </StudentRoute>
             },
             {
                 path: 'applications',
-                Component:My_Applications
+                element:
+                    <TutorRoute>
+                        <My_Applications></My_Applications>
+                    </TutorRoute>
             },
             {
                 path: 'applied-tutions',
-                Component:Applied_Tutions
+                element:
+                    <StudentRoute>
+                        <Applied_Tutions></Applied_Tutions>
+                    </StudentRoute>
             },
             {
                 path: 'payment/:applicationId',
-                Component:Payment
+                Component: Payment
             },
             {
                 path: 'payment-success',
-                Component:Payment_Success
+                Component: Payment_Success
             },
             {
                 path: 'payment-cancelled',
-                Component:Payment_Cancelled
+                Component: Payment_Cancelled
             },
             {
                 path: 'payment-history',
-                Component:PaymentHistory
+                element:
+                    <StudentRoute>
+                        <PaymentHistory></PaymentHistory>
+                    </StudentRoute>
             },
             {
                 path: 'tutor-payment',
-                Component:TutorPaymentHistory
+                element:
+                    <TutorRoute>
+                        <TutorPaymentHistory></TutorPaymentHistory>
+                </TutorRoute>
             },
             {
                 path: 'my-tutions',
-                Component:MyTutioins
+                element:
+                    <StudentRoute>
+                        <MyTutioins></MyTutioins>
+                    </StudentRoute>
             },
             {
                 path: 'all-users',
-                Component:AllUsers
+                element:
+                    <AdminRoute>
+                        <AllUsers></AllUsers>
+                    </AdminRoute>
             },
             {
                 path: 'applied-tutor',
-                Component:AppliedTutor
+                element:
+                    <AdminRoute>
+                        <AppliedTutor></AppliedTutor>
+                    </AdminRoute>
             },
             {
                 path: 'apply-tution',
-                Component:ApplyTution
+                element:
+                    <AdminRoute>
+                        <ApplyTution></ApplyTution>
+                    </AdminRoute>
             }
         ]
     }

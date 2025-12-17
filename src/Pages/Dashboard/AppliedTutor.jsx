@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const AppliedTutor = () => {
+    const axiosSecure = useAxiosSecure();
+
     const [tutors, setTutors] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchTutors = async () => {
         try {
-            const res = await axios.get(
-                'http://localhost:3000/tutors?status=pending'
-            );
-            setTutors(res.data);
+            const res = await axiosSecure.get('/tutors?status=pending');
+
+            // ⚠️ backend যদি { success, tutors } পাঠায়
+            setTutors(res.data.tutors || []);
         } catch (err) {
             console.error(err);
         } finally {
@@ -29,14 +31,14 @@ const AppliedTutor = () => {
             text: `You want to ${status} this tutor`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes'
+            confirmButtonText: 'Yes',
         });
 
         if (!confirm.isConfirmed) return;
 
         try {
-            const res = await axios.patch(
-                `http://localhost:3000/tutors/admin-approval/${id}`,
+            const res = await axiosSecure.patch(
+                `/tutors/admin-approval/${id}`,
                 { status }
             );
 
@@ -75,7 +77,7 @@ const AppliedTutor = () => {
                             <th>Subject</th>
                             <th>Location</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th className="text-center">Action</th>
                         </tr>
                     </thead>
 
@@ -93,7 +95,7 @@ const AppliedTutor = () => {
                                         {tutor.status}
                                     </span>
                                 </td>
-                                <td className="flex gap-2">
+                                <td className="flex gap-2 justify-center">
                                     <button
                                         onClick={() =>
                                             handleAction(tutor._id, 'approved')

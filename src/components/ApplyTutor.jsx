@@ -144,6 +144,7 @@ const ApplyTutor = () => {
                     <label className="label">Full Name</label>
                     <input
                         {...register('name', { required: 'Name required' })}
+                        defaultValue={user?.displayName}
                         className="input input-bordered w-full"
                     />
                     {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}

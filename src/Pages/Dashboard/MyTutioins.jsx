@@ -20,13 +20,13 @@ const My_Tuitions = () => {
         },
     });
 
-    const filtered = myTuitions.filter(t => t.status !== "booked");
-
     const handleDelete = async (id) => {
         const confirm = await Swal.fire({
             title: "Are you sure?",
+            text: "This tuition will be permanently deleted",
             icon: "warning",
             showCancelButton: true,
+            confirmButtonText: "Yes, delete",
         });
 
         if (!confirm.isConfirmed) return;
@@ -36,7 +36,7 @@ const My_Tuitions = () => {
         );
 
         if (res.data.success) {
-            Swal.fire("Deleted", "", "success");
+            Swal.fire("Deleted!", "", "success");
             refetch();
         }
     };
@@ -80,26 +80,44 @@ const My_Tuitions = () => {
                             <th>Class</th>
                             <th>Location</th>
                             <th>Budget</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {filtered.map((t, i) => (
+                        {myTuitions.map((t, i) => (
                             <tr key={t._id}>
                                 <td>{i + 1}</td>
                                 <td>{t.subject}</td>
                                 <td>{t.class}</td>
                                 <td>{t.location}</td>
                                 <td>৳ {t.budget}</td>
+
+                                {/* STATUS */}
+                                <td>
+                                    <span
+                                        className={`badge ${t.status === "booked"
+                                                ? "badge-success"
+                                                : "badge-warning"
+                                            }`}
+                                    >
+                                        {t.status}
+                                    </span>
+                                </td>
+
+                                {/* ACTION */}
                                 <td>
                                     <button
+                                        disabled={t.status === "booked"}
                                         className="btn btn-xs btn-warning mr-2"
                                         onClick={() => setEditTuition(t)}
                                     >
                                         Edit
                                     </button>
+
                                     <button
+                                        disabled={t.status === "booked"}
                                         className="btn btn-xs btn-error"
                                         onClick={() => handleDelete(t._id)}
                                     >
@@ -108,21 +126,54 @@ const My_Tuitions = () => {
                                 </td>
                             </tr>
                         ))}
+
+                        {myTuitions.length === 0 && (
+                            <tr>
+                                <td colSpan="7" className="text-center py-6">
+                                    No tuitions found
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
 
-            {/* EDIT MODAL */}
+            {/* ================= EDIT MODAL ================= */}
             {editTuition && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded w-96">
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-xl w-96">
+                        <h3 className="text-xl font-bold mb-4">
+                            Edit Tuition
+                        </h3>
+
                         <form onSubmit={handleEditSubmit} className="space-y-3">
-                            <input name="subject" defaultValue={editTuition.subject} className="input w-full" />
-                            <input name="class" defaultValue={editTuition.class} className="input w-full" />
-                            <input name="location" defaultValue={editTuition.location} className="input w-full" />
-                            <input name="budget" defaultValue={editTuition.budget} className="input w-full" />
-                            <div className="flex justify-end gap-2">
-                                <button type="button" onClick={() => setEditTuition(null)} className="btn btn-sm">
+                            <input
+                                name="subject"
+                                defaultValue={editTuition.subject}
+                                className="input input-bordered w-full"
+                            />
+                            <input
+                                name="class"
+                                defaultValue={editTuition.class}
+                                className="input input-bordered w-full"
+                            />
+                            <input
+                                name="location"
+                                defaultValue={editTuition.location}
+                                className="input input-bordered w-full"
+                            />
+                            <input
+                                name="budget"
+                                defaultValue={editTuition.budget}
+                                className="input input-bordered w-full"
+                            />
+
+                            <div className="flex justify-end gap-2 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setEditTuition(null)}
+                                    className="btn btn-sm"
+                                >
                                     Cancel
                                 </button>
                                 <button className="btn btn-sm btn-primary">

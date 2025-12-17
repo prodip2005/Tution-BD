@@ -24,6 +24,18 @@ const TutorPaymentHistory = () => {
         payment => payment.tutorEmail === user.email
     );
 
+
+    const formatDateTime = (dateString) => {
+        return new Date(dateString).toLocaleString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
+    };
+
     return (
         <div className="p-6">
             <h2 className="text-2xl font-bold mb-6">
@@ -65,7 +77,7 @@ const TutorPaymentHistory = () => {
                                                 {payment.trackingId}
                                             </td>
                                             <td>
-                                                {new Date(payment.paidAt).toLocaleDateString()}
+                                                {formatDateTime(payment.paidAt)}
                                             </td>
                                             <td>
                                                 <span className="badge badge-success">

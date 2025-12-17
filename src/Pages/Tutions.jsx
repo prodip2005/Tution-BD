@@ -42,7 +42,7 @@ const Tutions = () => {
     });
 
     // ================= FILTER BOOKED =================
-    const tuitions = allTuitions.filter(t => t.status !== "booked");
+    const tuitions = allTuitions.filter(t => t.status !== "booked" && t.tuition_status === "approved");
 
     // ================= CHECK IF ALREADY APPLIED =================
     const isApplied = (tuitionId) => {
