@@ -38,7 +38,7 @@ const slideData = [
 const HeroSection = () => {
     return (
         <section className="w-full lg:px-8 sm:px-5 -mt-4 md:-mt-8">
-            <div className="w-full h-[250px] sm:h-[450px] md:h-[750px] relative overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="w-full h-[250px] sm:h-[450px] md:h-[750px] relative overflow-hidden md:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                 <Swiper
                     modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectFade]}
                     effect="fade"

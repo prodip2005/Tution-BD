@@ -77,11 +77,10 @@ const Applied_Tutions = () => {
         }
     };
 
-
     const handleDeleteAll = async () => {
         const confirm = await Swal.fire({
-            title: "Delete all applications?",
-            text: "This will permanently delete all records!",
+            title: "Delete all?",
+            text: "Permanently delete all records!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes, delete all",
@@ -91,86 +90,40 @@ const Applied_Tutions = () => {
         });
 
         if (!confirm.isConfirmed) return;
-
         const ids = data.map(app => app._id);
-
         try {
-            const res = await axiosSecure.delete(
-                "/applications/student/bulk",
-                {
-                    data: {
-                        ids,
-                        email: user.email,
-                    },
-                }
-            );
-
+            const res = await axiosSecure.delete("/applications/student/bulk", { data: { ids, email: user.email } });
             if (res.data.success) {
-                Swal.fire({
-                    title: "Deleted!",
-                    text: `${res.data.deletedCount} applications removed`,
-                    icon: "success",
-                    background: "#111827",
-                    color: "#fff",
-                });
+                Swal.fire({ title: "Deleted!", text: `${res.data.deletedCount} items removed`, icon: "success", background: "#111827", color: "#fff" });
                 refetch();
             }
-        } catch (err) {
-            Swal.fire({
-                title: "Error",
-                text: "Failed to delete applications",
-                icon: "error",
-                background: "#111827",
-                color: "#fff",
-            });
+        } catch {
+            Swal.fire({ title: "Error", text: "Failed to delete", icon: "error", background: "#111827", color: "#fff" });
         }
     };
 
-
-    // --- Modern Cyber Loader ---
     if (isLoading) {
         return (
             <div className="flex flex-col justify-center items-center min-h-[70vh] bg-transparent">
                 <div className="relative flex items-center justify-center">
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                        className="w-32 h-32 border-2 border-indigo-500/10 border-t-indigo-500 rounded-full"
-                    />
-                    <motion.div
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        className="absolute w-24 h-24 border border-dashed border-indigo-400/20 rounded-full"
-                    />
-                    <motion.div
-                        animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.5)]"
-                    >
-                        <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_8px_white]" />
-                    </motion.div>
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }} className="w-24 h-24 md:w-32 md:h-32 border-2 border-indigo-500/10 border-t-indigo-500 rounded-full" />
+                    <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} className="absolute w-8 h-8 md:w-10 md:h-10 bg-indigo-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.5)]" />
                 </div>
-                <div className="mt-12 flex flex-col items-center gap-3">
-                    <motion.p
-                        animate={{ opacity: [0.3, 1, 0.3] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                        className="text-indigo-400 text-[10px] font-black tracking-[0.6em] uppercase italic"
-                    >
-                        Fetching Applications
-                    </motion.p>
+                <div className="mt-8 md:mt-12 flex flex-col items-center gap-3">
+                    <motion.p animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity }} className="text-indigo-400 text-[10px] font-black tracking-[0.4em] md:tracking-[0.6em] uppercase italic text-center">Fetching Applications</motion.p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="max-w-7xl mx-auto px-2 md:px-4 py-6 md:py-10">
             {/* Header Area */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-8 md:mb-12 px-2">
                 <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
-                    <div className="flex items-center gap-4">
-                        <div className="p-3 bg-primary/20 rounded-2xl text-primary"><FaUserGraduate size={32} /></div>
-                        <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter italic">
+                    <div className="flex items-center gap-3 md:gap-4">
+                        <div className="p-2 md:p-3 bg-primary/20 rounded-xl md:rounded-2xl text-primary"><FaUserGraduate size={24} className="md:w-8 md:h-8" /></div>
+                        <h2 className="text-xl md:text-5xl font-black text-white uppercase tracking-tighter italic leading-tight">
                             Tutor <span className="text-primary">Requests</span>
                         </h2>
                     </div>
@@ -178,10 +131,9 @@ const Applied_Tutions = () => {
 
                 {data.length > 0 && (
                     <motion.button
-                        whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleDeleteAll}
-                        className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-red-500/10 text-red-500 border border-red-500/20 font-bold hover:bg-red-500 hover:text-white transition-all shadow-lg"
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 md:px-6 md:py-3 rounded-xl md:rounded-2xl bg-red-500/10 text-red-500 border border-red-500/20 font-black uppercase text-[10px] md:text-sm transition-all"
                     >
                         <FaTrash /> Delete All
                     </motion.button>
@@ -190,102 +142,93 @@ const Applied_Tutions = () => {
 
             {data.length === 0 ? (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20 flex flex-col items-center">
-                    <Lottie animationData={null} path={emptyAnim} loop className="w-64 opacity-50" />
-                    <p className="text-gray-500 font-bold uppercase tracking-widest mt-6">No tutor has applied yet.</p>
+                    <Lottie animationData={null} path={emptyAnim} loop className="w-48 md:w-64 opacity-50" />
+                    <p className="text-gray-500 font-bold uppercase tracking-widest mt-6 text-xs md:text-base">No tutor has applied yet.</p>
                 </motion.div>
             ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-8">
                     <AnimatePresence>
                         {data.map((app, i) => (
                             <motion.div
                                 key={app._id}
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.1 }}
-                                whileHover={{ y: -10 }}
-                                className="relative group bg-white/[0.02] backdrop-blur-3xl border border-white/5 p-6 rounded-[2.5rem] shadow-2xl overflow-hidden hover:border-primary/50 transition-all duration-500"
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: i * 0.05 }}
+                                className="relative group bg-white/[0.02] backdrop-blur-3xl border border-white/5 p-3 md:p-6 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl overflow-hidden hover:border-primary/50 transition-all duration-500 flex flex-col justify-between"
                             >
-                                {/* Background Accent */}
-                                <div className="absolute top-0 right-0 p-4 opacity-5 text-white group-hover:opacity-10 transition-opacity">
-                                    <FaChartLine size={80} />
-                                </div>
+                                <div className="absolute top-0 right-0 p-4 opacity-5 text-white hidden md:block"><FaChartLine size={80} /></div>
 
-                                {/* Subject */}
-                                <h3 className="text-xl font-black text-white mb-4 italic flex items-center gap-2">
-                                    <span className="size-2 bg-primary rounded-full animate-ping"></span>
-                                    {app.tuitionSubject}
-                                </h3>
+                                <div>
+                                    <h3 className="text-[11px] md:text-xl font-black text-white mb-2 md:mb-4 italic flex items-center gap-1.5 truncate">
+                                        <span className="size-1.5 md:size-2 bg-primary rounded-full shrink-0"></span>
+                                        {app.tuitionSubject}
+                                    </h3>
 
-                                {/* Salary Comparison Card */}
-                                <div className="bg-white/[0.03] rounded-3xl p-5 mb-6 border border-white/5">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <div>
-                                            <p className="text-[10px] uppercase font-black text-gray-500 tracking-widest">Student Budget</p>
-                                            <p className="text-xl font-black text-green-400">৳ {app.studentDemand}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-[10px] uppercase font-black text-gray-500 tracking-widest">Tutor Expected</p>
-                                            <p className="text-xl font-black text-primary">৳ {app.expectedSalary}</p>
+                                    <div className="bg-white/[0.03] rounded-xl md:rounded-3xl p-2 md:p-5 mb-3 md:mb-6 border border-white/5">
+                                        <div className="grid grid-cols-1 md:flex md:justify-between gap-1 md:gap-4 mb-2">
+                                            <div>
+                                                <p className="text-[7px] md:text-[10px] uppercase font-black text-gray-500">Student</p>
+                                                <p className="text-[10px] md:text-xl font-black text-green-400">৳{app.studentDemand}</p>
+                                            </div>
+                                            <div className="md:text-right">
+                                                <p className="text-[7px] md:text-[10px] uppercase font-black text-gray-500">Tutor</p>
+                                                <p className="text-[10px] md:text-xl font-black text-primary">৳{app.expectedSalary}</p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                                        <motion.div initial={{ width: 0 }} animate={{ width: "70%" }} className="h-full bg-primary"></motion.div>
+
+                                    <div className="flex items-center gap-2 md:gap-4 mb-3 md:mb-6">
+                                        <div className="size-6 md:size-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shrink-0">
+                                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${app.tutorEmail}`} alt="tutor" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="font-bold text-white text-[9px] md:text-base truncate leading-none mb-1">{app.tutorName}</p>
+                                            <p className="text-[7px] md:text-[10px] text-gray-500 truncate">{app.tutorEmail}</p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Tutor Identity */}
-                                <div className="flex items-center gap-4 mb-6">
-                                    <div className="size-12 bg-white/5 rounded-full flex items-center justify-center border border-white/10 overflow-hidden">
-                                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${app.tutorEmail}`} alt="tutor" />
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-white">{app.tutorName}</p>
-                                        <p className="text-[10px] text-gray-500 font-medium">{app.tutorEmail}</p>
-                                    </div>
-                                </div>
-
-                                {/* Action Buttons */}
-                                <div className="space-y-3">
+                                <div className="space-y-1.5 md:space-y-3">
                                     <button
                                         onClick={() => handleViewTutor(app.tutorEmail)}
-                                        className="w-full py-4 rounded-2xl bg-white/5 text-white font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                                        className="w-full py-2 md:py-4 rounded-lg md:rounded-2xl bg-white/5 text-white font-bold hover:bg-white/10 text-[9px] md:text-base flex items-center justify-center gap-1.5 transition-all"
                                     >
-                                        <FaEye /> View Profile
+                                        <FaEye /> Profile
                                     </button>
 
                                     {app.status === "pending" && app.paymentStatus !== "paid" && (
-                                        <div className="flex gap-3">
+                                        <div className="flex flex-col md:flex-row gap-1.5 md:gap-3">
                                             <Link
                                                 to={`/dashboard/payment/${app._id}`}
-                                                className="flex-1 py-4 text-center rounded-2xl bg-primary text-white font-black hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2"
+                                                className="w-full md:flex-1 py-2 md:py-4 text-center rounded-lg md:rounded-2xl bg-primary text-white font-black text-[9px] md:text-base flex items-center justify-center gap-1"
                                             >
                                                 <FaMoneyCheckAlt /> Approve
                                             </Link>
                                             <button
                                                 onClick={() => handleStatusChange(app._id, "rejected")}
-                                                className="px-6 py-4 rounded-2xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all"
+                                                className="w-full md:w-auto px-4 py-2 md:px-6 md:py-4 rounded-lg md:rounded-2xl bg-red-500/10 text-red-500 flex justify-center items-center"
                                             >
-                                                <FaTimesCircle size={20} />
+                                                <FaTimesCircle size={14} />
                                             </button>
                                         </div>
                                     )}
 
-                                    {/* Status Indicators */}
+                                    {/* Status Display */}
                                     {(app.status === "approved" || (app.status === "pending" && app.paymentStatus === "paid")) && (
-                                        <div className="py-4 text-center rounded-2xl bg-green-500/10 text-green-400 font-black flex items-center justify-center gap-2 uppercase tracking-widest text-xs border border-green-500/20">
+                                        <div className="py-2 md:py-4 text-center rounded-lg md:rounded-2xl bg-green-500/10 text-green-400 font-black flex items-center justify-center gap-1.5 uppercase text-[7px] md:text-xs border border-green-500/20">
                                             <FaCheckCircle /> Approved
                                         </div>
                                     )}
 
                                     {app.status === "rejected" && (
-                                        <div className="py-4 text-center rounded-2xl bg-red-500/10 text-red-500 font-black flex items-center justify-center gap-2 uppercase tracking-widest text-xs border border-red-500/20">
+                                        <div className="py-2 md:py-4 text-center rounded-lg md:rounded-2xl bg-red-500/10 text-red-500 font-black flex items-center justify-center gap-1.5 uppercase text-[7px] md:text-xs border border-red-500/20">
                                             <FaTimesCircle /> Rejected
                                         </div>
                                     )}
 
                                     <button
                                         onClick={() => handleDelete(app._id)}
-                                        className="w-full py-2 text-gray-600 hover:text-red-500 transition-colors text-[10px] uppercase font-black tracking-widest mt-2"
+                                        className="w-full py-1 text-gray-700 hover:text-red-500 text-[7px] md:text-[10px] font-black uppercase tracking-tighter"
                                     >
                                         Remove Record
                                     </button>
@@ -296,43 +239,27 @@ const Applied_Tutions = () => {
                 </div>
             )}
 
-            {/* ================= TUTOR MODAL (GLASSY DARK) ================= */}
+            {/* Tutor Modal */}
             <AnimatePresence>
                 {selectedTutor && (
-                    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-[#0f1115] border border-white/10 rounded-[3rem] p-8 w-full max-w-md shadow-2xl relative overflow-hidden"
-                        >
-                            <div className="absolute top-0 right-0 p-10 opacity-5 -z-0"><FaUserGraduate size={150} /></div>
-
-                            <h3 className="text-3xl font-black text-white uppercase tracking-tighter italic mb-8 relative z-10">
-                                Tutor <span className="text-primary">Profile</span>
-                            </h3>
-
-                            <div className="space-y-4 relative z-10">
+                    <div className="fixed inset-0 bg-black/90 backdrop-blur-xl flex items-center justify-center z-[100] p-4">
+                        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-[#0f1115] border border-white/10 rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-8 w-full max-w-sm md:max-w-md relative shadow-2xl">
+                            <h3 className="text-xl md:text-3xl font-black text-white uppercase italic mb-6">Tutor <span className="text-primary">Profile</span></h3>
+                            <div className="space-y-3">
                                 {[
-                                    { label: "Name", value: selectedTutor.name },
-                                    { label: "Email", value: selectedTutor.email },
-                                    { label: "Subjects", value: selectedTutor.subjects },
-                                    { label: "Institution", value: selectedTutor.institution },
-                                    { label: "Location", value: selectedTutor.location }
+                                    { l: "Name", v: selectedTutor.name },
+                                    { l: "Email", v: selectedTutor.email },
+                                    { l: "Subjects", v: selectedTutor.subjects },
+                                    { l: "Institution", v: selectedTutor.institution },
+                                    { l: "Location", v: selectedTutor.location }
                                 ].map((item, idx) => (
-                                    <div key={idx} className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                                        <p className="text-[10px] uppercase font-black text-gray-500 tracking-widest">{item.label}</p>
-                                        <p className="text-white font-bold">{item.value || "Not Provided"}</p>
+                                    <div key={idx} className="bg-white/5 p-3 rounded-xl border border-white/5">
+                                        <p className="text-[7px] md:text-[9px] uppercase font-black text-gray-500 tracking-widest mb-1">{item.l}</p>
+                                        <p className="text-white font-bold text-xs md:text-base">{item.v || "N/A"}</p>
                                     </div>
                                 ))}
                             </div>
-
-                            <button
-                                onClick={() => setSelectedTutor(null)}
-                                className="mt-8 w-full py-4 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all border border-white/10"
-                            >
-                                Close Profile
-                            </button>
+                            <button onClick={() => setSelectedTutor(null)} className="mt-6 w-full py-3 md:py-4 bg-white/5 text-white font-bold rounded-xl md:rounded-2xl hover:bg-white/10 transition-all border border-white/10 text-xs md:text-base">Close Profile</button>
                         </motion.div>
                     </div>
                 )}

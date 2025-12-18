@@ -19,7 +19,7 @@ const Home = () => {
 
     if (isLoading) {
         return (
-            <div className="fixed inset-0 z-[100] flex flex-col justify-center items-center bg-[#fdfdfd] dark:bg-[#050505]">
+            <div className="fixed inset-0 z-100 flex flex-col justify-center items-center bg-[#050505]">
                 <div className="relative flex items-center justify-center">
                     {/* Outer Glow Ring */}
                     <motion.div

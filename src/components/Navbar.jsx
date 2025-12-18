@@ -19,16 +19,14 @@ const Navbar = () => {
             await LogOut();
             navigate("/");
         } catch (err) {
-          
+
         }
     };
 
-    // মেনু আইটেমগুলো এখানে কন্ডিশনাল করা হয়েছে
     const menuItems = [
         { to: "/", label: "Home", icon: <FiHome /> },
         { to: "/tutions", label: "Tutions", icon: <FiBookOpen /> },
         { to: "/tutors", label: "Tutors", icon: <FiUsers /> },
-        // লগইন থাকলে ড্যাশবোর্ড মেনু অ্যাড হবে
         ...(user ? [{ to: "/dashboard", label: "Dashboard", icon: <FiLayout /> }] : []),
     ];
 
@@ -37,7 +35,14 @@ const Navbar = () => {
             <motion.nav
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                className="max-w-7xl mx-auto backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 border border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-[1.5rem] md:rounded-[2rem] px-4 py-2.5 md:px-6 md:py-3 flex items-center justify-between"
+                className="max-w-7xl mx-auto
+                            backdrop-blur-2xl
+                            bg-gray-900/70
+                            border border-white/10
+                            shadow-[0_8px_40px_rgba(0,0,0,0.45)]
+                            rounded-3xl md:rounded-4xl
+                            px-4 py-2.5 md:px-6 md:py-3
+                            flex items-center justify-between"
             >
                 {/* --- Left: Brand Section --- */}
                 <div className="flex items-center gap-1 md:gap-3">
@@ -54,7 +59,7 @@ const Navbar = () => {
                             src="https://images-platform.99static.com/DVETQ4KXxNUWF1Q-k4ASnnzl9LY=/112x112:2365x2365/fit-in/99designs-work-samples/work-sample-designs/1039810/842795fa-0320-4287-baac-22e221a46d34"
                             alt="Logo"
                         />
-                        <span className="text-lg md:text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                        <span className="text-lg md:text-xl font-extrabold tracking-tight text-gray-100">
                             Tutor<span className="text-primary">OWL</span>
                         </span>
                     </Link>
@@ -62,13 +67,13 @@ const Navbar = () => {
 
                 {/* --- Center: Desktop Menu --- */}
                 <div className="hidden lg:block">
-                    <ul className="flex items-center gap-1 bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-2xl">
+                    <ul className="flex items-center gap-1 bg-gray-800/60 backdrop-blur-xl p-1 rounded-2xl">
                         {menuItems.map((item) => (
                             <li key={item.to} className="relative">
                                 <NavLink
                                     to={item.to}
                                     className={({ isActive }) =>
-                                        `relative px-4 py-2.5 flex items-center gap-2 text-sm font-bold transition-all duration-300 rounded-xl ${isActive ? "text-white" : "text-gray-600 dark:text-gray-400 hover:text-primary"
+                                        `relative px-4 py-2.5 flex items-center gap-2 text-sm font-bold transition-all duration-300 rounded-xl ${isActive ? "text-white" : "text-gray-300 hover:text-primary"
                                         }`
                                     }
                                 >
@@ -94,9 +99,10 @@ const Navbar = () => {
 
                 {/* --- Right: User & Auth --- */}
                 <div className="flex items-center gap-2 md:gap-4">
+                    {/* Updated: Added flex (removed hidden sm:flex) and Emerald Green color */}
                     {user && role === "student" && (
-                        <Link to="/apply-tutor" className="hidden sm:flex items-center gap-2 px-3 py-2 bg-primary/10 text-primary border border-primary/20 rounded-xl font-bold text-[10px] md:text-xs hover:bg-primary hover:text-white transition-all">
-                            <FiUserPlus /> <span className="hidden md:inline">BE A TUTOR</span>
+                        <Link to="/apply-tutor" className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-xl font-bold text-[9px] md:text-xs hover:bg-emerald-500 hover:text-white transition-all">
+                            <FiUserPlus /> <span className="inline">BE A TUTOR</span>
                         </Link>
                     )}
 
@@ -113,7 +119,7 @@ const Navbar = () => {
                     ) : (
                         <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 border-l border-gray-200 dark:border-gray-700">
                             <div className="hidden sm:flex flex-col items-end leading-tight">
-                                <span className="text-[13px] font-bold text-gray-900 dark:text-white truncate max-w-[100px]">
+                                <span className="text-[13px] font-bold text-gray-100 truncate max-w-[100px]">
                                     {user?.displayName || "User"}
                                 </span>
                                 <span className="text-[10px] font-medium text-primary uppercase tracking-wider">{role || "Member"}</span>
@@ -155,14 +161,14 @@ const Navbar = () => {
                             animate={{ x: 0 }}
                             exit={{ x: "-100%" }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="fixed top-0 left-0 h-screen w-[280px] bg-white dark:bg-gray-900 shadow-2xl p-6 lg:hidden z-[110] flex flex-col"
+                            className="fixed top-0 left-0 h-screen w-[280px] bg-gray-900/90 backdrop-blur-2xl border-r border-white/10 shadow-2xl p-6 lg:hidden z-[110] flex flex-col"
                         >
                             <div className="mb-8 pt-4">
                                 {user ? (
                                     <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl">
                                         <img src={user.photoURL} className="w-12 h-12 rounded-full border-2 border-primary" alt="" />
                                         <div className="overflow-hidden">
-                                            <p className="font-bold text-gray-900 dark:text-white truncate">{user?.displayName}</p>
+                                            <p className="font-bold text-gray-100 truncate">{user?.displayName}</p>
                                             <p className="text-xs text-primary font-semibold uppercase">{role}</p>
                                         </div>
                                     </div>
@@ -182,7 +188,7 @@ const Navbar = () => {
                                                 to={item.to}
                                                 onClick={() => setOpen(false)}
                                                 className={({ isActive }) =>
-                                                    `flex items-center gap-4 p-4 rounded-xl font-bold transition-all ${isActive ? "bg-primary text-white shadow-lg" : "text-gray-600 dark:text-gray-400 hover:bg-gray-50"
+                                                    `flex items-center gap-4 p-4 rounded-xl font-bold transition-all ${isActive ? "bg-primary text-white shadow-lg" : "text-gray-600 dark:text-gray-400 hover:bg-white/5"
                                                     }`
                                                 }
                                             >

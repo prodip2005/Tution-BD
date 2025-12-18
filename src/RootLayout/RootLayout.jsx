@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 const RootLayout = () => {
     return (
-        <div className='min-h-screen flex flex-col overflow-x-hidden relative bg-slate-50 dark:bg-gray-950 transition-colors duration-500'>
+        <div className='min-h-screen flex flex-col overflow-x-hidden relative bg-gray-950 text-base-content transition-colors duration-500'>
 
             {/* --- Stylish Animated & Color Changing Blobs --- */}
             <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">

@@ -19,7 +19,6 @@ const PostTutions = () => {
         formState: { errors },
     } = useForm();
 
-    // --- Modern Cyber Loader ---
     if (isLoading) {
         return (
             <div className="flex flex-col justify-center items-center min-h-[70vh] bg-transparent">
@@ -27,26 +26,21 @@ const PostTutions = () => {
                     <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                        className="w-32 h-32 border-2 border-indigo-500/10 border-t-indigo-500 rounded-full shadow-[0_0_20px_rgba(79,70,229,0.2)]"
-                    />
-                    <motion.div
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        className="absolute w-24 h-24 border border-dashed border-indigo-400/20 rounded-full"
+                        className="w-24 h-24 md:w-32 md:h-32 border-2 border-indigo-500/10 border-t-indigo-500 rounded-full"
                     />
                     <motion.div
                         animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center"
+                        className="absolute w-8 h-8 md:w-10 md:h-10 bg-indigo-500 rounded-full flex items-center justify-center"
                     >
-                        <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_8px_white]" />
+                        <div className="w-2 h-2 bg-white rounded-full" />
                     </motion.div>
                 </div>
-                <div className="mt-12 flex flex-col items-center gap-3">
+                <div className="mt-8 md:mt-12 flex flex-col items-center">
                     <motion.p
                         animate={{ opacity: [0.3, 1, 0.3] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
-                        className="text-indigo-400 text-[10px] font-black tracking-[0.6em] uppercase italic"
+                        className="text-indigo-400 text-[8px] md:text-[10px] font-black tracking-[0.4em] md:tracking-[0.6em] uppercase italic"
                     >
                         Establishing Portal
                     </motion.p>
@@ -55,23 +49,21 @@ const PostTutions = () => {
         );
     }
 
-    // --- Access Denied UI ---
     if (role !== "student") {
         return (
             <div className="min-h-[70vh] flex items-center justify-center px-4">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-center p-12 bg-white/[0.02] backdrop-blur-3xl border border-red-500/20 rounded-[3rem] max-w-lg w-full shadow-2xl relative overflow-hidden"
+                    className="text-center p-8 md:p-12 bg-white/[0.02] backdrop-blur-3xl border border-red-500/20 rounded-[2rem] md:rounded-[3rem] max-w-lg w-full shadow-2xl relative overflow-hidden"
                 >
-                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-red-500/10 blur-3xl rounded-full" />
                     <div className="relative z-10">
-                        <div className="w-20 h-20 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-red-500/20">
-                            <PlusCircle size={40} className="rotate-45" />
+                        <div className="w-16 h-16 md:w-20 md:h-20 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <PlusCircle size={32} className="rotate-45" />
                         </div>
-                        <h2 className="text-red-500 text-2xl md:text-3xl font-black uppercase tracking-tighter italic leading-none">Access <span className="text-white">Denied</span></h2>
-                        <p className="text-slate-400 mt-4 font-medium leading-relaxed">
-                            Only registered <span className="text-indigo-400 font-bold italic uppercase">Students</span> can publish tuition requests.
+                        <h2 className="text-red-500 text-xl md:text-3xl font-black uppercase italic leading-none">Access <span className="text-white">Denied</span></h2>
+                        <p className="text-slate-400 mt-4 text-xs md:text-sm font-medium leading-relaxed">
+                            Only registered <span className="text-indigo-400 font-bold italic uppercase">Students</span> can publish requests.
                         </p>
                     </div>
                 </motion.div>
@@ -104,129 +96,110 @@ const PostTutions = () => {
                 reset();
             }
         } catch (err) {
-            // console.error(err);
-            Swal.fire({
-                title: "Error",
-                text: "Something went wrong!",
-                icon: "error",
-                background: '#020617',
-                color: '#fff'
-            });
+            Swal.fire({ title: "Error", text: "Something went wrong!", icon: "error", background: '#020617', color: '#fff' });
         }
     };
 
     return (
-        <div className="min-h-full py-12 px-4 md:px-0 flex justify-center items-center bg-transparent">
+        <div className="min-h-full py-4 md:py-12 px-0 md:px-4 flex justify-center items-center bg-transparent">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full max-w-4xl bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[3rem] p-8 md:p-14 shadow-2xl relative overflow-hidden"
+                // Mobile এ rounded-none আর w-full করা হয়েছে
+                className="w-full max-w-4xl bg-white/[0.02] md:backdrop-blur-3xl border-y md:border border-white/10 rounded-none md:rounded-[3rem] p-5 md:p-14 shadow-2xl relative overflow-hidden"
             >
-                {/* Decorative Background Element */}
                 <div className="absolute -top-20 -right-20 w-80 h-80 bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
                 <div className="relative z-10">
-                    <div className="flex items-center gap-5 mb-12">
-                        <div className="p-5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 rounded-[2rem] shadow-xl">
-                            <PlusCircle size={36} />
+                    <div className="flex flex-col md:flex-row items-center md:items-start text-center md:text-left gap-4 md:gap-5 mb-8 md:mb-12">
+                        <div className="p-4 md:p-5 bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 rounded-2xl md:rounded-[2rem]">
+                            <PlusCircle size={28} className="md:w-9 md:h-9" />
                         </div>
                         <div>
-                            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter italic leading-none">
+                            <h2 className="text-2xl md:text-5xl font-black text-white uppercase tracking-tighter italic leading-none">
                                 Create <span className="text-indigo-500">Tuition</span>
                             </h2>
-                            <p className="text-slate-500 font-bold text-xs uppercase tracking-[0.2em] mt-2">Find the best mentor for your journey.</p>
+                            <p className="text-slate-500 font-bold text-[8px] md:text-[10px] uppercase tracking-[0.15em] md:tracking-[0.2em] mt-2">Find the best mentor for your journey.</p>
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {/* Subject */}
-                            <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
-                                    <BookOpen size={14} className="text-indigo-500" /> Subject Name
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 md:space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
+                                    <BookOpen size={12} className="text-indigo-500" /> Subject
                                 </label>
                                 <input
                                     {...register("subject", { required: true })}
-                                    className="w-full px-6 py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-[1.5rem] outline-none text-white font-bold transition-all placeholder:text-slate-700 focus:bg-white/[0.08]"
+                                    className="w-full px-5 py-4 md:px-6 md:py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-xl md:rounded-[1.5rem] outline-none text-white text-sm md:text-base font-bold transition-all placeholder:text-slate-700"
                                     placeholder="e.g. Higher Math"
                                 />
-                                {errors.subject && <p className="text-red-500 text-[10px] font-bold uppercase ml-1 tracking-wider">Subject is required</p>}
                             </div>
 
-                            {/* Class */}
-                            <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
-                                    <PlusCircle size={14} className="text-indigo-500" /> Class / Level
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
+                                    <PlusCircle size={12} className="text-indigo-500" /> Level
                                 </label>
                                 <input
                                     {...register("class", { required: true })}
-                                    className="w-full px-6 py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-[1.5rem] outline-none text-white font-bold transition-all placeholder:text-slate-700 focus:bg-white/[0.08]"
-                                    placeholder="e.g. Class 10 / HSC"
+                                    className="w-full px-5 py-4 md:px-6 md:py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-xl md:rounded-[1.5rem] outline-none text-white text-sm md:text-base font-bold transition-all placeholder:text-slate-700"
+                                    placeholder="e.g. HSC"
                                 />
-                                {errors.class && <p className="text-red-500 text-[10px] font-bold uppercase ml-1 tracking-wider">Class is required</p>}
                             </div>
 
-                            {/* Location */}
-                            <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
-                                    <MapPin size={14} className="text-indigo-500" /> Location
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
+                                    <MapPin size={12} className="text-indigo-500" /> Location
                                 </label>
                                 <input
                                     {...register("location", { required: true })}
-                                    className="w-full px-6 py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-[1.5rem] outline-none text-white font-bold transition-all placeholder:text-slate-700 focus:bg-white/[0.08]"
-                                    placeholder="e.g. Mirpur, Dhaka"
+                                    className="w-full px-5 py-4 md:px-6 md:py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-xl md:rounded-[1.5rem] outline-none text-white text-sm md:text-base font-bold transition-all placeholder:text-slate-700"
+                                    placeholder="e.g. Mirpur"
                                 />
-                                {errors.location && <p className="text-red-500 text-[10px] font-bold uppercase ml-1 tracking-wider">Location is required</p>}
                             </div>
 
-                            {/* Budget */}
-                            <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
-                                    <DollarSign size={14} className="text-indigo-500" /> Budget (Monthly ৳)
+                            <div className="space-y-2">
+                                <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
+                                    <DollarSign size={12} className="text-indigo-500" /> Monthly ৳
                                 </label>
                                 <input
                                     type="number"
                                     {...register("budget", { required: true })}
-                                    className="w-full px-6 py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-[1.5rem] outline-none text-white font-bold transition-all placeholder:text-slate-700 focus:bg-white/[0.08]"
+                                    className="w-full px-5 py-4 md:px-6 md:py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-xl md:rounded-[1.5rem] outline-none text-white text-sm md:text-base font-bold transition-all placeholder:text-slate-700"
                                     placeholder="e.g. 5000"
                                 />
-                                {errors.budget && <p className="text-red-500 text-[10px] font-bold uppercase ml-1 tracking-wider">Budget is required</p>}
                             </div>
                         </div>
 
-                        {/* Preferred Time */}
-                        <div className="space-y-3">
-                            <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
-                                <Clock size={14} className="text-indigo-500" /> Preferred Time & Days
+                        <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
+                                <Clock size={12} className="text-indigo-500" /> Time & Days
                             </label>
                             <input
                                 {...register("time")}
-                                className="w-full px-6 py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-[1.5rem] outline-none text-white font-bold transition-all placeholder:text-slate-700 focus:bg-white/[0.08]"
-                                placeholder="e.g. 4:00 PM | 3 Days per week"
+                                className="w-full px-5 py-4 md:px-6 md:py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-xl md:rounded-[1.5rem] outline-none text-white text-sm md:text-base font-bold transition-all placeholder:text-slate-700"
+                                placeholder="e.g. 4:00 PM | 3 Days"
                             />
                         </div>
 
-                        {/* Details */}
-                        <div className="space-y-3">
-                            <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
-                                <MessageSquare size={14} className="text-indigo-500" /> Additional Information
+                        <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">
+                                <MessageSquare size={12} className="text-indigo-500" /> Information
                             </label>
                             <textarea
                                 {...register("details")}
-                                className="w-full px-6 py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-[1.5rem] outline-none text-white font-bold transition-all placeholder:text-slate-700 focus:bg-white/[0.08] min-h-[140px] resize-none"
-                                placeholder="Describe any specific requirements (e.g. Female tutor preferred...)"
+                                className="w-full px-5 py-4 md:px-6 md:py-5 bg-white/5 border border-white/10 focus:border-indigo-500 rounded-xl md:rounded-[1.5rem] outline-none text-white text-sm md:text-base font-bold transition-all placeholder:text-slate-700 min-h-[100px] md:min-h-[140px] resize-none"
+                                placeholder="Requirements..."
                             ></textarea>
                         </div>
 
-                        {/* Submit Button */}
                         <motion.button
-                            whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(79,70,229,0.4)" }}
-                            whileTap={{ scale: 0.98 }}
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
                             type="submit"
-                            className="w-full py-6 bg-indigo-600 text-white font-black rounded-[1.5rem] transition-all uppercase tracking-[0.3em] text-[10px] md:text-xs flex items-center justify-center gap-3 mt-6 shadow-2xl"
+                            className="w-full py-4 md:py-6 bg-indigo-600 text-white font-black rounded-xl md:rounded-[1.5rem] transition-all uppercase tracking-[0.2em] md:tracking-[0.3em] text-[10px] md:text-xs flex items-center justify-center gap-2 md:gap-3 shadow-xl"
                         >
-                            Post Tuition Request <PlusCircle size={18} />
+                            Post Request <PlusCircle size={16} />
                         </motion.button>
                     </form>
                 </div>
