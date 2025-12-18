@@ -58,7 +58,7 @@ const RegistrationForm = () => {
             try {
                 await axiosSecure.post("/users", userPayload);
             } catch (postErr) {
-                console.error("Failed to save user to server:", postErr);
+                // console.error("Failed to save user to server:", postErr);
                 showInlineError("Profile save failed, but account created.");
             }
 

@@ -5,7 +5,7 @@ import useAuth from './useAuth';
 import { useNavigate } from 'react-router';
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:3000'
+    baseURL: 'https://tutor-owl.vercel.app'
 })
 
 const useAxiosSecure = () => {
@@ -29,26 +29,26 @@ const useAxiosSecure = () => {
         // interceptop response
         const resInterceptor = axiosSecure.interceptors.response.use((response) => {
             return response
-         },
+        },
             (error) => {
-                console.log(error);
+                
 
                 const statusCode = error.response.status
-                if (statusCode===401 || statusCode===403) {
+                if (statusCode === 401 || statusCode === 403) {
                     LogOut().then(() => {
                         navigate('/login')
                     })
                 }
                 return Promise.reject(error)
-            
-        })
+
+            })
 
         return () => {
             axiosSecure.interceptors.request.eject(reqInterceptor);
             axiosSecure.interceptors.response.eject(resInterceptor);
         }
 
-    }, [LogOut, navigate, user?.accessToken,loading])
+    }, [LogOut, navigate, user?.accessToken, loading])
     return axiosSecure;
 };
 

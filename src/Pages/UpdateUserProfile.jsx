@@ -42,7 +42,9 @@ const UpdateUserProfile = () => {
                     setPreview(img);
                     setValue("imageUrl", img);
                 }
-            } catch (err) { console.error("User load failed:", err); }
+            } catch (err) {
+                // console.error("User load failed:", err);
+            }
         };
         loadUser();
     }, [user, axiosSecure, setValue]);

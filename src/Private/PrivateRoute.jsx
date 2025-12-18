@@ -13,7 +13,7 @@ const PrivateRoute = ({ children }) => {
     if (loading) {
         return <ScalingBarLoader/>
     }
-    console.log(user);
+    // console.log(user);
     
 
     

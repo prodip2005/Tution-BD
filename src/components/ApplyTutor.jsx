@@ -40,7 +40,7 @@ const ApplyTutor = () => {
                 }
 
             })
-            .catch(err => console.error("API Error:", err))
+            .catch()
             .finally(() => setLoading(false));
     }, [user, axiosSecure, setValue]);
 

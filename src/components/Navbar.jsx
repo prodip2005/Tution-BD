@@ -19,7 +19,7 @@ const Navbar = () => {
             await LogOut();
             navigate("/");
         } catch (err) {
-            console.error("Logout error:", err);
+          
         }
     };
 

@@ -19,7 +19,7 @@ const AppliedTutor = () => {
             const res = await axiosSecure.get('/tutors?status=pending');
             setTutors(res.data.tutors || []);
         } catch (err) {
-            console.error(err);
+            // console.error(err);
         } finally {
             setLoading(false);
         }

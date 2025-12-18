@@ -27,11 +27,13 @@ import ApplyTution from "../Pages/Dashboard/ApplyTution";
 import TutorRoute from "../Private/TutorRoute";
 import StudentRoute from "../Private/StudentRoute";
 import AdminRoute from "../Private/AdminRoute";
+import ErrorPage from "../components/ErrorPage";
 
 const router = createBrowserRouter([
     {
         path: '/',
         Component: RootLayout,
+        errorElement:<ErrorPage/>,
         children: [
             {
                 index: true,
@@ -89,6 +91,7 @@ const router = createBrowserRouter([
             <PrivateRoute>
                 <Dashboard></Dashboard>
             </PrivateRoute>,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: 'post-tutions',

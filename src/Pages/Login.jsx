@@ -25,14 +25,14 @@ const LoginForm = () => {
 
     const saveUserToDB = async (userObj) => {
         try {
-            const res = await fetch("http://localhost:3000/users", {
+            const res = await fetch("https://tutor-owl.vercel.app/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userObj),
             });
             return await res.json();
         } catch (err) {
-            console.error("Save user error:", err);
+            // console.error("Save user error:", err);
             return null;
         }
     };
@@ -134,9 +134,7 @@ const LoginForm = () => {
                                 </button>
                             </div>
 
-                            <div className="flex justify-end">
-                                <Link to="/forgot-password" size={10} className="text-[9px] text-slate-500 uppercase font-black hover:text-indigo-400 tracking-widest transition-colors">Forgot Access?</Link>
-                            </div>
+                            
 
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
