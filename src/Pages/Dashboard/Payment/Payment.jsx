@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useParams } from 'react-router';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
-import { FaMoneyBillWave, FaUserTie, FaRupeeSign, FaBookOpen, FaShieldAlt, FaIdCardAlt } from "react-icons/fa";
-import { motion } from 'framer-motion';
+import { FaMoneyBillWave, FaUserTie, FaBookOpen, FaShieldAlt, FaIdCardAlt, FaArrowRight } from "react-icons/fa";
+import { motion, AnimatePresence } from 'framer-motion';
+import Lottie from "lottie-react";
 
 const Payment = () => {
     const { applicationId } = useParams();
@@ -19,174 +20,135 @@ const Payment = () => {
     });
 
     if (isLoading || !application) {
-        // Full-Page Light-Themed Loading State
         return (
-            <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
-                <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-indigo-600"></div>
-                <p className="mt-6 text-xl text-indigo-700 font-semibold">Initiating secure transaction...</p>
+            <div className="min-h-screen flex flex-col justify-center items-center bg-[#050505]">
+                <Lottie
+                    path="https://lottie.host/890453d1-419b-449a-bd9e-269608406180/7eL6R9oV7j.json"
+                    className="w-64"
+                    loop
+                />
+                <h2 className="text-xl font-black text-primary animate-pulse tracking-[0.5em] mt-8 uppercase">
+                    Securing Connection
+                </h2>
             </div>
         );
     }
 
-    // Framer Motion variants for a subtle, elegant fade-in (kept the same structure)
-    const containerVariants = {
-        hidden: { opacity: 0, scale: 0.98 },
-        visible: {
-            opacity: 1,
-            scale: 1,
-            transition: {
-                duration: 0.5,
-                delayChildren: 0.2,
-                staggerChildren: 0.1
-            }
-        }
-    };
+    const formatCurrency = (amount) => `৳${new Intl.NumberFormat('en-IN').format(amount)}`;
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 15 },
-        visible: { opacity: 1, y: 0 }
-    };
-
-    // Helper function to format currency
-    const formatCurrency = (amount) => `৳ ${new Intl.NumberFormat('en-IN').format(amount)}`;
-
-
-
-    const handlePayment = async() => {
+    const handlePayment = async () => {
         const paymentInfo = {
             expectedSalary: application.expectedSalary,
             applicationId: application._id,
-            applicationName:application.studentName,
+            applicationName: application.studentName,
             studentEmail: application.studentEmail,
             tuitionSubject: application.tuitionSubject
         }
-
         const res = await axiosSecure.post('/create-checkout-session', paymentInfo);
-        console.log(res.data);
-        window.location.href = res.data.url
-        
+        window.location.href = res.data.url;
     }
 
-
     return (
-        // Full Page Container with Soft Light Background (Replacing bg-gray-900)
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 sm:p-8">
+        <div className="min-h-full py-10 flex items-center justify-center px-4 overflow-hidden relative">
+
+            {/* Background Decorative Blur */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10"></div>
+
             <motion.div
-                // Main card is bright white (Replacing bg-gray-800)
-                className="w-full max-w-2xl bg-white rounded-3xl shadow-3xl p-6 sm:p-10 border border-indigo-100"
-                initial="hidden"
-                animate="visible"
-                variants={containerVariants}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full max-w-2xl bg-white/[0.03] backdrop-blur-3xl rounded-[3rem] p-6 md:p-12 border border-white/10 shadow-2xl relative"
             >
-                {/* Header Section */}
-                <motion.header
+                {/* Header */}
+                <motion.div
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
                     className="text-center mb-10"
-                    variants={itemVariants}
                 >
-                    {/* Header Text is Dark/Gradient (Replacing text-white) */}
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-cyan-700">
-                            Finalize Payment
-                        </span>
+                    <div className="inline-flex items-center justify-center p-4 bg-primary/20 rounded-2xl text-primary mb-6">
+                        <FaMoneyBillWave size={40} className="animate-pulse" />
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic leading-none">
+                        Finalize <span className="text-primary">Payment</span>
                     </h1>
-                    {/* Subtitle is Darker Gray (Replacing text-gray-400) */}
-                    <p className="mt-2 text-lg text-gray-600 flex items-center justify-center gap-2">
-                        <FaIdCardAlt className="text-indigo-500" />
-                        Billing Details for Application #{applicationId.slice(-6)}
+                    <p className="mt-4 text-gray-500 font-bold flex items-center justify-center gap-2 uppercase text-[10px] tracking-widest">
+                        <FaIdCardAlt className="text-primary" />
+                        ID: {applicationId.slice(-8)}
                     </p>
-                </motion.header>
+                </motion.div>
 
-                {/* Main Content Area: Centered Details */}
-                <div className="space-y-8">
-
-                    {/* Transaction Details (Light Blue/Gray background - Replacing bg-gray-700) */}
+                {/* Summary Info Grid */}
+                <div className="space-y-6">
                     <motion.div
-                        className="bg-indigo-50 p-6 rounded-2xl space-y-4 shadow-sm"
-                        variants={itemVariants}
+                        initial={{ x: -30, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        className="grid grid-cols-1 md:grid-cols-2 gap-4"
                     >
-                        {/* Summary Header (Darker Text - Replacing text-white) */}
-                        <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b border-indigo-200 pb-2">
-                            Transaction Summary
-                        </h2>
-
-                        {/* Subject */}
-                        <motion.div
-                            className="flex justify-between items-center py-2 border-b border-indigo-200"
-                            variants={itemVariants}
-                        >
+                        <div className="bg-white/5 p-6 rounded-3xl border border-white/5 hover:border-primary/30 transition-all group">
+                            <p className="text-[10px] uppercase font-black text-gray-500 tracking-[0.2em] mb-2">Subject</p>
                             <div className="flex items-center gap-3">
-                                {/* Icon Color (Indigo) */}
-                                <FaBookOpen className="text-indigo-500" />
-                                <span className="font-medium text-gray-600">Tuition Subject:</span>
+                                <FaBookOpen className="text-primary group-hover:scale-125 transition-transform" />
+                                <span className="text-xl font-bold text-white italic">{application.tuitionSubject}</span>
                             </div>
-                            <span className="font-bold text-lg text-gray-900">{application.tuitionSubject}</span>
-                        </motion.div>
+                        </div>
 
-                        {/* Tutor */}
-                        <motion.div
-                            className="flex justify-between items-center py-2"
-                            variants={itemVariants}
-                        >
+                        <div className="bg-white/5 p-6 rounded-3xl border border-white/5 hover:border-primary/30 transition-all group">
+                            <p className="text-[10px] uppercase font-black text-gray-500 tracking-[0.2em] mb-2">Tutor Name</p>
                             <div className="flex items-center gap-3">
-                                {/* Icon Color (Cyan) */}
-                                <FaUserTie className="text-cyan-500" />
-                                <span className="font-medium text-gray-600">Tutor Name:</span>
+                                <FaUserTie className="text-primary group-hover:scale-125 transition-transform" />
+                                <span className="text-xl font-bold text-white italic">{application.tutorName}</span>
                             </div>
-                            <span className="font-bold text-lg text-gray-900">{application.tutorName}</span>
-                        </motion.div>
-
-                        {/* Tutor Expected (Subtle Info) */}
-                        <motion.div
-                            className="text-right pt-2 text-sm italic text-gray-500"
-                            variants={itemVariants}
-                        >
-                            <p>Student Demand: {formatCurrency(application.studentDemand)}</p>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* Final Amount Block - Highly Elevated (Indigo/Cyan Accent) */}
-                    <motion.div
-                        // Final Block: White background with strong accent border
-                        className="p-8 bg-white rounded-2xl shadow-xl border-4 border-indigo-300"
-                        variants={itemVariants}
-                    >
-                        {/* Header Text (Accent Color) */}
-                        <h3 className="text-2xl font-semibold text-indigo-600 mb-2">
-                            Your Payment Total (Tutor expected salary)
-                        </h3>
-
-                        <div className="flex justify-between items-center">
-                            <span className="text-xl text-gray-500">Final Agreed Amount:</span>
-                            <span className="text-6xl font-black text-cyan-600 tracking-wider animate-pulse-slow">
-                                {formatCurrency(application.expectedSalary)}
-                            </span>
                         </div>
                     </motion.div>
 
-                    {/* Pay Now Button with High Contrast (Indigo) */}
-                    <motion.button
-                        // High Contrast Button: Indigo background, White text
-                        className="w-full py-5 bg-indigo-600 text-white font-bold text-xl rounded-full shadow-2xl shadow-indigo-300/50 hover:bg-indigo-700 transition duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-indigo-300 flex items-center justify-center gap-3"
-                        whileHover={{ scale: 1.03, boxShadow: "0 15px 30px -5px rgba(99, 102, 241, 0.6)" }}
-                        whileTap={{ scale: 0.95 }}
-                        variants={itemVariants}
-                        // The actual click functionality remains unchanged
-                        onClick={handlePayment}
+                    {/* Final Amount Display */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-primary/5 rounded-[2.5rem] p-10 border border-primary/20 text-center relative overflow-hidden group"
                     >
-                        <FaMoneyBillWave className="text-3xl" />
-                        CONFIRM AND PAY NOW
-                    </motion.button>
+                        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
-                    {/* Security Note Footer (Darker Gray Text) */}
-                    <motion.p
-                        className="text-center text-sm text-gray-500 mt-4 flex items-center justify-center gap-1"
-                        variants={itemVariants}
-                    >
-                        <FaShieldAlt className="text-green-600" />
-                        This transaction is protected by our secure, encrypted payment process.
-                    </motion.p>
+                        <p className="text-xs uppercase font-black text-primary tracking-[0.4em] mb-4">Amount to Pay</p>
+                        <div className="flex flex-col items-center">
+                            <span className="text-7xl md:text-8xl font-black text-white tracking-tighter drop-shadow-[0_0_20px_rgba(var(--p),0.3)]">
+                                {formatCurrency(application.expectedSalary)}
+                            </span>
+                            <div className="mt-4 flex items-center gap-2 text-gray-500 font-bold text-sm bg-white/5 px-4 py-1 rounded-full border border-white/5">
+                                <s>{formatCurrency(application.studentDemand)}</s>
+                                <FaArrowRight size={10} className="text-primary" />
+                                <span className="text-gray-300 italic">Agreed Deal</span>
+                            </div>
+                        </div>
+                    </motion.div>
 
+                    {/* Call to Action */}
+                    <div className="space-y-6">
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={handlePayment}
+                            className="w-full py-6 bg-primary text-white font-black text-xl rounded-2xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all flex items-center justify-center gap-4 uppercase tracking-[0.2em]"
+                        >
+                            Confirm & Pay Now <FaMoneyBillWave size={24} />
+                        </motion.button>
+
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-2">
+                            <div className="flex items-center gap-2 text-[10px] font-black text-gray-600 uppercase tracking-widest">
+                                <FaShieldAlt className="text-green-500" />
+                                Secure Encrypted Transaction
+                            </div>
+                            <div className="flex gap-2">
+                                <div className="w-8 h-5 bg-white/10 rounded"></div>
+                                <div className="w-8 h-5 bg-white/10 rounded"></div>
+                                <div className="w-8 h-5 bg-white/10 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                {/* Corner Decorative */}
+                <div className="absolute -bottom-4 -right-4 size-24 bg-primary/10 rounded-full blur-3xl"></div>
             </motion.div>
         </div>
     );

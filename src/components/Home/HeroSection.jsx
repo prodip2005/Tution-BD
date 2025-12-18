@@ -1,122 +1,162 @@
-// src/components/HeroSection.jsx
 import React from "react";
 import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectFade } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { motion } from "framer-motion";
+import { Link } from "react-router";
+import { FaArrowRight } from "react-icons/fa";
+
+// Swiper Styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-import { Swiper, SwiperSlide } from "swiper/react";
-
 
 const slideData = [
     {
         image: "https://images.unsplash.com/photo-1506765515384-028b60a970df?q=80&w=1600&auto=format&fit=crop",
-        title: "Master new skills with TutorOWL",
-        subtitle: "Expert tutors • Flexible schedules • Personalised lessons",
+        tag: "SKILL DEVELOPMENT",
+        title: "Master New Skills with TutorOWL",
+        subtitle: "Expert tutors • Flexible schedules",
         cta: { label: "Get Started", href: "/register" },
     },
     {
         image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1600&auto=format&fit=crop",
+        tag: "EXPERT GUIDANCE",
         title: "Find Top Tutors Near You",
-        subtitle: "Hand-picked experts in math, programming and more.",
+        subtitle: "Hand-picked experts in math and more.",
         cta: { label: "Find Tutors", href: "/tutors" },
     },
     {
         image: "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?q=80&w=1600&auto=format&fit=crop",
+        tag: "PRACTICAL LEARNING",
         title: "Interactive Lessons That Click",
-        subtitle: "Engaging lessons with practical projects and feedback.",
-        cta: { label: "Find Tutions", href: "/tutions" },
+        subtitle: "Engaging lessons with practical projects.",
+        cta: { label: "Explore Lessons", href: "/tutions" },
     },
 ];
 
 const HeroSection = () => {
     return (
-        <section className="w-full  mx-auto px-4">
-            <div className="rounded-2xl overflow-hidden relative shadow-lg">
+        <section className="w-full lg:px-8 sm:px-5 -mt-4 md:-mt-8">
+            <div className="w-full h-[250px] sm:h-[450px] md:h-[750px] relative overflow-hidden rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                 <Swiper
                     modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectFade]}
                     effect="fade"
                     fadeEffect={{ crossFade: true }}
-                    navigation
-                    pagination={{ clickable: true }}
-                    mousewheel
-                    keyboard
-                    autoplay={{
-                        delay: 1500,
-                        disableOnInteraction: false,
-                        pauseOnMouseEnter: true,
+                    navigation={true}
+                    pagination={{ 
+                        clickable: true, 
+                        dynamicBullets: true,
                     }}
                     loop={true}
-                    speed={900}
-                    className="w-full h-[520px] md:h-[620px]"
+                    autoplay={{
+                        delay: 6000,
+                        disableOnInteraction: false,
+                    }}
+                    speed={1500}
+                    className="w-full h-full"
                 >
                     {slideData.map((s, i) => (
                         <SwiperSlide key={i}>
-                            <div className="relative w-full h-[520px] md:h-[620px]">
-                               
-                                <div
-                                    className="absolute inset-0 bg-center bg-cover transition-transform duration-1000"
-                                    style={{
-                                        backgroundImage: `url("${s.image}")`,
-                                        transform: "scale(1.03)",
-                                        willChange: "transform, opacity",
-                                    }}
-                                    aria-hidden
+                            <div className="relative w-full h-full">
+                                {/* Enhanced Zoom Background Image */}
+                                <motion.div
+                                    initial={{ scale: 1.2 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ duration: 10 }}
+                                    className="absolute inset-0 bg-center bg-cover"
+                                    style={{ backgroundImage: `url("${s.image}")` }}
                                 />
 
-                               
-                                <div className="absolute inset-0 bg-linear-to-b from-black/20 via-black/10 to-black/45" />
+                                {/* Multi-layer Overlays for Glassy Look */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-[#020617]/40 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
 
-                              
-                                <div className="relative z-10 h-full flex items-center">
-                                    <div className="container mx-auto px-6 md:px-12">
-                                        <div className="max-w-2xl text-white">
-                                            <h2 className="text-2xl md:text-4xl font-extrabold leading-tight drop-shadow-md">
-                                                {s.title}
+                                {/* Content Container */}
+                                <div className="relative z-10 h-full max-w-[1440px] mx-auto flex items-center px-8 sm:px-12 md:px-20">
+                                    <div className="max-w-4xl">
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 30 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.8, ease: "easeOut" }}
+                                        >
+                                            {/* Top Tagline */}
+                                            <span className="inline-block text-[10px] md:text-xs font-black text-indigo-400 bg-indigo-500/10 px-4 py-1.5 rounded-full tracking-[0.3em] uppercase mb-4 border border-indigo-500/20 backdrop-blur-md">
+                                                {s.tag}
+                                            </span>
+
+                                            <h2 className="text-2xl sm:text-5xl md:text-8xl font-black text-white leading-[1.1] italic uppercase tracking-tighter">
+                                                {s.title.split(' ').map((word, index) => (
+                                                    <span key={index} className={index % 2 !== 0 ? "text-indigo-500" : ""}>{word} </span>
+                                                ))}
                                             </h2>
-                                            <p className="mt-3 text-sm md:text-lg text-white/90">{s.subtitle}</p>
+                                            
+                                            <p className="mt-3 md:mt-8 text-xs sm:text-lg md:text-2xl text-slate-300 font-medium max-w-xl line-clamp-2 uppercase tracking-wide opacity-80">
+                                                {s.subtitle}
+                                            </p>
 
-                                            <div className="mt-6 flex gap-3">
-                                                {s.cta && (
-                                                    <a
-                                                        href={s.cta.href}
-                                                        className="inline-block btn btn-primary px-5 py-3 rounded-lg shadow-lg backdrop-blur-sm"
-                                                    >
-                                                        {s.cta.label}
-                                                    </a>
-                                                )}
+                                            <div className="mt-6 md:mt-12 flex items-center gap-4">
+                                                <Link
+                                                    to={s.cta.href}
+                                                    className="group relative px-6 md:px-12 py-3 md:py-5 bg-indigo-600 text-white rounded-2xl font-black shadow-[0_10px_30px_rgba(79,70,229,0.3)] text-[10px] md:text-sm uppercase tracking-[0.2em] flex items-center gap-3 overflow-hidden transition-all hover:bg-indigo-500"
+                                                >
+                                                    <span className="relative z-10">{s.cta.label}</span>
+                                                    <FaArrowRight className="relative z-10 group-hover:translate-x-2 transition-transform" />
+                                                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                                                </Link>
+                                                
+                                                <div className="hidden md:flex items-center gap-2 opacity-30">
+                                                    <div className="w-12 h-[1px] bg-white"></div>
+                                                    <span className="text-[10px] font-black text-white uppercase tracking-widest">Scroll</span>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </motion.div>
                                     </div>
                                 </div>
-
-                                <div
-                                    className="absolute inset-0 pointer-events-none"
-                                    style={{
-                                        background:
-                                            "radial-gradient(900px 400px at 10% 20%, rgba(255,255,255,0.02), rgba(255,255,255,0) 20%)",
-                                    }}
-                                />
                             </div>
                         </SwiperSlide>
                     ))}
                 </Swiper>
 
-                <style>{`
-          /* bring navigation buttons and pagination above overlay */
-          .swiper-button-next, .swiper-button-prev {
-            color: white;
-            box-shadow: 0 6px 20px rgba(2,6,23,0.25);
-          }
-          .swiper-pagination-bullet {
-            background: rgba(255,255,255,0.6);
-            opacity: 1;
-          }
-          .swiper-pagination-bullet-active {
-            background: white;
-            transform: scale(1.1);
-          }
-        `}</style>
+                {/* Cyber Styling for Swiper */}
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    .swiper-button-next, .swiper-button-prev {
+                        width: 50px;
+                        height: 50px;
+                        background: rgba(255, 255, 255, 0.03);
+                        backdrop-filter: blur(20px);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 18px;
+                        color: #6366f1 !important;
+                        transition: all 0.3s ease;
+                    }
+                    .swiper-button-next:after, .swiper-button-prev:after {
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+                    .swiper-button-next:hover, .swiper-button-prev:hover {
+                        background: #6366f1;
+                        color: white !important;
+                        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+                    }
+                    .swiper-pagination-bullet {
+                        background: rgba(255, 255, 255, 0.2) !important;
+                        width: 12px;
+                        height: 12px;
+                        opacity: 1;
+                    }
+                    .swiper-pagination-bullet-active {
+                        background: #6366f1 !important;
+                        width: 30px;
+                        border-radius: 6px;
+                    }
+                    @media (max-width: 768px) {
+                        .swiper-button-next, .swiper-button-prev {
+                            display: none;
+                        }
+                    }
+                `}} />
             </div>
         </section>
     );

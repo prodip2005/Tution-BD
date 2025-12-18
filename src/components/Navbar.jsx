@@ -1,324 +1,213 @@
-// src/components/Navbar.jsx
 import React, { useContext, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../Providers/AuthContext";
 import useRole from "../Hooks/useRole";
 
-/* --- Framer Motion variants --- */
-const navVariants = {
-    hidden: { opacity: 0, y: -12 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { type: "spring", stiffness: 120, damping: 14, when: "beforeChildren" },
-    },
-};
-
-
-const itemVariants = {
-    hidden: { opacity: 0, y: -6 },
-    visible: (i = 1) => ({ opacity: 1, y: 0, transition: { delay: i * 0.06 } }),
-};
+// Icons
+import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
+import { FiHome, FiBookOpen, FiUsers, FiLayout, FiLogOut, FiUserPlus } from "react-icons/fi";
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const { user, LogOut } = useContext(AuthContext); 
+    const { user, LogOut } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
-    const {role}=useRole()
-
-    const navLinkClasses = ({ isActive }) =>
-        `px-4 py-2 rounded-lg relative transition-all duration-300 overflow-hidden
-      ${isActive ? "bg-primary text-white shadow-lg shadow-primary/50" : "text-base-content/80"}
-      group`;
-
-    const menuItems = [
-        { to: "/", label: "Home" },
-        { to: "/tutions", label: "Tutions" },
-        { to: "/tutors", label: "Tutors" },
-    ];
-
+    const { role } = useRole();
 
     const handleLogOut = async () => {
         try {
-            await LogOut(); 
-            navigate("/"); 
+            await LogOut();
+            navigate("/");
         } catch (err) {
             console.error("Logout error:", err);
         }
     };
 
-    return (
-        <header className="w-full">
-            {/* motion.nav with glass classes; we also add a custom class nav-glass for extra CSS animation */}
-            <motion.nav
-                initial="hidden"
-                animate="visible"
-                variants={navVariants}
-                className={
-                    "nav-glass mx-auto md:max-w-7xl rounded-2xl md:rounded-3xl mt-3 md:mt-5 px-4 py-3 flex items-center justify-between gap-4 backdrop-blur-xl bg-white/16 dark:bg-gray-800/28 border border-white/12 dark:border-gray-700/40 shadow-xl shadow-black/6 transition-all duration-500"
-                }
-            >
-                {/* subtle moving gradient overlay (shimmer) is implemented via a child span */}
-                <span aria-hidden className="glass-shimmer pointer-events-none" />
+    // মেনু আইটেমগুলো এখানে কন্ডিশনাল করা হয়েছে
+    const menuItems = [
+        { to: "/", label: "Home", icon: <FiHome /> },
+        { to: "/tutions", label: "Tutions", icon: <FiBookOpen /> },
+        { to: "/tutors", label: "Tutors", icon: <FiUsers /> },
+        // লগইন থাকলে ড্যাশবোর্ড মেনু অ্যাড হবে
+        ...(user ? [{ to: "/dashboard", label: "Dashboard", icon: <FiLayout /> }] : []),
+    ];
 
-                {/* left: brand + mobile toggle */}
-                <div className="flex items-center gap-3 relative z-10">
+    return (
+        <header className="fixed top-0 left-0 w-full z-[100] px-2 py-3 md:px-8 md:py-5">
+            <motion.nav
+                initial={{ y: -100 }}
+                animate={{ y: 0 }}
+                className="max-w-7xl mx-auto backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 border border-gray-200/50 dark:border-gray-800/50 shadow-xl rounded-[1.5rem] md:rounded-[2rem] px-4 py-2.5 md:px-6 md:py-3 flex items-center justify-between"
+            >
+                {/* --- Left: Brand Section --- */}
+                <div className="flex items-center gap-1 md:gap-3">
                     <button
-                        onClick={() => setOpen((s) => !s)}
-                        aria-label="menu"
-                        className="lg:hidden btn btn-ghost btn-circle"
+                        onClick={() => setOpen(!open)}
+                        className="lg:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-700 dark:text-gray-200"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
+                        {open ? <HiOutlineX size={22} /> : <HiOutlineMenuAlt3 size={22} />}
                     </button>
 
-                    <Link to={'/'}>
+                    <Link to="/" className="flex items-center gap-2 group">
                         <img
-                            className="w-10 rounded-full shadow-lg"
+                            className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl shadow-md group-hover:rotate-6 transition-transform duration-300"
                             src="https://images-platform.99static.com/DVETQ4KXxNUWF1Q-k4ASnnzl9LY=/112x112:2365x2365/fit-in/99designs-work-samples/work-sample-designs/1039810/842795fa-0320-4287-baac-22e221a46d34"
-                            alt="Tutor OWL Logo"
-                        /></Link>
-
-                    <Link to="/" className="text font-black text-xl normal-case tracking-wider text-base-content/90">
-                        Tutor <span className="text-primary">OWL</span>
+                            alt="Logo"
+                        />
+                        <span className="text-lg md:text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                            Tutor<span className="text-primary">OWL</span>
+                        </span>
                     </Link>
                 </div>
 
-                {/* center: desktop menu */}
-                <div className="hidden lg:flex relative z-10">
-                    <ul className="menu menu-horizontal px-1 gap-2 bg-transparent flex items-center">
-                        {menuItems.map((item, idx) => (
-                            <motion.li
-                                key={item.to}
-                                custom={idx}
-                                initial="hidden"
-                                animate="visible"
-                                variants={itemVariants}
-                                className="relative"
-                            >
-                                <NavLink to={item.to} className={navLinkClasses}>
-                                    <motion.span className="relative z-10" whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
-                                        {item.label}
-                                    </motion.span>
-
-                                    {/* animated subtle underline (scaleX on hover) */}
-                                    <motion.span
-                                        className="absolute left-0 bottom-0 h-0.5 w-full bg-white/20 rounded-sm"
-                                        initial={{ scaleX: 0 }}
-                                        whileHover={{ scaleX: 1 }}
-                                        transition={{ duration: 0.35 }}
-                                        style={{ transformOrigin: "left" }}
-                                    />
-                                </NavLink>
-                            </motion.li>
-                        ))}
-
-                        {user && (
-                            <motion.li initial="hidden" animate="visible" variants={itemVariants} className="relative">
-                                <NavLink to="/dashboard/" className={navLinkClasses}>
-                                    <span className="relative z-10">Dashboard</span>
-                                </NavLink>
-                            </motion.li>
-                        )}
-
-
-
-                        {user && role === "student" && (
-                            <motion.li
-                                initial={{ opacity: 0, x: -6 }}
-                                animate={{ opacity: 1, x: 0 }}
-                            >
+                {/* --- Center: Desktop Menu --- */}
+                <div className="hidden lg:block">
+                    <ul className="flex items-center gap-1 bg-gray-100/80 dark:bg-gray-800/80 p-1 rounded-2xl">
+                        {menuItems.map((item) => (
+                            <li key={item.to} className="relative">
                                 <NavLink
-                                    to="/apply-tutor"
-                                    className="block px-4 py-2 rounded-lg text-base-content/90"
-                                    onClick={() => setOpen(false)}
+                                    to={item.to}
+                                    className={({ isActive }) =>
+                                        `relative px-4 py-2.5 flex items-center gap-2 text-sm font-bold transition-all duration-300 rounded-xl ${isActive ? "text-white" : "text-gray-600 dark:text-gray-400 hover:text-primary"
+                                        }`
+                                    }
                                 >
-                                    Be a Tutor
+                                    {({ isActive }) => (
+                                        <>
+                                            {isActive && (
+                                                <motion.div
+                                                    layoutId="nav-pill-active"
+                                                    className="absolute inset-0 bg-primary rounded-xl shadow-md"
+                                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                                />
+                                            )}
+                                            <span className="relative z-10 flex items-center gap-2">
+                                                {item.icon} {item.label}
+                                            </span>
+                                        </>
+                                    )}
                                 </NavLink>
-                            </motion.li>
-                        )}
-
-                        
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
-                {/* right: actions */}
-                <div className="relative z-10">
-                    {user ? (
-                        /* User area: avatar + name + logout */
-                        <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-3">
-                                <Link to={'/updateUserProfile'}>
-                                    <img
-                                        src={user.photoURL || "https://placehold.co/40x40?text=U"}
-                                        alt={user.displayName || "User"}
-                                        onError={(e) => (e.currentTarget.src = "https://placehold.co/40x40?text=U")}
-                                        className="w-14 h-14 rounded-full object-cover border"
-                                    />
-                                </Link>
-                                <div className="hidden sm:flex flex-col">
-                                    <span className="text-sm font-medium">{user.displayName || (user.email ? user.email.split("@")[0] : "User")}</span>
-                               
-                                </div>
-                            </div>
-
-                            <motion.button
-                                onClick={handleLogOut}
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="btn btn-sm bg-red-600 text-white rounded-xl shadow-lg shadow-primary/30 transition-all duration-300"
-                            >
-                                Logout
-                            </motion.button>
-
-                        </div>
-                    ) : (
-                        <Link to={"/login"}>
-                            <div className="flex items-center gap-3">
-                                <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="btn btn-sm btn-primary rounded-xl shadow-lg shadow-primary/30 transition-all duration-300">
-                                    Login / Register
-                                </motion.button>
-                            </div>
+                {/* --- Right: User & Auth --- */}
+                <div className="flex items-center gap-2 md:gap-4">
+                    {user && role === "student" && (
+                        <Link to="/apply-tutor" className="hidden sm:flex items-center gap-2 px-3 py-2 bg-primary/10 text-primary border border-primary/20 rounded-xl font-bold text-[10px] md:text-xs hover:bg-primary hover:text-white transition-all">
+                            <FiUserPlus /> <span className="hidden md:inline">BE A TUTOR</span>
                         </Link>
+                    )}
+
+                    {!user ? (
+                        <Link to="/login">
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="px-5 py-2 md:px-6 md:py-2.5 bg-primary text-white text-xs md:text-sm font-bold rounded-xl shadow-lg shadow-primary/20"
+                            >
+                                Login
+                            </motion.button>
+                        </Link>
+                    ) : (
+                        <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 border-l border-gray-200 dark:border-gray-700">
+                            <div className="hidden sm:flex flex-col items-end leading-tight">
+                                <span className="text-[13px] font-bold text-gray-900 dark:text-white truncate max-w-[100px]">
+                                    {user?.displayName || "User"}
+                                </span>
+                                <span className="text-[10px] font-medium text-primary uppercase tracking-wider">{role || "Member"}</span>
+                            </div>
+
+                            <Link to="/updateUserProfile" className="relative group">
+                                <img
+                                    src={user.photoURL || "https://i.ibb.co/5GzXkwq/user.png"}
+                                    className="w-9 h-9 md:w-11 md:h-11 rounded-full border-2 border-primary/20 group-hover:border-primary transition-all object-cover shadow-sm"
+                                    alt="Profile"
+                                />
+                                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
+                            </Link>
+
+                            <button
+                                onClick={handleLogOut}
+                                className="hidden md:flex p-2.5 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"
+                            >
+                                <FiLogOut size={18} />
+                            </button>
+                        </div>
                     )}
                 </div>
             </motion.nav>
 
-            {/* mobile menu: animated drawer */}
+            {/* --- Mobile Sidebar/Drawer --- */}
             <AnimatePresence>
                 {open && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        transition={{ type: "spring", stiffness: 260, damping: 28 }}
-                        className="lg:hidden"
-                    >
-                        <div className="p-3 mt-2 mx-4 rounded-xl backdrop-blur-xl bg-white/40 dark:bg-gray-700/50 border border-white/50 dark:border-gray-500/60 shadow-lg">
-                            <ul className="menu menu-compact flex flex-col gap-2">
-                                {menuItems.map((item, idx) => (
-                                    <motion.li key={item.to} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.04 }}>
-                                        <NavLink
-                                            to={item.to}
-                                            className={({ isActive }) => `block px-4 py-2 rounded-lg transition-colors duration-200 ${isActive ? "bg-primary text-white" : "text-base-content/90"}`}
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            {item.label}
-                                        </NavLink>
-                                    </motion.li>
-
-                                ))}
-
-                                {user && (
-                                    <motion.li initial="hidden" animate="visible" variants={itemVariants} className="relative">
-                                        <NavLink to="/dashboard" className={navLinkClasses}>
-                                            <span className="relative z-10">Dashboard</span>
-                                        </NavLink>
-                                    </motion.li>
-
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setOpen(false)}
+                            className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm lg:hidden z-[-1]"
+                        />
+                        <motion.div
+                            initial={{ x: "-100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "-100%" }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="fixed top-0 left-0 h-screen w-[280px] bg-white dark:bg-gray-900 shadow-2xl p-6 lg:hidden z-[110] flex flex-col"
+                        >
+                            <div className="mb-8 pt-4">
+                                {user ? (
+                                    <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl">
+                                        <img src={user.photoURL} className="w-12 h-12 rounded-full border-2 border-primary" alt="" />
+                                        <div className="overflow-hidden">
+                                            <p className="font-bold text-gray-900 dark:text-white truncate">{user?.displayName}</p>
+                                            <p className="text-xs text-primary font-semibold uppercase">{role}</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-3">
+                                        <img className="w-10 h-10 rounded-lg" src="https://images-platform.99static.com/DVETQ4KXxNUWF1Q-k4ASnnzl9LY=/112x112:2365x2365/fit-in/99designs-work-samples/work-sample-designs/1039810/842795fa-0320-4287-baac-22e221a46d34" alt="Logo" />
+                                        <span className="text-xl font-bold dark:text-white italic">TutorOWL</span>
+                                    </div>
                                 )}
-                                {user && role === "student" && (
-                                    <motion.li
-                                        initial={{ opacity: 0, x: -6 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                    >
-                                        <NavLink
-                                            to="/apply-tutor"
-                                            className={({ isActive }) =>
-                                                `block px-4 py-2 rounded-lg transition-colors duration-200 ${isActive ? "bg-primary text-white" : "text-base-content/90"
-                                                }`
-                                            }
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            Be a Tutor
-                                        </NavLink>
-                                    </motion.li>
+                            </div>
+
+                            <nav className="flex-1 overflow-y-auto">
+                                <ul className="space-y-2">
+                                    {menuItems.map((item) => (
+                                        <li key={item.to}>
+                                            <NavLink
+                                                to={item.to}
+                                                onClick={() => setOpen(false)}
+                                                className={({ isActive }) =>
+                                                    `flex items-center gap-4 p-4 rounded-xl font-bold transition-all ${isActive ? "bg-primary text-white shadow-lg" : "text-gray-600 dark:text-gray-400 hover:bg-gray-50"
+                                                    }`
+                                                }
+                                            >
+                                                <span className="text-xl">{item.icon}</span> {item.label}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
+
+                            <div className="mt-auto pt-6 border-t border-gray-100 dark:border-gray-800">
+                                {user ? (
+                                    <button onClick={handleLogOut} className="flex items-center gap-3 w-full p-4 text-red-500 font-bold hover:bg-red-50 rounded-xl transition-all">
+                                        <FiLogOut size={20} /> Logout
+                                    </button>
+                                ) : (
+                                    <Link to="/login" onClick={() => setOpen(false)} className="block w-full p-4 bg-primary text-white text-center font-bold rounded-xl shadow-lg shadow-primary/20">
+                                        Login / Register
+                                    </Link>
                                 )}
-
-
-                                
-                                {/* add auth actions in mobile menu */}
-                                <li className="mt-2">
-                                    {user ? (
-                                        <button onClick={handleLogOut} className="w-full btn btn-ghost">
-                                            Logout
-                                        </button>
-                                    ) : (
-                                        <NavLink to="/login" className="w-full btn btn-primary">
-                                            Login / Register
-                                        </NavLink>
-                                    )}
-                                </li>
-                            </ul>
-                        </div>
-                    </motion.div>
+                            </div>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
-
-            {/* Inline CSS for shimmer + subtle pulse. Move to global CSS if you prefer */}
-            <style>{`
-        /* glass container extra styling */
-        .nav-glass {
-          position: relative;
-          overflow: hidden;
-        }
-
-        /* moving gradient shimmer */
-        .glass-shimmer {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background: linear-gradient(120deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.02) 60%, rgba(255,255,255,0.00) 100%);
-          transform: translateX(-40%);
-          filter: blur(8px);
-          opacity: 0.9;
-          mix-blend-mode: overlay;
-          animation: shimmer 6s linear infinite;
-          border-radius: inherit;
-        }
-
-        @keyframes shimmer {
-          0% { transform: translateX(-40%) scale(1.02); opacity: 0.6; }
-          50% { transform: translateX(40%) scale(1.03); opacity: 0.85; }
-          100% { transform: translateX(-40%) scale(1.02); opacity: 0.6; }
-        }
-
-        /* subtle pulse of border & shadow to give life */
-        .nav-glass {
-          animation: glassPulse 10s ease-in-out infinite;
-        }
-
-        @keyframes glassPulse {
-          0% { box-shadow: 0 10px 30px rgba(2,6,23,0.06); border-color: rgba(255,255,255,0.10); }
-          50% { box-shadow: 0 18px 50px rgba(2,6,23,0.08); border-color: rgba(255,255,255,0.08); }
-          100% { box-shadow: 0 10px 30px rgba(2,6,23,0.06); border-color: rgba(255,255,255,0.10); }
-        }
-
-        /* make sure buttons and links sit above shimmer */
-        .nav-glass > .relative,
-        .nav-glass .btn,
-        .nav-glass a,
-        .nav-glass .menu {
-          position: relative;
-          z-index: 10;
-        }
-
-        /* tiny floating effect for desktop only (soft transform) */
-        @media (min-width: 1024px) {
-          .nav-glass {
-            transform-origin: center;
-            animation: glassPulse 10s ease-in-out infinite, floatY 8s ease-in-out infinite;
-          }
-
-          @keyframes floatY {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-            100% { transform: translateY(0); }
-          }
-        }
-      `}</style>
         </header>
     );
 };
