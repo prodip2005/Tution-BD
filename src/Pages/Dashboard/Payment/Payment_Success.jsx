@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FaCheckCircle, FaHashtag, FaArrowRight, FaReceipt } from 'react-icons/fa';
 
 const Payment_Success = () => {
@@ -28,9 +28,10 @@ const Payment_Success = () => {
         }
     }, [axiosSecure, sessionId]);
 
+    // --- ডার্ক মোড লোডার ---
     if (isLoading) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-[80vh] bg-transparent">
+            <div className="flex flex-col justify-center items-center min-h-[80vh] bg-[#050505]">
                 <div className="relative flex items-center justify-center">
                     <motion.div
                         animate={{ rotate: 360 }}
@@ -38,16 +39,11 @@ const Payment_Success = () => {
                         className="w-32 h-32 border-2 border-green-500/10 border-t-green-500 rounded-full"
                     />
                     <motion.div
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                        className="absolute w-24 h-24 border border-dashed border-green-400/20 rounded-full"
-                    />
-                    <motion.div
                         animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         className="absolute w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.5)]"
                     >
-                        <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_8px_white]" />
+                        <div className="w-1.5 h-1.5 bg-white rounded-full" />
                     </motion.div>
                 </div>
                 <div className="mt-12 text-center">
@@ -56,7 +52,7 @@ const Payment_Success = () => {
                         transition={{ duration: 1.5, repeat: Infinity }}
                         className="text-green-500 text-[10px] font-black tracking-[0.6em] uppercase italic"
                     >
-                        Verifying Payment
+                        Securing Transaction
                     </motion.p>
                 </div>
             </div>
@@ -64,69 +60,79 @@ const Payment_Success = () => {
     }
 
     return (
-        <div className="min-h-[80vh] flex items-center justify-center px-4 py-10">
+        <div className="min-h-screen bg-[#050505] flex items-center justify-center px-4 py-10 relative overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-green-500/10 rounded-full blur-[100px] -z-10" />
+
             <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="max-w-md w-full bg-white dark:bg-[#0f1115] rounded-[2.5rem] md:rounded-[3rem] shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden relative"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-md w-full bg-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] md:rounded-[3.5rem] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden relative"
             >
                 {/* Top Success Banner */}
-                <div className="bg-green-500/10 py-8 md:py-10 flex flex-col items-center relative">
+                <div className="bg-green-500/5 py-10 md:py-14 flex flex-col items-center relative">
                     <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                        className="size-16 md:size-20 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-500/30"
+                        initial={{ scale: 0, rotate: -45 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", stiffness: 200, damping: 12 }}
+                        className="size-20 md:size-24 bg-green-500 text-white rounded-[2rem] flex items-center justify-center shadow-2xl shadow-green-500/20"
                     >
-                        <FaCheckCircle className="text-3xl md:text-4xl" />
+                        <FaCheckCircle className="text-4xl md:text-5xl" />
                     </motion.div>
-                    <h2 className="mt-4 md:mt-6 text-xl md:text-2xl font-black text-gray-900 dark:text-white uppercase italic tracking-tighter">
-                        Payment <span className="text-green-500">Successful</span>
+
+                    <h2 className="mt-6 md:mt-8 text-2xl md:text-4xl font-black text-white uppercase italic tracking-tighter">
+                        Success <span className="text-green-500">Fixed</span>
                     </h2>
-                    <p className="text-gray-500 text-[9px] md:text-[10px] font-bold uppercase tracking-widest mt-1">Transaction Completed</p>
+
+                    <div className="mt-2 flex items-center gap-2 px-4 py-1.5 bg-green-500/10 rounded-full border border-green-500/20">
+                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                        <p className="text-green-400 text-[9px] font-black uppercase tracking-[0.2em]">Validated by System</p>
+                    </div>
                 </div>
 
                 {/* Details Section */}
-                <div className="p-5 md:p-8 space-y-4">
-                    <div className="p-4 md:p-5 bg-gray-50 dark:bg-white/5 rounded-2xl md:rounded-3xl border border-gray-100 dark:border-white/5">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg">
+                <div className="p-6 md:p-10 space-y-6 text-white">
+                    <div className="p-6 bg-white/[0.02] rounded-[2rem] border border-white/5 space-y-5">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg border border-indigo-500/20">
                                 <FaReceipt size={14} />
                             </div>
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Billing Summary</span>
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Digital Receipt</span>
                         </div>
 
                         <div className="space-y-4">
-                            <div className="w-full overflow-hidden">
-                                <p className="text-[8px] md:text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5 flex items-center gap-1">
+                            <div className="group">
+                                <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2 flex items-center gap-2 italic">
                                     <FaHashtag size={8} className="text-green-500" /> Transaction ID
                                 </p>
-                                <p className="font-mono text-[11px] md:text-sm font-bold text-gray-800 dark:text-gray-200 bg-white dark:bg-black/20 p-3 rounded-xl border border-gray-200 dark:border-white/5 break-all leading-relaxed">
-                                    {paymentInfo?.transectionId}
-                                </p>
+                                <div className="font-mono text-[11px] md:text-sm font-bold text-slate-200 bg-black/40 p-4 rounded-2xl border border-white/5 break-all leading-relaxed group-hover:border-green-500/30 transition-colors">
+                                    {paymentInfo?.transectionId || "N/A"}
+                                </div>
                             </div>
 
-                            <div className="w-full overflow-hidden">
-                                <p className="text-[8px] md:text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                                    <FaHashtag size={8} className="text-green-500" /> Tracking ID
+                            <div className="group">
+                                <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-2 flex items-center gap-2 italic">
+                                    <FaHashtag size={8} className="text-green-500" /> Internal Tracking
                                 </p>
-                                <p className="font-mono text-[11px] md:text-sm font-bold text-gray-800 dark:text-gray-200 bg-white dark:bg-black/20 p-3 rounded-xl border border-gray-200 dark:border-white/5 break-all leading-relaxed">
-                                    {paymentInfo?.trackingId}
-                                </p>
+                                <div className="font-mono text-[11px] md:text-sm font-bold text-slate-200 bg-black/40 p-4 rounded-2xl border border-white/5 break-all leading-relaxed group-hover:border-green-500/30 transition-colors">
+                                    {paymentInfo?.trackingId || "N/A"}
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="w-full py-4 bg-gray-900 dark:bg-white text-white dark:text-black font-black rounded-xl md:rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-all uppercase text-[10px] md:text-xs tracking-[0.2em] shadow-xl"
-                    >
-                        Go to Dashboard <FaArrowRight />
-                    </button>
+                    <div className="pt-2">
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="w-full py-5 bg-white text-black font-black rounded-2xl md:rounded-[1.8rem] flex items-center justify-center gap-3 hover:bg-green-500 hover:text-white transition-all uppercase text-[10px] md:text-xs tracking-[0.3em] shadow-2xl active:scale-95"
+                        >
+                            Return to HQ <FaArrowRight size={14} />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Decorative Bottom Line */}
-                <div className="h-1.5 md:h-2 bg-green-500 w-full" />
+                <div className="h-2 bg-gradient-to-r from-transparent via-green-500 to-transparent w-full opacity-50" />
             </motion.div>
         </div>
     );

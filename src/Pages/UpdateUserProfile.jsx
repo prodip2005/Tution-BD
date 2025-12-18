@@ -43,7 +43,7 @@ const UpdateUserProfile = () => {
                     setValue("imageUrl", img);
                 }
             } catch (err) {
-                // console.error("User load failed:", err);
+                // Silent error
             }
         };
         loadUser();
@@ -59,34 +59,31 @@ const UpdateUserProfile = () => {
             if (auth.currentUser) {
                 await updateProfile(auth.currentUser, { displayName: data.name, photoURL: data.imageUrl });
             }
-            setMessage({ type: "success", text: "Profile updated successfully! 🎉" });
+            setMessage({ type: "success", text: "Profile sync successful! ⚡" });
             setTimeout(() => setMessage(null), 4000);
         } catch (err) {
-            setMessage({ type: "error", text: err.message || "Something went wrong" });
+            setMessage({ type: "error", text: err.message || "Sync Interrupted" });
         } finally { setLoading(false); }
     };
 
-    // Background Animated Bubbles Component
     const Bubbles = () => (
         <div className="absolute inset-0 overflow-hidden -z-10 pointer-events-none">
-            {[...Array(10)].map((_, i) => (
+            {[...Array(8)].map((_, i) => (
                 <motion.div
                     key={i}
-                    className="absolute bg-primary/10 dark:bg-indigo-500/10 rounded-full blur-3xl"
+                    className="absolute bg-indigo-500/5 rounded-full blur-[100px]"
                     style={{
-                        width: Math.random() * 250 + 150,
-                        height: Math.random() * 250 + 150,
+                        width: Math.random() * 300 + 150,
+                        height: Math.random() * 300 + 150,
                         left: `${Math.random() * 100}%`,
                         top: `${Math.random() * 100}%`,
                     }}
                     animate={{
-                        y: [0, -50, 0],
-                        x: [0, 30, 0],
-                        scale: [1, 1.2, 1],
-                        opacity: [0.2, 0.4, 0.2]
+                        y: [0, -60, 0],
+                        opacity: [0.1, 0.2, 0.1]
                     }}
                     transition={{
-                        duration: Math.random() * 7 + 5,
+                        duration: 8,
                         repeat: Infinity,
                         ease: "easeInOut"
                     }}
@@ -96,112 +93,108 @@ const UpdateUserProfile = () => {
     );
 
     return (
-        <div className="min-h-screen relative overflow-hidden bg-gray-50 dark:bg-[#050505] flex items-center justify-center p-4 md:p-10">
+        <div className="min-h-screen relative overflow-hidden bg-[#050505] flex items-center justify-center p-4 md:p-10">
             <Bubbles />
 
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-6xl relative z-10 bg-white/60 dark:bg-gray-900/60 backdrop-blur-3xl rounded-[3rem] shadow-2xl border border-white/20 dark:border-gray-800 overflow-hidden grid grid-cols-1 lg:grid-cols-12"
+                className="w-full max-w-6xl relative z-10 bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden grid grid-cols-1 lg:grid-cols-12"
             >
-                {/* Left Section: Aesthetic Profile View */}
-                <div className="lg:col-span-4 bg-gradient-to-br from-indigo-600 via-violet-700 to-purple-800 p-10 text-white flex flex-col items-center justify-center text-center relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                {/* Left Section: Profile Card Display */}
+                <div className="lg:col-span-4 bg-gradient-to-br from-indigo-900 via-indigo-950 to-black p-10 text-white flex flex-col items-center justify-center text-center relative border-b lg:border-b-0 lg:border-r border-white/5">
 
-                    <motion.div whileHover={{ scale: 1.05 }} className="relative group z-10">
-                        <div className="w-52 h-52 rounded-[2.5rem] overflow-hidden border-4 border-white/30 shadow-2xl relative">
+                    <motion.div whileHover={{ scale: 1.02 }} className="relative group z-10">
+                        <div className="w-52 h-52 rounded-[3rem] overflow-hidden border-4 border-white/5 shadow-2xl relative">
                             {preview ? (
                                 <img src={preview} className="w-full h-full object-cover" alt="Profile" />
                             ) : (
-                                <div className="w-full h-full bg-white/10 flex items-center justify-center text-6xl font-black">
+                                <div className="w-full h-full bg-white/5 flex items-center justify-center text-6xl font-black italic">
                                     {watch("name")?.charAt(0) || "U"}
                                 </div>
                             )}
                         </div>
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-900 text-indigo-600 dark:text-indigo-400 p-4 rounded-2xl shadow-2xl border border-indigo-100 dark:border-gray-700"
-                        >
-                            <FiCamera size={24} />
-                        </motion.div>
+                        <div className="absolute -bottom-2 -right-2 bg-indigo-600 p-4 rounded-2xl shadow-2xl border border-white/10 text-white">
+                            <FiCamera size={20} />
+                        </div>
                     </motion.div>
 
                     <div className="mt-10 z-10">
-                        <h3 className="text-3xl font-black tracking-tight mb-1">{watch("name") || "Full Name"}</h3>
-                        <p className="opacity-70 font-medium text-indigo-100">{user?.email}</p>
+                        <h3 className="text-3xl font-black italic tracking-tighter uppercase mb-1">{watch("name") || "Member"}</h3>
+                        <p className="text-slate-500 font-bold text-sm tracking-tight">{user?.email}</p>
                     </div>
 
-                    <div className="mt-8 inline-flex items-center gap-2 px-6 py-2 bg-white/10 backdrop-blur-xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border border-white/20 z-10">
-                        <HiSparkles className="text-yellow-300" /> {watch("role") || "Member"}
+                    <div className="mt-6 inline-flex items-center gap-2 px-6 py-2 bg-indigo-500/10 rounded-full text-[9px] font-black uppercase tracking-[0.3em] border border-indigo-500/20 text-indigo-400">
+                        <HiSparkles className="animate-pulse" /> {watch("role") || "student"}
                     </div>
 
-                    <div className="mt-12 w-full text-left bg-black/20 p-8 rounded-[2rem] backdrop-blur-md border border-white/10 z-10">
-                        <p className="text-sm italic font-medium leading-relaxed opacity-90 text-indigo-50">
-                            "{watch("bio") || "Your personal bio will appear here once you share your story..."}"
+                    <div className="mt-10 w-full text-left bg-black/40 p-8 rounded-[2.5rem] border border-white/5 relative">
+                        <p className="text-sm italic font-medium leading-relaxed text-slate-400">
+                            "{watch("bio") || "Define your journey in the digital realm..."}"
                         </p>
+                        <div className="absolute top-4 right-6 opacity-10 font-serif text-5xl">"</div>
                     </div>
                 </div>
 
-                {/* Right Section: Modern Dark Form */}
-                <div className="lg:col-span-8 p-8 md:p-14 bg-transparent">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
+                {/* Right Section: Settings Form */}
+                <div className="lg:col-span-8 p-8 md:p-14 bg-transparent text-white">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                         <div>
-                            <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-2 uppercase tracking-tighter">
-                                Account <span className="text-indigo-600 dark:text-indigo-400">Settings</span>
+                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter italic leading-none mb-3">
+                                Profile <span className="text-indigo-500 not-italic">Sync</span>
                             </h2>
-                            <p className="text-gray-500 dark:text-gray-400 font-medium italic">Update your public identity and preferences.</p>
+                            <p className="text-slate-500 text-xs font-black uppercase tracking-widest italic">Modify your public core identity parameters.</p>
                         </div>
-                        <div className="p-4 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-3xl self-start">
-                            <FiEdit3 size={32} />
+                        <div className="p-5 bg-white/5 border border-white/5 text-indigo-500 rounded-3xl">
+                            <FiEdit3 size={28} />
                         </div>
                     </div>
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Name */}
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 ml-1 flex items-center gap-2">
-                                    <FiUser className="text-indigo-500" /> Full Name
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 ml-1 italic flex items-center gap-2">
+                                    <FiUser className="text-indigo-500" /> Identity Label
                                 </label>
-                                <input {...register("name", { required: true })} className="w-full px-6 py-5 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all font-bold text-gray-700 dark:text-gray-200 shadow-sm" placeholder="e.g. Abdullah Al Mamun" />
+                                <input {...register("name", { required: true })} className="w-full px-6 py-4 bg-white/5 border border-white/5 focus:border-indigo-500/50 rounded-2xl outline-none transition-all font-bold text-white shadow-sm italic" placeholder="Your Name" />
                             </div>
 
                             {/* Image URL */}
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 ml-1 flex items-center gap-2">
-                                    <FiCamera className="text-indigo-500" /> Profile Image URL
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 ml-1 italic flex items-center gap-2">
+                                    <FiCamera className="text-indigo-500" /> Avatar Uplink (URL)
                                 </label>
-                                <input {...register("imageUrl")} onChange={(e) => setPreview(e.target.value)} className="w-full px-6 py-5 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all font-bold text-gray-700 dark:text-gray-200 shadow-sm" placeholder="https://..." />
+                                <input {...register("imageUrl")} onChange={(e) => setPreview(e.target.value)} className="w-full px-6 py-4 bg-white/5 border border-white/5 focus:border-indigo-500/50 rounded-2xl outline-none transition-all font-bold text-white shadow-sm italic" placeholder="https://image-source.com" />
                             </div>
 
                             {/* Institution */}
                             <div className="space-y-3 md:col-span-2">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 ml-1 flex items-center gap-2">
-                                    <HiOutlineAcademicCap className="text-indigo-500 text-lg" /> Institution Name
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 ml-1 italic flex items-center gap-2">
+                                    <HiOutlineAcademicCap className="text-indigo-500 text-base" /> Foundation / Institution
                                 </label>
-                                <input {...register("institution")} className="w-full px-6 py-5 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all font-bold text-gray-700 dark:text-gray-200 shadow-sm" placeholder="College or University" />
+                                <input {...register("institution")} className="w-full px-6 py-4 bg-white/5 border border-white/5 focus:border-indigo-500/50 rounded-2xl outline-none transition-all font-bold text-white shadow-sm italic" placeholder="Academy Name" />
                             </div>
 
                             {/* Level & Location */}
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 ml-1 flex items-center gap-2">
-                                    <FiBookOpen className="text-indigo-500" /> Level
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 ml-1 italic flex items-center gap-2">
+                                    <FiBookOpen className="text-indigo-500" /> Grade / Status
                                 </label>
-                                <input {...register("level")} className="w-full px-6 py-5 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all font-bold text-gray-700 dark:text-gray-200 shadow-sm" placeholder="Class / Year" />
+                                <input {...register("level")} className="w-full px-6 py-4 bg-white/5 border border-white/5 focus:border-indigo-500/50 rounded-2xl outline-none transition-all font-bold text-white shadow-sm italic" placeholder="Current Level" />
                             </div>
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 ml-1 flex items-center gap-2">
-                                    <FiMapPin className="text-indigo-500" /> Location
+                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 ml-1 italic flex items-center gap-2">
+                                    <FiMapPin className="text-indigo-500" /> Sector / Location
                                 </label>
-                                <input {...register("location")} className="w-full px-6 py-5 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all font-bold text-gray-700 dark:text-gray-200 shadow-sm" placeholder="City, Country" />
+                                <input {...register("location")} className="w-full px-6 py-4 bg-white/5 border border-white/5 focus:border-indigo-500/50 rounded-2xl outline-none transition-all font-bold text-white shadow-sm italic" placeholder="City" />
                             </div>
                         </div>
 
                         {/* Bio */}
                         <div className="space-y-3">
-                            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 ml-1">About Your Professional Journey</label>
-                            <textarea {...register("bio")} rows={4} className="w-full px-6 py-5 bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-[2.5rem] focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all font-bold text-gray-700 dark:text-gray-200 shadow-sm resize-none" placeholder="Briefly describe yourself..." />
+                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 ml-1 italic">Professional Manifest / Bio</label>
+                            <textarea {...register("bio")} rows={4} className="w-full px-6 py-5 bg-white/5 border border-white/5 focus:border-indigo-500/50 rounded-[2rem] outline-none transition-all font-bold text-white shadow-sm resize-none italic" placeholder="Your story starts here..." />
                         </div>
 
                         {/* Feedback Messages */}
@@ -211,9 +204,9 @@ const UpdateUserProfile = () => {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, scale: 0.9 }}
-                                    className={`p-5 rounded-[2rem] flex items-center gap-4 text-sm font-black shadow-xl ${message.type === "success" ? "bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20" : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"}`}
+                                    className={`p-6 rounded-[2rem] flex items-center gap-4 text-[10px] font-black uppercase tracking-widest shadow-2xl ${message.type === "success" ? "bg-green-500/10 text-green-500 border border-green-500/20" : "bg-red-500/10 text-red-500 border border-red-500/20"}`}
                                 >
-                                    {message.type === "success" ? <FiCheckCircle size={22} /> : <FiAlertCircle size={22} />}
+                                    {message.type === "success" ? <FiCheckCircle size={20} /> : <FiAlertCircle size={20} />}
                                     {message.text}
                                 </motion.div>
                             )}
@@ -222,14 +215,14 @@ const UpdateUserProfile = () => {
                         {/* Save Button */}
                         <motion.button
                             disabled={loading}
-                            whileHover={{ scale: 1.02, y: -2 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full py-6 rounded-3xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-black uppercase tracking-[0.3em] text-xs shadow-2xl hover:bg-indigo-600 dark:hover:bg-indigo-500 dark:hover:text-white transition-all disabled:opacity-50 flex items-center justify-center gap-3 group"
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
+                            className="w-full py-6 rounded-[2rem] bg-indigo-600 text-white font-black uppercase tracking-[0.4em] text-[10px] shadow-2xl hover:bg-indigo-500 transition-all disabled:opacity-50 flex items-center justify-center gap-3 group"
                         >
                             {loading ? (
                                 <FiLoader className="animate-spin text-lg" />
                             ) : (
-                                <>Save Profile Changes <HiSparkles className="group-hover:animate-bounce" /></>
+                                <>Update Database Sync <HiSparkles className="group-hover:animate-bounce" /></>
                             )}
                         </motion.button>
                     </form>
