@@ -2,7 +2,6 @@
   <img src="https://img.icons8.com/fluency/96/owl.png" alt="Tutor OWL Logo" />
   <h1><font size="7">Tutor OWL</font></h1>
   <p><b>Advanced Peer-to-Peer Mentorship & Tuition Management System</b></p>
-
 </div>
 
 ---
@@ -12,11 +11,13 @@
 <b>Tutor OWL</b> is a comprehensive web application designed to bridge the gap between students seeking knowledge and tutors offering expertise. Built with a modern <b>Cyber Dark Aesthetic</b>, the platform provides a seamless experience for posting tuition requirements, managing applications, and processing secure payments.
 </p>
 
+<p align="center">
+  <img src="https://i.ibb.co.com/LzfhcR51/Screenshot-From-2026-01-01-10-54-12.png" alt="Tutor OWL Screen" width="100%">
+</p>
+
 ---
 
 <h2>👥 User Roles & Permissions</h2>
-
-
 
 <h3>🛡️ Admin Dashboard</h3>
 <ul>
