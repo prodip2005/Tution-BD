@@ -6,13 +6,15 @@ import useRole from "../Hooks/useRole";
 
 // Icons
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
-import { FiHome, FiBookOpen, FiUsers, FiLayout, FiLogOut, FiUserPlus } from "react-icons/fi";
+import { FiHome, FiBookOpen, FiUsers, FiLayout, FiLogOut, FiUserPlus, FiPhone, FiSun, FiMoon } from "react-icons/fi";
+import { useTheme } from "../Providers/ThemeContext";
 
 const Navbar = () => {
     const navigate = useNavigate();
     const { user, LogOut } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
     const { role } = useRole();
+    const { theme, toggleTheme } = useTheme();
 
     const handleLogOut = async () => {
         try {
@@ -27,19 +29,21 @@ const Navbar = () => {
         { to: "/", label: "Home", icon: <FiHome /> },
         { to: "/tutions", label: "Tutions", icon: <FiBookOpen /> },
         { to: "/tutors", label: "Tutors", icon: <FiUsers /> },
+        { to: "/contact", label: "Contact", icon: <FiPhone /> },
         ...(user ? [{ to: "/dashboard", label: "Dashboard", icon: <FiLayout /> }] : []),
     ];
 
     return (
-        <header className="fixed top-0 left-0 w-full z-[100] px-2 py-3 md:px-8 md:py-5">
+        <header className="fixed top-0 left-0 w-full z-100 px-2 py-3 md:px-8 md:py-5">
             <motion.nav
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 className="max-w-7xl mx-auto
-                            backdrop-blur-2xl
-                            bg-gray-900/70
-                            border border-white/10
-                            shadow-[0_8px_40px_rgba(0,0,0,0.45)]
+                            backdrop-blur-xl
+                            bg-base-100/70
+                            dark:bg-gray-900/70
+                            border border-base-200 dark:border-white/10
+                            shadow-2xl shadow-primary/5
                             rounded-3xl md:rounded-4xl
                             px-4 py-2.5 md:px-6 md:py-3
                             flex items-center justify-between"
@@ -59,8 +63,8 @@ const Navbar = () => {
                             src="https://images-platform.99static.com/DVETQ4KXxNUWF1Q-k4ASnnzl9LY=/112x112:2365x2365/fit-in/99designs-work-samples/work-sample-designs/1039810/842795fa-0320-4287-baac-22e221a46d34"
                             alt="Logo"
                         />
-                        <span className="text-lg md:text-xl font-extrabold tracking-tight text-gray-100">
-                            Tutor<span className="text-primary">OWL</span>
+                        <span className="text-lg md:text-xl font-extrabold tracking-tight text-base-content italic transition-colors">
+                            Tutor<span className="text-primary italic">OWL</span>
                         </span>
                     </Link>
                 </div>
@@ -73,7 +77,7 @@ const Navbar = () => {
                                 <NavLink
                                     to={item.to}
                                     className={({ isActive }) =>
-                                        `relative px-4 py-2.5 flex items-center gap-2 text-sm font-bold transition-all duration-300 rounded-xl ${isActive ? "text-white" : "text-gray-300 hover:text-primary"
+                                        `relative px-4 py-2.5 flex items-center gap-2 text-sm font-bold transition-all duration-300 rounded-xl ${isActive ? "text-primary-content" : "text-base-content/70 hover:text-primary"
                                         }`
                                     }
                                 >
@@ -99,9 +103,20 @@ const Navbar = () => {
 
                 {/* --- Right: User & Auth --- */}
                 <div className="flex items-center gap-2 md:gap-4">
-                    {/* Updated: Added flex (removed hidden sm:flex) and Emerald Green color */}
+                    {/* Theme Toggle Button */}
+                    <motion.button
+                        whileHover={{ scale: 1.1, rotate: 15 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={toggleTheme}
+                        className="p-2.5 rounded-xl bg-base-200 dark:bg-white/5 text-base-content border border-base-300 dark:border-white/10 hover:border-primary/50 transition-all shadow-sm"
+                        aria-label="Toggle Theme"
+                    >
+                        {theme === "light" ? <FiMoon size={18} /> : <FiSun size={18} className="text-yellow-400" />}
+                    </motion.button>
+
+                    {/* Updated: Added flex and secondary color */}
                     {user && role === "student" && (
-                        <Link to="/apply-tutor" className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-xl font-bold text-[9px] md:text-xs hover:bg-emerald-500 hover:text-white transition-all">
+                        <Link to="/apply-tutor" className="flex items-center gap-2 px-3 py-2 bg-secondary/10 text-secondary border border-secondary/20 rounded-xl font-bold text-[9px] md:text-xs hover:bg-secondary hover:text-white transition-all">
                             <FiUserPlus /> <span className="inline">BE A TUTOR</span>
                         </Link>
                     )}
@@ -119,7 +134,7 @@ const Navbar = () => {
                     ) : (
                         <div className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 border-l border-gray-200 dark:border-gray-700">
                             <div className="hidden sm:flex flex-col items-end leading-tight">
-                                <span className="text-[13px] font-bold text-gray-100 truncate max-w-[100px]">
+                                <span className="text-[13px] font-bold text-base-content truncate max-w-[100px]">
                                     {user?.displayName || "User"}
                                 </span>
                                 <span className="text-[10px] font-medium text-primary uppercase tracking-wider">{role || "Member"}</span>
@@ -131,12 +146,12 @@ const Navbar = () => {
                                     className="w-9 h-9 md:w-11 md:h-11 rounded-full border-2 border-primary/20 group-hover:border-primary transition-all object-cover shadow-sm"
                                     alt="Profile"
                                 />
-                                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
+                                <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-secondary border-2 border-white dark:border-gray-900 rounded-full"></div>
                             </Link>
 
                             <button
                                 onClick={handleLogOut}
-                                className="hidden md:flex p-2.5 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"
+                                className="hidden md:flex p-2.5 text-gray-500 hover:text-accent hover:bg-accent/5 dark:hover:bg-accent/10 rounded-xl transition-all"
                             >
                                 <FiLogOut size={18} />
                             </button>
@@ -161,14 +176,14 @@ const Navbar = () => {
                             animate={{ x: 0 }}
                             exit={{ x: "-100%" }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="fixed top-0 left-0 h-screen w-[280px] bg-gray-900/90 backdrop-blur-2xl border-r border-white/10 shadow-2xl p-6 lg:hidden z-[110] flex flex-col"
+                            className="fixed top-0 left-0 h-screen w-[280px] bg-gray-900/90 backdrop-blur-2xl border-r border-white/10 shadow-2xl p-6 lg:hidden z-110 flex flex-col"
                         >
                             <div className="mb-8 pt-4">
                                 {user ? (
-                                    <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl">
+                                    <div className="flex items-center gap-3 p-4 bg-base-200 dark:bg-gray-800 rounded-2xl">
                                         <img src={user.photoURL} className="w-12 h-12 rounded-full border-2 border-primary" alt="" />
                                         <div className="overflow-hidden">
-                                            <p className="font-bold text-gray-100 truncate">{user?.displayName}</p>
+                                            <p className="font-bold text-base-content truncate">{user?.displayName}</p>
                                             <p className="text-xs text-primary font-semibold uppercase">{role}</p>
                                         </div>
                                     </div>

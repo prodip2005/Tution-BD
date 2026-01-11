@@ -30,7 +30,7 @@ const Tutors = () => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-[70vh] bg-[#050505]">
+            <div className="flex flex-col justify-center items-center min-h-[70vh] bg-base-100 dark:bg-gray-950">
                 <div className="relative flex items-center justify-center">
                     <motion.div
                         animate={{ rotate: 360 }}
@@ -47,7 +47,7 @@ const Tutors = () => {
                     <motion.p
                         animate={{ opacity: [0.3, 1, 0.3] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
-                        className="text-indigo-400 text-[10px] font-black tracking-[0.4em] uppercase italic px-4 text-center"
+                        className="text-primary text-[10px] font-black tracking-[0.4em] uppercase italic px-4 text-center"
                     >
                         Fetching Experts
                     </motion.p>
@@ -57,7 +57,7 @@ const Tutors = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white">
+        <div className="min-h-screen bg-base-100 dark:bg-gray-950 text-base-content pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
 
                 {/* --- Header Section --- */}
@@ -68,167 +68,110 @@ const Tutors = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="flex items-center justify-center md:justify-start gap-2 mb-2"
                         >
-                            <span className="h-[2px] w-6 md:w-8 bg-indigo-500 rounded-full inline-block"></span>
-                            <span className="text-indigo-500 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[9px] md:text-[10px]">Professional Network</span>
+                            <span className="h-[2px] w-6 md:w-8 bg-primary rounded-full inline-block"></span>
+                            <span className="text-primary font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-[9px] md:text-[10px]">Professional Network</span>
                         </motion.div>
                         <motion.h2
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="text-3xl md:text-7xl font-black text-white tracking-tighter uppercase italic leading-tight"
+                            className="text-3xl md:text-7xl font-black text-base-content tracking-tighter uppercase italic leading-tight"
                         >
-                            Our <span className="text-indigo-500 not-italic">Elite</span> Tutors
+                            Our <span className="text-primary not-italic">Elite</span> Tutors
                         </motion.h2>
-                        <p className="mt-4 text-slate-400 font-bold italic flex items-center gap-2 justify-center md:justify-start text-xs md:text-base uppercase tracking-widest opacity-60">
-                            <LuShieldCheck className="text-indigo-500 shrink-0" /> Verified educators ready to guide you.
+                        <p className="mt-4 text-base-content/60 font-bold italic flex items-center gap-2 justify-center md:justify-start text-xs md:text-base uppercase tracking-widest">
+                            <LuShieldCheck className="text-primary shrink-0" /> Verified educators ready to guide you.
                         </p>
                     </div>
 
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-3 md:px-8 md:py-4 rounded-[1.5rem] md:rounded-[2rem] shadow-2xl backdrop-blur-xl"
+                        className="flex items-center gap-4 bg-base-200/50 border border-base-300 dark:border-white/10 px-6 py-3 md:px-8 md:py-4 rounded-3xl shadow-2xl backdrop-blur-xl"
                     >
-                        <div className="p-2 md:p-3 bg-indigo-500/10 text-indigo-500 rounded-xl md:rounded-2xl">
+                        <div className="p-2 md:p-3 bg-primary/10 text-primary rounded-xl md:rounded-2xl">
                             <LuUsers size={24} />
                         </div>
                         <div>
-                            <p className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Active Mentors</p>
-                            <p className="text-xl md:text-3xl font-black text-white leading-none">{tutors.length}</p>
+                            <p className="text-[9px] md:text-[10px] font-black text-base-content/60 uppercase tracking-widest leading-none mb-1">Active Mentors</p>
+                            <p className="text-xl md:text-3xl font-black text-base-content leading-none">{tutors.length}</p>
                         </div>
                     </motion.div>
                 </div>
 
-                {/* --- Table / Card Container --- */}
+                {/* --- Grid Layout (Unified) --- */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="overflow-hidden md:bg-white/[0.02] md:backdrop-blur-3xl md:rounded-[3rem] md:border md:border-white/10 md:shadow-2xl"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
                 >
-                    <div className="overflow-x-auto hidden md:block">
-                        {/* --- DESKTOP TABLE VIEW --- */}
-                        <table className="table w-full border-separate border-spacing-y-4 px-6 pb-6">
-                            <thead>
-                                <tr className="text-slate-500 uppercase text-[10px] tracking-[0.3em] font-black border-none">
-                                    <th className="bg-transparent pl-8"><div className="flex items-center gap-2"><LuHash size={14} className="text-indigo-500" /> ID</div></th>
-                                    <th className="bg-transparent"><div className="flex items-center gap-2"><LuUser size={14} className="text-indigo-500" /> Profile</div></th>
-                                    <th className="bg-transparent"><div className="flex items-center gap-2"><LuMail size={14} className="text-indigo-500" /> Contact</div></th>
-                                    <th className="bg-transparent"><div className="flex items-center gap-2"><LuGraduationCap size={14} className="text-indigo-500" /> Affiliation</div></th>
-                                    <th className="bg-transparent text-right pr-8">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <AnimatePresence>
-                                    {tutors.map((tutor, index) => (
-                                        <TutorRow key={tutor._id} tutor={tutor} index={index} navigate={navigate} />
-                                    ))}
-                                </AnimatePresence>
-                            </tbody>
-                        </table>
-                    </div>
+                    <AnimatePresence>
+                        {tutors.map((tutor, index) => (
+                            <motion.div
+                                key={tutor._id || index}
+                                layout
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.2, delay: index * 0.05 }}
+                                onClick={() => navigate(`/tutors/${tutor.email}`)}
+                                className="group relative bg-base-100 dark:bg-base-200/40 border border-base-200 dark:border-white/5 rounded-3xl p-5 shadow-lg hover:shadow-2xl hover:border-primary/30 dark:hover:border-primary/30 transition-all duration-300 flex flex-col h-full cursor-pointer overflow-hidden"
+                            >
+                                {/* Hover Effect Gradient */}
+                                <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                    {/* --- MOBILE CARD VIEW --- */}
-                    <div className="md:hidden flex flex-col gap-4">
-                        <AnimatePresence>
-                            {tutors.map((tutor, index) => (
-                                <motion.div
-                                    key={tutor._id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    onClick={() => navigate(`/tutors/${tutor.email}`)}
-                                    className="bg-white/5 border border-white/10 rounded-[2rem] p-5 shadow-xl active:scale-95 transition-all"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div className="relative shrink-0">
-                                            <img
-                                                src={tutor.image || "https://i.ibb.co/2FsfXqM/avatar.png"}
-                                                className="w-16 h-16 rounded-2xl object-cover ring-2 ring-indigo-500/20 shadow-lg"
-                                                alt=""
-                                            />
-                                            <div className="absolute -top-1 -right-1 flex h-3 w-3">
-                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 border-2 border-[#050505]"></span>
-                                            </div>
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="font-black text-white text-base italic truncate tracking-tight uppercase">
-                                                {tutor.name || "Anonymous"}
-                                            </h3>
-                                            <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider truncate mt-1">
-                                                <LuMail className="text-indigo-500" /> {tutor.email}
-                                            </div>
+                                <div className="flex items-center gap-4 mb-4 z-10">
+                                    <div className="relative">
+                                        <img
+                                            src={tutor.image || "https://i.ibb.co/2FsfXqM/avatar.png"}
+                                            className="w-16 h-16 rounded-2xl object-cover shadow-md group-hover:scale-105 transition-transform duration-300"
+                                            alt={tutor.name}
+                                        />
+                                        <div className="absolute -bottom-1 -right-1 bg-base-100 rounded-full p-[2px]">
+                                            <div className="w-3 h-3 bg-green-500 rounded-full border-2 border-base-100"></div>
                                         </div>
                                     </div>
-
-                                    <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
-                                        <div className="flex items-center gap-2 px-3 py-1 bg-indigo-500/10 text-indigo-400 rounded-lg text-[9px] font-black uppercase tracking-widest border border-indigo-500/10">
-                                            <LuGraduationCap size={12} /> {tutor.institution ? "Verified Edu" : "Private"}
-                                        </div>
-                                        <div className="text-indigo-500 font-black text-[10px] uppercase flex items-center gap-1">
-                                            Details <LuArrowRight size={14} />
-                                        </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="font-black text-base-content text-lg italic tracking-tight truncate group-hover:text-primary transition-colors">
+                                            {tutor.name || "Anonymous"}
+                                        </h3>
+                                        <p className="text-[10px] font-bold text-base-content/50 uppercase tracking-wider truncate">
+                                            Expert Tutor
+                                        </p>
                                     </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                    </div>
+                                </div>
 
-                    {tutors.length === 0 && (
-                        <div className="py-24 text-center">
-                            <div className="flex flex-col items-center justify-center opacity-20">
-                                <LuSearchX size={64} className="mb-4 text-indigo-500" />
-                                <p className="text-sm md:text-xl font-black uppercase tracking-[0.4em] italic text-white">No Experts Found</p>
-                            </div>
-                        </div>
-                    )}
+                                <div className="space-y-3 mb-6 z-10 flex-1">
+                                    <div className="flex items-center gap-3 text-xs font-bold text-base-content/70 bg-base-200/50 dark:bg-black/20 p-2 rounded-xl">
+                                        <LuMail className="text-primary shrink-0" />
+                                        <span className="truncate">{tutor.email}</span>
+                                    </div>
+                                    <div className="flex items-center gap-3 text-xs font-bold text-base-content/70 bg-base-200/50 dark:bg-black/20 p-2 rounded-xl">
+                                        <LuGraduationCap className="text-primary shrink-0" />
+                                        <span className="truncate">{tutor.institution || "N/A"}</span>
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 mt-auto border-t border-base-200 dark:border-white/5 z-10">
+                                    <button className="w-full py-3 bg-primary text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-xl shadow-lg shadow-primary/20 group-hover:bg-primary-focus transition-all flex items-center justify-center gap-2">
+                                        View Profile <LuArrowRight size={14} />
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                 </motion.div>
+
+                {tutors.length === 0 && (
+                    <div className="py-24 text-center">
+                        <div className="flex flex-col items-center justify-center opacity-20">
+                            <LuSearchX size={64} className="mb-4 text-primary" />
+                            <p className="text-xl font-black uppercase tracking-[0.4em] italic text-base-content">No Experts Found</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
-
-// Desktop Row Component
-const TutorRow = ({ tutor, index, navigate }) => (
-    <motion.tr
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: index * 0.05 }}
-        className="group bg-white/[0.03] hover:bg-indigo-600/10 transition-all shadow-sm"
-    >
-        <td className="p-6 pl-8 font-mono text-xs text-slate-600 rounded-l-[2.5rem]">
-            {String(index + 1).padStart(2, '0')}
-        </td>
-        <td className="p-6">
-            <div className="flex items-center gap-4">
-                <img src={tutor.image || "https://i.ibb.co/2FsfXqM/avatar.png"} className="w-14 h-14 rounded-2xl object-cover shadow-2xl border border-white/5" alt="" />
-                <div className="flex flex-col">
-                    <span className="font-black text-white group-hover:text-indigo-400 transition-colors text-lg italic leading-tight uppercase tracking-tight">
-                        {tutor.name || "Anonymous"}
-                    </span>
-                    <span className="text-[9px] uppercase font-black tracking-widest text-slate-500">Expert Tutor</span>
-                </div>
-            </div>
-        </td>
-        <td className="p-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/5 text-sm font-bold text-slate-400">
-                {tutor.email}
-            </div>
-        </td>
-        <td className="p-6">
-            <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2 border shadow-sm ${tutor.institution ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20" : "bg-rose-500/10 text-rose-400 border-rose-500/20"}`}>
-                <LuGraduationCap size={14} /> {tutor.institution || "Private Practice"}
-            </div>
-        </td>
-        <td className="p-6 text-right pr-8 rounded-r-[2.5rem]">
-            <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(`/tutors/${tutor.email}`)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-indigo-500 hover:text-white transition-all shadow-xl"
-            >
-                Details <LuArrowRight size={16} />
-            </motion.button>
-        </td>
-    </motion.tr>
-);
 
 export default Tutors;

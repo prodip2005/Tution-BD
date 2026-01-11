@@ -7,41 +7,41 @@ import { motion } from 'framer-motion';
 
 const RootLayout = () => {
     return (
-        <div className='min-h-screen flex flex-col overflow-x-hidden relative bg-gray-950 text-base-content transition-colors duration-500'>
+        <div className='min-h-screen flex flex-col overflow-x-hidden relative bg-base-100 dark:bg-gray-950 text-base-content transition-colors duration-500'>
 
             {/* --- Stylish Animated & Color Changing Blobs --- */}
             <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
 
-                {/* 1st Blob: Dynamic Color & Motion */}
+                {/* 1st Blob: Dynamic Color & Motion - Violet Primary */}
                 <motion.div
                     animate={{
                         x: [0, 150, -100, 0],
                         y: [0, 80, 150, 0],
                         scale: [1, 1.3, 0.9, 1],
-                        backgroundColor: ["rgba(59, 130, 246, 0.15)", "rgba(168, 85, 247, 0.15)", "rgba(236, 72, 153, 0.15)", "rgba(59, 130, 246, 0.15)"]
+                        backgroundColor: ["rgba(124, 58, 237, 0.15)", "rgba(5, 150, 105, 0.15)", "rgba(225, 29, 72, 0.15)", "rgba(124, 58, 237, 0.15)"]
                     }}
                     transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                     className="absolute -top-[5%] -left-[5%] w-[45%] h-[45%] rounded-full blur-[100px] md:blur-[130px]"
                 />
 
-                {/* 2nd Blob: Dynamic Color & Motion */}
+                {/* 2nd Blob: Dynamic Color & Motion - Emerald Secondary */}
                 <motion.div
                     animate={{
                         x: [0, -120, 100, 0],
                         y: [0, 150, -50, 0],
                         scale: [1, 1.2, 1.1, 1],
-                        backgroundColor: ["rgba(34, 197, 94, 0.12)", "rgba(59, 130, 246, 0.12)", "rgba(234, 179, 8, 0.12)", "rgba(34, 197, 94, 0.12)"]
+                        backgroundColor: ["rgba(5, 150, 105, 0.12)", "rgba(124, 58, 237, 0.12)", "rgba(225, 29, 72, 0.12)", "rgba(5, 150, 105, 0.12)"]
                     }}
                     transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
                     className="absolute top-[20%] -right-[5%] w-[40%] h-[40%] rounded-full blur-[100px] md:blur-[120px]"
                 />
 
-                {/* 3rd Blob: Dynamic Color & Motion */}
+                {/* 3rd Blob: Dynamic Color & Motion - Rose Accent */}
                 <motion.div
                     animate={{
                         x: [0, 100, -80, 0],
                         y: [0, -120, 80, 0],
-                        backgroundColor: ["rgba(249, 115, 22, 0.1)", "rgba(236, 72, 153, 0.1)", "rgba(168, 85, 247, 0.1)", "rgba(249, 115, 22, 0.1)"]
+                        backgroundColor: ["rgba(225, 29, 72, 0.1)", "rgba(5, 150, 105, 0.1)", "rgba(124, 58, 237, 0.1)", "rgba(225, 29, 72, 0.1)"]
                     }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     className="absolute bottom-[-10%] left-[20%] w-[35%] h-[35%] rounded-full blur-[100px] md:blur-[110px]"

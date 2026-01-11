@@ -11,7 +11,7 @@ import Lottie from "lottie-react";
 
 // --- এনিমেটেড ব্যাকগ্রাউন্ড অর্বস ---
 const BackgroundAnimation = () => (
-    <div className="fixed inset-0 -z-10 bg-[#050505] overflow-hidden">
+    <div className="fixed inset-0 -z-10 bg-base-100 dark:bg-black overflow-hidden">
         <motion.div
             animate={{
                 scale: [1, 1.2, 1],
@@ -28,7 +28,7 @@ const BackgroundAnimation = () => (
                 y: [0, -40, 0],
             }}
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px]"
+            className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-secondary/10 rounded-full blur-[120px]"
         />
     </div>
 );
@@ -62,15 +62,15 @@ const DashboardOverview = ({ role }) => {
                 {/* Hero Section */}
                 <motion.div
                     initial={{ y: 30 }} animate={{ y: 0 }}
-                    className="relative p-8 md:p-16 rounded-[2.5rem] bg-white/[0.03] backdrop-blur-3xl border border-white/10 shadow-2xl text-center overflow-hidden"
+                    className="relative p-8 md:p-16 rounded-[2.5rem] bg-base-100/60 dark:bg-base-200/40 backdrop-blur-3xl border border-base-200 dark:border-white/10 shadow-2xl text-center overflow-hidden"
                 >
-                    <div className="absolute top-0 right-0 p-10 opacity-10">
+                    <div className="absolute top-0 right-0 p-10 opacity-10 text-base-content">
                         <FaGraduationCap size={200} />
                     </div>
-                    <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter text-white">
+                    <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter text-base-content">
                         Welcome, <span className="text-primary italic">{role}</span>
                     </h1>
-                    <p className="mt-4 text-gray-400 text-lg md:text-xl font-medium tracking-wide">
+                    <p className="mt-4 text-base-content/60 text-lg md:text-xl font-medium tracking-wide">
                         Your professional control center is ready.
                     </p>
                 </motion.div>
@@ -83,13 +83,13 @@ const DashboardOverview = ({ role }) => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="group p-8 rounded-[2rem] bg-white/[0.02] hover:bg-white/[0.05] backdrop-blur-md border border-white/5 hover:border-primary/50 transition-all duration-500"
+                            className="group p-8 rounded-4xl bg-base-100/40 dark:bg-white/2 hover:bg-base-100/60 dark:hover:bg-white/5 backdrop-blur-md border border-base-200 dark:border-white/5 hover:border-primary/50 transition-all duration-500 shadow-xl"
                         >
                             <div className="w-14 h-14 bg-primary/20 text-primary rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
                                 {rule.icon}
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2">{rule.title}</h3>
-                            <p className="text-gray-400 font-medium leading-relaxed">{rule.text}</p>
+                            <h3 className="text-xl font-bold text-base-content mb-2">{rule.title}</h3>
+                            <p className="text-base-content/60 font-medium leading-relaxed">{rule.text}</p>
                         </motion.div>
                     ))}
                 </div>
@@ -105,7 +105,7 @@ const Dashboard = () => {
 
     if (isLoading) {
         return (
-            <div className="h-screen flex flex-col justify-center items-center bg-[#050505]">
+            <div className="h-screen flex flex-col justify-center items-center bg-base-100 dark:bg-black">
                 <Lottie path="https://lottie.host/890453d1-419b-449a-bd9e-269608406180/7eL6R9oV7j.json" className="w-64" loop />
                 <h2 className="text-xl font-black text-primary animate-pulse tracking-[0.5em] mt-8 uppercase">Initializing</h2>
             </div>
@@ -113,19 +113,19 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="drawer lg:drawer-open min-h-screen">
+        <div className="drawer lg:drawer-open min-h-screen font-sans text-base-content">
             <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 
-            <div className="drawer-content flex flex-col relative">
+            <div className="drawer-content flex flex-col relative text-base-content">
                 <BackgroundAnimation />
 
                 {/* Glassy Navbar */}
-                <nav className="navbar w-full bg-black/20 backdrop-blur-xl border-b border-white/5 px-6 sticky top-0 z-40 justify-between">
+                <nav className="navbar w-full bg-base-100/50 dark:bg-black/20 backdrop-blur-xl border-b border-base-200 dark:border-white/5 px-6 sticky top-0 z-40 justify-between">
                     <div className="flex items-center gap-4">
-                        <label htmlFor="my-drawer-4" className="btn btn-square btn-ghost lg:hidden text-white">
+                        <label htmlFor="my-drawer-4" className="btn btn-square btn-ghost lg:hidden text-base-content">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-6 h-6 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                         </label>
-                        <span className="text-white font-black uppercase tracking-widest text-lg italic">
+                        <span className="text-base-content font-black uppercase tracking-widest text-lg italic">
                             Dashboard <span className="text-primary">.</span>
                         </span>
                     </div>
@@ -147,7 +147,7 @@ const Dashboard = () => {
                                 transition={{ duration: 0.3 }}
                                 className="p-4 md:p-8"
                             >
-                                <div className="bg-white/[0.02] backdrop-blur-2xl rounded-[2.5rem] border border-white/5 min-h-[80vh] p-4 md:p-10 shadow-2xl">
+                                <div className="bg-base-100/60 dark:bg-white/2 backdrop-blur-2xl rounded-4xl border border-base-200 dark:border-white/5 min-h-[80vh] p-4 md:p-10 shadow-2xl">
                                     <Outlet />
                                 </div>
                             </motion.div>
@@ -157,25 +157,25 @@ const Dashboard = () => {
             </div>
 
             {/* Premium Sidebar */}
-            <div className="drawer-side z-[50]">
+            <div className="drawer-side z-50">
                 <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
-                <div className="w-72 min-h-full bg-[#0a0a0a] border-r border-white/5 flex flex-col">
+                <div className="w-72 min-h-full bg-base-200 border-r border-base-300 dark:border-white/5 flex flex-col text-base-content">
 
                     {/* Brand */}
                     <div className="p-8">
                         <Link to="/" className="flex items-center gap-3 group">
                             <div className="p-3 bg-primary rounded-2xl shadow-lg shadow-primary/20">
-                                <FaGraduationCap size={28} className="text-white" />
+                                <FaGraduationCap size={28} className="text-primary-content" />
                             </div>
-                            <span className="text-2xl font-black text-white tracking-tighter uppercase italic group-hover:text-primary transition-colors">TutorOWL</span>
+                            <span className="text-2xl font-black text-base-content tracking-tighter uppercase italic group-hover:text-primary transition-colors">TutorOWL</span>
                         </Link>
                     </div>
 
                     {/* Nav Links */}
                     <ul className="menu px-4 py-2 w-full grow gap-2 overflow-y-auto">
-                        <li className="menu-title text-gray-500 text-[10px] uppercase tracking-[0.3em] mt-4 mb-2 ml-4">Main Menu</li>
+                        <li className="menu-title text-base-content/40 text-[10px] uppercase tracking-[0.3em] mt-4 mb-2 ml-4">Main Menu</li>
                         <li>
-                            <NavLink to={'/'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}>
+                            <NavLink to={'/'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}>
                                 <FaHome size={20} /> <span>Homepage</span>
                             </NavLink>
                         </li>
@@ -183,38 +183,38 @@ const Dashboard = () => {
                         {/* Student Routes */}
                         {role === 'student' && (
                             <>
-                                <li><NavLink to={'post-tutions'} className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"><MdOutlinePostAdd size={22} /> Post Tuitions</NavLink></li>
-                                <li><NavLink to={'my-tutions'} className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"><HiOutlineDocumentText size={22} /> My Tuitions</NavLink></li>
-                                <li><NavLink to={'applied-tutions'} className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"><VscGitStashApply size={22} /> Applied Tuitions</NavLink></li>
+                                <li><NavLink to={'post-tutions'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}><MdOutlinePostAdd size={22} /> Post Tuitions</NavLink></li>
+                                <li><NavLink to={'my-tutions'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}><HiOutlineDocumentText size={22} /> My Tuitions</NavLink></li>
+                                <li><NavLink to={'applied-tutions'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}><VscGitStashApply size={22} /> Applied Tuitions</NavLink></li>
                             </>
                         )}
 
                         {/* Tutor Routes */}
                         {role === 'tutor' && (
                             <>
-                                <li><NavLink to={'applications'} className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"><MdMoveToInbox size={22} /> My Applications</NavLink></li>
+                                <li><NavLink to={'applications'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}><MdMoveToInbox size={22} /> My Applications</NavLink></li>
                             </>
                         )}
 
                         {/* Admin Routes */}
                         {role === 'admin' && (
                             <>
-                                <li><NavLink to={'all-users'} className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"><FaUsersBetweenLines size={22} /> Users Control</NavLink></li>
-                                <li><NavLink to={'apply-tution'} className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"><FaClipboardList size={22} /> Tuition Desk</NavLink></li>
-                                <li><NavLink to={'applied-tutor'} className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"><FaChalkboardTeacher size={22} /> Tutor Requests</NavLink></li>
+                                <li><NavLink to={'all-users'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}><FaUsersBetweenLines size={22} /> Users Control</NavLink></li>
+                                <li><NavLink to={'apply-tution'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}><FaClipboardList size={22} /> Tuition Desk</NavLink></li>
+                                <li><NavLink to={'applied-tutor'} className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}><FaChalkboardTeacher size={22} /> Tutor Requests</NavLink></li>
                             </>
                         )}
 
                         {/* Financials Section - Hidden for Admin */}
                         {role !== 'admin' && (
                             <>
-                                <li className="menu-title text-gray-500 text-[10px] uppercase tracking-[0.3em] mt-8 mb-2 ml-4">
+                                <li className="menu-title text-base-content/40 text-[10px] uppercase tracking-[0.3em] mt-8 mb-2 ml-4">
                                     Financials
                                 </li>
                                 <li>
                                     <NavLink
                                         to={role === 'tutor' ? 'tutor-payment' : 'payment-history'}
-                                        className="flex items-center gap-4 px-6 py-4 rounded-2xl font-bold text-gray-400 hover:bg-white/5 hover:text-white transition-all"
+                                        className={({ isActive }) => `flex items-center gap-4 px-6 py-4 rounded-2xl font-bold transition-all ${isActive ? 'bg-primary text-primary-content shadow-lg shadow-primary/20' : 'text-base-content/60 hover:bg-base-100 dark:hover:bg-white/5 hover:text-base-content'}`}
                                     >
                                         <FaRegCreditCard size={20} /> <span>Payments</span>
                                     </NavLink>
@@ -224,11 +224,11 @@ const Dashboard = () => {
                     </ul>
 
                     {/* Footer Area */}
-                    <div className="p-6 border-t border-white/5">
-                        <div className="p-4 bg-white/[0.03] rounded-2xl border border-white/5">
+                    <div className="p-6 border-t border-base-300 dark:border-white/5">
+                        <div className="p-4 bg-base-100/50 dark:bg-white/3 rounded-2xl border border-base-300 dark:border-white/5">
                             <div className="flex items-center gap-3">
-                                <div className="size-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Network Secure</span>
+                                <div className="size-2 bg-success rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
+                                <span className="text-[10px] font-black text-base-content/60 uppercase tracking-widest">Network Secure</span>
                             </div>
                         </div>
                     </div>

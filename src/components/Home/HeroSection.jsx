@@ -38,14 +38,14 @@ const slideData = [
 const HeroSection = () => {
     return (
         <section className="w-full lg:px-8 sm:px-5 -mt-4 md:-mt-8">
-            <div className="w-full h-[250px] sm:h-[450px] md:h-[750px] relative overflow-hidden md:rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="w-full h-[60vh] md:h-[70vh] relative overflow-hidden md:rounded-3xl shadow-2xl dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
                 <Swiper
                     modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay, EffectFade]}
                     effect="fade"
                     fadeEffect={{ crossFade: true }}
                     navigation={true}
-                    pagination={{ 
-                        clickable: true, 
+                    pagination={{
+                        clickable: true,
                         dynamicBullets: true,
                     }}
                     loop={true}
@@ -69,8 +69,8 @@ const HeroSection = () => {
                                 />
 
                                 {/* Multi-layer Overlays for Glassy Look */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#020617] via-[#020617]/40 to-transparent" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
+                                <div className="absolute inset-0 bg-linear-to-r from-base-100 dark:from-[#020617] via-base-100/40 dark:via-[#020617]/40 to-transparent" />
+                                <div className="absolute inset-0 bg-linear-to-t from-base-100 dark:from-[#020617] via-transparent to-transparent" />
 
                                 {/* Content Container */}
                                 <div className="relative z-10 h-full max-w-[1440px] mx-auto flex items-center px-8 sm:px-12 md:px-20">
@@ -81,33 +81,33 @@ const HeroSection = () => {
                                             transition={{ duration: 0.8, ease: "easeOut" }}
                                         >
                                             {/* Top Tagline */}
-                                            <span className="inline-block text-[10px] md:text-xs font-black text-indigo-400 bg-indigo-500/10 px-4 py-1.5 rounded-full tracking-[0.3em] uppercase mb-4 border border-indigo-500/20 backdrop-blur-md">
+                                            <span className="inline-block text-[10px] md:text-xs font-black text-primary bg-primary/10 px-4 py-1.5 rounded-full tracking-[0.3em] uppercase mb-4 border border-primary/20 backdrop-blur-md">
                                                 {s.tag}
                                             </span>
 
-                                            <h2 className="text-2xl sm:text-5xl md:text-8xl font-black text-white leading-[1.1] italic uppercase tracking-tighter">
+                                            <h2 className="text-2xl sm:text-5xl md:text-8xl font-black text-base-content leading-[1.1] italic uppercase tracking-tighter">
                                                 {s.title.split(' ').map((word, index) => (
-                                                    <span key={index} className={index % 2 !== 0 ? "text-indigo-500" : ""}>{word} </span>
+                                                    <span key={index} className={index % 2 !== 0 ? "text-primary" : ""}>{word} </span>
                                                 ))}
                                             </h2>
-                                            
-                                            <p className="mt-3 md:mt-8 text-xs sm:text-lg md:text-2xl text-slate-300 font-medium max-w-xl line-clamp-2 uppercase tracking-wide opacity-80">
+
+                                            <p className="mt-3 md:mt-8 text-xs sm:text-lg md:text-2xl text-base-content/70 font-medium max-w-xl line-clamp-2 uppercase tracking-wide opacity-80">
                                                 {s.subtitle}
                                             </p>
 
                                             <div className="mt-6 md:mt-12 flex items-center gap-4">
                                                 <Link
                                                     to={s.cta.href}
-                                                    className="group relative px-6 md:px-12 py-3 md:py-5 bg-indigo-600 text-white rounded-2xl font-black shadow-[0_10px_30px_rgba(79,70,229,0.3)] text-[10px] md:text-sm uppercase tracking-[0.2em] flex items-center gap-3 overflow-hidden transition-all hover:bg-indigo-500"
+                                                    className="group relative px-6 md:px-12 py-3 md:py-5 bg-primary text-primary-content rounded-2xl font-black shadow-[0_10px_30px_rgba(124,58,237,0.3)] text-[10px] md:text-sm uppercase tracking-[0.2em] flex items-center gap-3 overflow-hidden transition-all hover:bg-primary/90"
                                                 >
                                                     <span className="relative z-10">{s.cta.label}</span>
                                                     <FaArrowRight className="relative z-10 group-hover:translate-x-2 transition-transform" />
                                                     <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                                 </Link>
-                                                
+
                                                 <div className="hidden md:flex items-center gap-2 opacity-30">
-                                                    <div className="w-12 h-[1px] bg-white"></div>
-                                                    <span className="text-[10px] font-black text-white uppercase tracking-widest">Scroll</span>
+                                                    <div className="w-12 h-px bg-base-content"></div>
+                                                    <span className="text-[10px] font-black text-base-content uppercase tracking-widest">Scroll</span>
                                                 </div>
                                             </div>
                                         </motion.div>
@@ -128,7 +128,7 @@ const HeroSection = () => {
                         backdrop-filter: blur(20px);
                         border: 1px solid rgba(255, 255, 255, 0.1);
                         border-radius: 18px;
-                        color: #6366f1 !important;
+                        color: oklch(var(--p)) !important;
                         transition: all 0.3s ease;
                     }
                     .swiper-button-next:after, .swiper-button-prev:after {
@@ -136,9 +136,9 @@ const HeroSection = () => {
                         font-weight: bold;
                     }
                     .swiper-button-next:hover, .swiper-button-prev:hover {
-                        background: #6366f1;
+                        background: oklch(var(--p));
                         color: white !important;
-                        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+                        box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
                     }
                     .swiper-pagination-bullet {
                         background: rgba(255, 255, 255, 0.2) !important;
@@ -147,7 +147,7 @@ const HeroSection = () => {
                         opacity: 1;
                     }
                     .swiper-pagination-bullet-active {
-                        background: #6366f1 !important;
+                        background: oklch(var(--p)) !important;
                         width: 30px;
                         border-radius: 6px;
                     }

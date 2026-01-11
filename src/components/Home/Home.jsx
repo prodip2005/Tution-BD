@@ -4,6 +4,11 @@ import LatestTutionPost from './LatestTutionPost';
 import LatestTutors from './LatestTutors';
 import HowItWorks from './HowItWorks';
 import WhyChooseUs from './WhyChooseUs';
+import StatsSection from './StatsSection';
+import CategoriesSection from './CategoriesSection';
+import TestimonialsSection from './TestimonialsSection';
+import FAQSection from './FAQSection';
+import NewsletterSection from './NewsletterSection';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Home = () => {
@@ -37,14 +42,14 @@ const Home = () => {
                     <motion.div
                         animate={{ rotate: -360 }}
                         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                        className="absolute w-20 h-20 border-[3px] border-dashed border-indigo-400/30 rounded-full"
+                        className="absolute w-20 h-20 border-[3px] border-dashed border-primary/30 rounded-full"
                     />
 
                     {/* Inner Core */}
                     <motion.div
                         animate={{ scale: [0.8, 1.1, 0.8] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute w-12 h-12 bg-gradient-to-tr from-primary to-indigo-600 rounded-2xl shadow-[0_0_30px_rgba(79,70,229,0.5)] flex items-center justify-center rotate-45"
+                        className="absolute w-12 h-12 bg-gradient-to-tr from-primary to-secondary rounded-2xl shadow-lg shadow-primary/40 flex items-center justify-center rotate-45"
                     >
                         <div className="w-4 h-4 bg-white rounded-full animate-ping" />
                     </motion.div>
@@ -82,10 +87,15 @@ const Home = () => {
             className='pt-8 pb-8'
         >
             <HeroSection />
+            <StatsSection />
+            <CategoriesSection />
             <LatestTutionPost />
             <LatestTutors />
+            <TestimonialsSection />
             <HowItWorks />
             <WhyChooseUs />
+            <FAQSection />
+            <NewsletterSection />
         </motion.div>
     );
 };

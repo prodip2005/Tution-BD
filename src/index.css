@@ -1,308 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
- @plugin "daisyui" {
-     themes: dark --default, light;
- }
- @plugin "daisyui/theme" {
-  
-  --color-primary: blue;
-  --color-secondary: teal;
+@plugin "daisyui";
+
+@theme {
+  --color-primary: #7c3aed; /* Violet-600 */
+  --color-secondary: #059669; /* Emerald-600 */
+  --color-accent: #e11d48; /* Rose-600 */
+  --color-neutral: #475569; /* Slate-600 */
+}
+
+/* Configure Dark Mode variant for Tailwind v4 (selector strategy) */
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  font-family: 'Outfit', sans-serif;
+  --color-primary: #7c3aed;
+  --color-secondary: #059669;
+  --color-accent: #e11d48;
+}
+
+.dark {
+  --color-primary: #8b5cf6;
+  --color-secondary: #10b981;
+  --color-accent: #f43f5e;
+  /* Ensure backgrounds are set correctly if not handled by daisyUI */
+  --color-base-100: #020617;
+  --color-base-200: #0f172a;
+  --color-base-300: #1e293b;
+  --color-base-content: #f8fafc;
 }
 
 
 
-/* REGISTRATION FORM */
-/* --- 1. General Container Styling (Beautiful Background) --- */
-.form-container {
+/* REGISTRATION FORM & LOGIN FORM - Unified Minimal Styles */
+/* --- 1. General Container Styling --- */
+.form-container, .login-container {
   max-width: 400px;
   margin: 50px auto;
-  padding: 30px;
-  background-color: #ffffff; /* Clean white background */
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  text-align: center;
-  overflow: hidden; /* Important for animations */
-
-  /* Initial state for Load-in Animation */
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInMoveUp 0.8s ease-out forwards;
-}
-
-/* --- 2. Load-in Animation Keyframes --- */
-@keyframes fadeInMoveUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* --- 3. Header and Prompt Styling --- */
-.form-title {
-  color: #333333;
-  margin-bottom: 5px;
-}
-
-.form-subtitle {
-  color: #777777;
-  margin-bottom: 25px;
-}
-
-.login-prompt {
-  margin-top: 20px;
-  font-size: 0.9em;
-  color: #555;
-}
-
-.login-link {
-  color: #007bff; /* Primary color for links */
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease; /* Smooth hover transition */
-}
-
-.login-link:hover {
-  color: #0056b3;
-}
-
-/* --- 4. Form and Input Styling (Animations) --- */
-.registration-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.input-group {
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #444;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box;
-  /* Smooth transition for focus effect */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Animated Focus Effect */
-.input-group input:focus {
-  border-color: #007bff; /* Blue border on focus */
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Glow effect */
-  outline: none; /* Remove default browser outline */
-}
-
-/* --- 5. Button Styling (Animated Hover Effect) --- */
-.submit-button {
-  padding: 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-  /* Smooth transition for hover effect */
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-/* Animated Hover Effect: Darken and slightly scale up */
-.submit-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px); /* Slight lift */
-  box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
-}
-
-
-
-/* LOGIN FORM */
-/* --- 1. General Container Styling and Load-in Animation --- */
-.login-container {
-  max-width: 380px;
-  margin: 50px auto;
-  padding: 35px;
-  background-color: #f7f7f7; /* Slightly darker background than form for contrast */
-  border-radius: 15px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Stronger, modern shadow */
+  padding: 2rem;
+  background-color: var(--fallback-b1,oklch(var(--b1)/1)); 
+  border: 1px solid var(--fallback-b2,oklch(var(--b2)/1));
+  border-radius: 1.5rem; /* rounded-3xl */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   text-align: center;
   overflow: hidden;
 
-  /* Global Entrance Animation */
+  /* Minimal Entrance Fade */
   opacity: 0;
-  transform: scale(0.95);
-  animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  animation: simpleFadeIn 0.5s ease-out forwards;
 }
 
-/* Global Scale-In Keyframes */
-@keyframes scaleIn {
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* --- 2. Minimal Animation Keyframes --- */
+@keyframes simpleFadeIn {
+  to { opacity: 1; }
 }
 
-/* --- 2. Header and Prompt Styling --- */
-.login-title {
-  color: #1e3a8a; /* Deep blue color */
-  margin-bottom: 5px;
-  /* Specific header animation: slight bounce on load */
-  transform: translateY(-10px);
-  animation: headerDrop 0.6s ease-out 0.4s forwards;
+/* --- 3. Header and Prompt Styling --- */
+.form-title, .login-title {
+  @apply text-base-content font-black text-2xl mb-2;
 }
 
-@keyframes headerDrop {
-    to { transform: translateY(0); }
+.form-subtitle, .login-subtitle {
+  @apply text-base-content/60 text-sm mb-6;
 }
 
-.login-subtitle {
-  color: #6b7280;
-  margin-bottom: 30px;
+.login-prompt, .register-prompt {
+  @apply mt-6 text-sm text-base-content/60;
+}
+
+.login-link, .register-link, .forgot-password-link {
+  @apply text-primary font-bold transition-colors hover:text-secondary no-underline;
 }
 
 .forgot-password-link {
-  display: block;
-  text-align: right;
-  font-size: 0.85em;
-  margin-top: 5px;
-  color: #4f46e5;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  @apply block text-right text-xs mt-2;
 }
 
-.forgot-password-link:hover {
-  color: #3730a3;
-}
-
-/* --- 3. Form and Input Styling (Specific Animations) --- */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.input-group {
-  text-align: left;
+/* --- 4. Form and Input Styling --- */
+.registration-form, .login-form {
+  @apply flex flex-col gap-4;
 }
 
 .input-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 700;
-  color: #333;
+  @apply block mb-1.5 text-sm font-bold text-base-content/80 text-left;
 }
 
 .input-group input {
-  width: 100%;
-  padding: 14px;
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  font-size: 16px;
-  box-sizing: border-box;
-  /* Smooth transition for hover/focus */
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  @apply w-full p-3 rounded-xl bg-base-200 border border-base-300 text-base-content transition-all outline-none;
 }
 
-/* Animated Focus Effect */
+/* Focus Effect: Minimal Border Color Change */
 .input-group input:focus {
-  border-color: #1e3a8a; /* Primary blue border on focus */
-  background-color: #eff6ff; /* Light blue background hint on focus */
-  outline: none;
+  @apply border-primary ring-1 ring-primary/20 bg-base-100;
 }
 
-/* Staggered Input Entrance Animation */
-.animated-input {
-    opacity: 0;
-    transform: translateX(-20px);
-    /* Initial state, animation is applied below */
+/* --- 5. Button Styling --- */
+.submit-button, .login-button {
+  @apply w-full py-3 mt-2 bg-primary text-white font-bold rounded-xl transition-all shadow-lg shadow-primary/20 border-none cursor-pointer text-sm uppercase tracking-wider;
 }
 
-/* Applying staggered animation with delay */
-.login-form .input-group:nth-child(1) { animation: slideIn 0.5s ease-out 0.6s forwards; }
-.login-form .input-group:nth-child(2) { animation: slideIn 0.5s ease-out 0.8s forwards; }
-
-@keyframes slideIn {
-    to { 
-        opacity: 1; 
-        transform: translateX(0); 
-    }
+.submit-button:hover, .login-button:hover {
+  @apply bg-primary/90 scale-[1.02] shadow-primary/30;
 }
-
-/* --- 4. Button Styling (Interactive & Animated) --- */
-.login-button {
-  padding: 16px;
-  background-color: #10b981; /* Green/teal primary color */
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  /* Smooth transition for all properties */
-  transition: all 0.3s ease;
-  
-  /* Button specific entrance animation */
-  opacity: 0;
-  transform: scale(0.8);
-  animation: popIn 0.4s ease-out 1s forwards; 
-}
-
-/* Animated Hover Effect: Scale, Shadow, and Color Change */
-.login-button:hover {
-  background-color: #059669;
-  transform: scale(1.02); /* Slight scale up */
-  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
-}
-
-@keyframes popIn {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* --- 5. Register Prompt Styling --- */
-.register-prompt {
-  margin-top: 30px;
-  font-size: 0.95em;
-  color: #555;
-}
-
-.register-link {
-  color: #1e3a8a; 
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-
-.register-link:hover {
-  color: #3b82f6;
-}
-
-
-
-
 
 /* Scaling Bar Animation Keyframes */
 @keyframes scaleBar {
-  0% {
-    transform: scaleX(0.1); /* Starts very small */
-  }
-  50% {
-    transform: scaleX(1); /* Expands fully */
-  }
-  100% {
-    transform: scaleX(0.1); /* Shrinks again */
-  }
+  0% { transform: scaleX(0.1); }
+  50% { transform: scaleX(1); }
+  100% { transform: scaleX(0.1); }
 }
 
 /* Applying the animation */
@@ -310,9 +115,6 @@
   animation: scaleBar 2s infinite ease-in-out;
 }
 
-
-
 a.active{
-  @apply bg-primary text-white
-  
+  @apply bg-primary text-white shadow-lg shadow-primary/20;
 }
