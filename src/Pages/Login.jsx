@@ -26,7 +26,7 @@ const LoginForm = () => {
 
     const saveUserToDB = async (userObj) => {
         try {
-            const res = await fetch("http://localhost:3000/users", {
+            const res = await fetch("https://tutor-owl.vercel.app/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userObj),
